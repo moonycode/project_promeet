@@ -1,0 +1,815 @@
+/* ===== Reset & Base ===== */
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+  margin:0;
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,"Apple SD Gothic Neo","Noto Sans KR",sans-serif;
+  background:#f9f9ff;
+  color:#111;
+}
+a{color:inherit;text-decoration:none}
+button,select,input{font:inherit}
+
+/* ===== Layout ===== */
+.container{display:flex;min-height:100vh}
+.sidebar{
+  width:260px;background:#f0c7ff;padding:20px;
+  display:flex;flex-direction:column;align-items:center;gap:16px;flex-shrink:0
+}
+.main{flex:1;padding:32px;min-width:0}
+
+/* ===== Sidebar ===== */
+.logo-wrap{width:160px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;}
+.logo-wrap img{max-width:120px;max-height:30px}
+.avatar{width:96px;height:96px;border-radius:50%;overflow:hidden;background:#fff;box-shadow:0 2px 6px rgba(0,0,0,.12)}
+.avatar img{width:100%;height:100%;object-fit:cover}
+.username{font-weight:700}
+.status-board{width:100%;padding:12px;border-radius:12px;background:#fff;box-shadow:0 1px 0 rgba(0,0,0,.06)}
+.status-board .row{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.status-board label{font-weight:700}
+.nav{width:100%}
+.nav a{display:block;width:100%;padding:10px 12px;border-radius:10px;font-weight:700;color:#452a7a}
+.nav a.active{background:#fff;color:#5c2ab1;box-shadow:inset 0 0 0 2px #e7b6f9}
+.logout{width:100%;padding:10px 12px;border:none;border-radius:10px;background:#fff;font-weight:700;cursor:pointer}
+
+/* ===== Headers & Buttons ===== */
+.header{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:16px}
+.header h1{margin:0;font-size:32px}
+.btn{background:#e7b6f9;border:none;padding:10px 16px;border-radius:12px;cursor:pointer;font-weight:800}
+.btn.secondary{background:#f3e7ff}
+.btn-outline{background:#fff;border:1.2px solid #222;border-radius:10px;padding:8px 12px;font-weight:700}
+.btn-xs{background:#fff;border:1px solid #222;padding:4px 8px;border-radius:8px;font-size:12px;cursor:default}
+
+/* ===== Sections ===== */
+.section{margin-top:24px}
+.section h2{margin:0 0 12px 0}
+
+/* ===== Project Cards (overview pages) ===== */
+.projects{display:flex;flex-wrap:wrap;gap:18px}
+.project-card{position:relative;width:220px;background:#fff;border:1.2px solid #222;border-radius:12px;padding:14px;box-shadow:2px 2px 0 #222}
+.project-title{font-weight:800;margin-bottom:6px;padding-right:34px}
+.small{font-size:12px;color:#555}
+.progress{background:#eee;height:10px;border-radius:999px;overflow:hidden;margin:6px 0}
+.progress-bar{height:100%;background:#111}
+.meta{font-size:12px;color:#444}
+.people{position:absolute;top:8px;right:8px;width:28px;height:28px;border-radius:999px;background:#fff;border:1.2px solid #222;box-shadow:2px 2px 0 #222;display:flex;align-items:center;justify-content:center;font-size:16px;line-height:1}
+.people::before{content:"👥"}
+.people .count{position:absolute;top:-6px;right:-6px;min-width:18px;height:18px;padding:0 4px;border-radius:999px;background:#e7b6f9;border:1.2px solid #222;font-size:11px;font-weight:800;display:flex;align-items:center;justify-content:center;box-shadow:1px 1px 0 #222}
+
+/* ===== Project Task Pages ===== */
+.page-header{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:12px}
+.page-title{display:flex;align-items:center;gap:12px;font-size:28px;font-weight:800}
+.status-dot{width:30px;height:30px;border-radius:999px;display:inline-block}
+.status-dot.green{background:#25d366}
+.status-dot.purple{background:#5b33c4}
+.date-range{color:#666;font-weight:600;margin-left:8px;font-size:16px}
+.member-chip{display:flex;align-items:center;gap:8px;font-weight:800}
+.member-chip .avatar-s{width:36px;height:36px;border-radius:999px;overflow:hidden;background:#fff;border:1.2px solid #222;display:flex;align-items:center;justify-content:center}
+.member-chip .avatar-s img{width:100%;height:100%;object-fit:cover}
+.member-ratio{font-size:22px}
+.desc-box{width:min(720px,100%);min-height:56px;border:1.2px solid #222;border-radius:10px;padding:12px;background:#fff;margin:8px 0 22px}
+.task-wrap{background:#fff;border:1.2px solid #222;border-radius:10px;box-shadow:2px 2px 0 #222;overflow-x:auto}
+.task-table{width:100%;border-collapse:collapse}
+.task-table th,.task-table td{padding:12px 14px;border-bottom:1px solid #eee;text-align:left;white-space:nowrap}
+.task-table th{color:#666;font-weight:800}
+.task-table tr:last-child td{border-bottom:none}
+.task-table .chip{display:inline-flex;align-items:center;gap:4px;padding:2px 8px;border:1px solid #222;border-radius:999px;background:#fff}
+.task-table .chip .count{font-weight:400}
+.task-table .progress-cell{width:160px}
+.progressbar-s{height:14px;background:#eee;border-radius:999px;overflow:hidden;border:1px solid #ddd}
+.progressbar-s .bar{height:100%;background:#111;width:0%}
+.row-edit td{background:#faf7ff}
+.input-s,.select-s{border:1px solid #888;border-radius:6px;padding:6px 8px;background:#fff}
+.w-120{width:120px}
+.w-90{width:90px}
+.w-60{width:60px;text-align:right}
+
+/* ===== Misc ===== */
+.restore-tag{display:inline-block;padding:2px 6px;border-radius:999px;background:#e7b6f9;font-size:12px;margin-left:6px;font-weight:700}
+.hidden{display:none!important}
+
+/* === Desc + Button side-by-side, bottom-aligned === */
+.desc-wrap{display:flex;align-items:flex-end;gap:12px;flex-wrap:nowrap;margin-bottom:12px}
+.desc-wrap .desc-box{flex:1 1 auto;margin:0;min-width:0;width:auto}
+.btn-outline{display:inline-flex;align-items:center;white-space:nowrap;height:40px}
+@media (max-width:720px){
+  .desc-wrap{flex-direction:column;align-items:stretch}
+  .btn-outline{align-self:flex-end;height:auto}
+}
+
+/* ==== Project Add / Update forms ==== */
+.panel{
+  position:relative;background:#fff;border:1.2px solid #e2d9ff;border-radius:12px;padding:24px;box-shadow:0 0 0 1px rgba(0,0,0,.02)
+}
+.panel .close-x{position:absolute;top:14px;right:16px;font-weight:800;font-size:24px;line-height:1}
+.form-title{font-size:32px;font-weight:800;margin:0 0 16px 0;display:flex;align-items:center;gap:12px}
+.form-row{display:flex;gap:10px;align-items:center;margin-bottom:10px}
+.form-col{flex:1}
+.input-lg,.textarea-lg,.date-s,.input-s-line{
+  width:100%;border:1px solid #cfcfe7;border-radius:6px;padding:8px 10px;background:#fff
+}
+.textarea-lg{min-height:200px;max-height:500px;overflow-y:auto;resize:vertical}
+.date-s{max-width:160px}
+.helper{color:#777;font-size:12px}
+.actions-right{display:flex;justify-content:flex-end;gap:10px;margin-top:16px}
+.btn-primary{background:#e7b6f9;border:none;padding:10px 16px;border-radius:12px;font-weight:800}
+.btn-danger{background:#fff0f0;border:1px solid #eaa;padding:8px 12px;border-radius:10px;font-weight:700}
+.badge-dot{width:30px;height:30px;border-radius:999px;background:#25d366;display:inline-block}
+.btn-outline.s{padding:6px 10px;border-radius:8px}
+
+/* ===== Task Detail (header strip) ===== */
+.detail-top{
+  display: grid;
+  grid-template-columns: 1fr auto auto;
+  column-gap: 12px;
+  align-items: center;
+  margin-bottom: 14px;
+}
+.detail-titlebar{display:flex;align-items:center;gap:12px}
+.icon-back{width:36px;height:36px;border:2px solid #111;border-radius:8px;display:flex;align-items:center;justify-content:center;font-weight:800}
+.detail-title{font-size:36px;font-weight:900;letter-spacing:-.5px}
+.detail-dates{justify-self: end;}
+.member-pill{display:flex;align-items:center;gap:8px;justify-content:flex-end;justify-self: end;}
+.member-pill .avatar-s{width:36px;height:36px;border-radius:999px;overflow:hidden;background:#fff;border:1.5px solid #111;display:flex;align-items:center;justify-content:center}
+.member-pill .plus{font-weight:900;font-size:20px}
+
+/* ===== Task Detail (body layout) ===== */
+.detail-body{display:grid;grid-template-columns:1fr 420px;gap:18px}
+
+/* ===== Checklist card ===== */
+.todo-card,.comment-card2{background:#fff;border:1.6px solid #222;border-radius:10px;padding:16px}
+.todo-card{display:flex;flex-direction:column;min-height:300px;height:auto}
+.todo-list{display:flex;flex-direction:column;gap:14px}
+.chk{appearance:none;-webkit-appearance:none;width:22px;height:22px;border:2px solid #222;border-radius:4px;display:inline-block;position:relative;margin-right:8px;background:#d9d9d9}
+.chk:checked{background:#fff}
+.chk:checked::after{content:"";position:absolute;left:4px;top:0;width:10px;height:16px;border:3px solid #222;border-left:none;border-top:none;transform:rotate(45deg)}
+.todo-input{border:2px solid #222;border-radius:6px;padding:6px 10px;width:100%;font-size:16px;font-weight:700}
+.todo-line{display:flex;align-items:center;gap:10px}
+.todo-line .del-ico{margin-left:8px;border:1px solid #222;border-radius:4px;width:22px;height:22px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;background:#fff;cursor:pointer}
+.todo-line .del-ico.disabled{opacity:.35;pointer-events:none}
+.todo-actions{display:flex;gap:10px;margin-top:12px}
+
+/* ===== Editable vs View states ===== */
+.view .todo-input,.view .del-ico,.view .chk{pointer-events:none}
+.view .del-ico{opacity:.3}
+.view .todo-input{background:#f6f6f9}
+.view .chk{filter:grayscale(.3)}
+.view .todo-line .del-ico{display:none!important}
+
+/* ===== Footer buttons ===== */
+.footer-actions{display:flex;gap:12px;margin-top:12px}
+.footer-actions .btn{padding:10px 18px;border-radius:12px}
+
+/* ===== Tiny icon helpers ===== */
+.i-paperclip::before{content:"📎"}
+.i-reply::before{content:"💬"}
+.i-like::before{content:"👍"}
+.l-reply{display:inline-block;transform:translateY(-1px);font-weight:900}
+
+/* ===== Comment Thread (4-line comment / 3-line reply) ===== */
+.cmt-panel{
+  background:#fff;border:1.5px solid #bfb9d1;border-radius:10px;padding:14px 16px 16px
+}
+.cmt-list{display:flex;flex-direction:column;gap:16px}
+
+/* 각 댓글 블록(4줄) */
+.cmt4{border-bottom:1px solid #e9e6f5;padding-bottom:14px}
+.cmt4:last-child{border-bottom:none}
+
+/* 1줄: 이름 + (옵션)첨부아이콘 — 이름 옆에 딱 붙음 */
+.cmt4 .line1,.r3 .rline1{display:flex;align-items:center;justify-content:flex-start;gap:6px}
+.name-wrap{display:flex;align-items:center;gap:6px}
+.name-wrap .name,.cmt4 .name,.r3 .name{font-weight:800}
+.attach-icon{display:none;font-size:18px;line-height:1}
+.has-attach .attach-icon{display:inline;margin-left:6px}
+
+/* 2줄: 본문 */
+.cmt4 .line2,.r3 .rline2{margin-top:6px}
+
+/* 3줄: 작은 글씨(날짜 + 첨부목록 줄바꿈) */
+.cmt4 .line3,.r3 .rline3{
+  margin-top:4px;font-size:12px;color:#7a748a;display:flex;flex-direction:column;gap:4px
+}
+/* 날짜시간 옆에 액션을 '바로' 붙임 */
+.meta-row{
+  display:flex;
+  align-items:center;
+  gap:8px;            /* 날짜 ↔ 액션 간격 */
+}
+.meta-actions{display:flex;gap:8px}
+.meta-actions a{font-size:12px;font-weight:800;color:#5b33c4;text-decoration:none}
+.meta-actions a:hover{text-decoration:underline}
+
+/* 첨부목록(인라인 표시) */
+.inline-files{ color:#7a748a; }
+.inline-files .file + .file::before{ content:", "; }
+
+/* 4줄: '답글' 버튼 왼쪽 정렬 */
+.cmt4 .line4{margin-top:8px;display:flex;justify-content:flex-start}
+.btn-reply{border:1.5px solid #222;border-radius:12px;padding:6px 12px;background:#f6d7ff;font-weight:800}
+
+/* 대댓글 스택(3줄) */
+.reply-stack{margin-top:10px;display:flex;flex-direction:column;gap:10px}
+.r3{padding-left:18px;border-left:3px solid #efeafb}
+.r3 .arrow{margin-right:6px;font-weight:900}
+
+/* === 입력란 === */
+.reply-editor,.comment-editor{display:grid;grid-template-columns:1fr auto auto;gap:10px;margin-top:10px}
+.reply-editor input[type="text"],
+.comment-editor input[type="text"]{border:1px solid #222;border-radius:10px;padding:10px 12px}
+.btn-small{border:1.5px solid #222;border-radius:12px;padding:8px 14px;font-weight:800}
+.btn-gray{background:#fff}
+.btn-pink{background:#f6d7ff}
+
+/* 인라인(답글 전용-점선박스) 그대로 유지 */
+.reply-editor.inline{
+  margin-top:10px;background:#fbf7ff;border:1px dashed #cfc6eb;border-radius:12px;padding:10px
+}
+
+/* 수정중(확인/취소) — 주황빛 박스 */
+.reply-editor.editing{
+  margin-top:10px;background:#fbf7ff;border:1px dashed #cfc6eb;border-radius:12px;padding:10px
+}
+
+/* 새 답글 작성(일반)도 수정중과 동일 배경 적용 */
+.reply-editor.writing{
+  margin-top:10px;background:#fbf7ff;border:1px dashed #cfc6eb;border-radius:12px;padding:10px
+}
+
+/* 새 댓글 작성란(전역) — 진한 윤곽선 박스 */
+.comment-editor{
+  background:#ffffff;
+  border:2px solid #2b2b2b;
+  border-radius:14px;
+  padding:12px;
+  box-shadow:2px 2px 0 #2b2b2b;
+}
+
+/* 편집중 첨부 목록(입력란 아래) */
+.attached-list{
+  margin-top:6px;
+  font-size:12px;
+  color:#6d687a;
+}
+.attached-list .file + .file::before{ content:", "; }
+
+/* ===================== */
+/* ====== Add-ons ====== */
+/* ===================== */
+
+/* --- Login page (scoped) --- */
+.pm-login .header{
+  position:sticky; top:0; z-index:5;
+  display:flex; align-items:center; gap:10px;
+  height:56px; padding:0 16px;
+  font-weight:800; color:#4a176c;
+  background:#ecd2ff;
+  box-shadow:inset 0 -1px 0 rgba(0,0,0,.06);
+}
+.pm-login .wrap{
+  display:grid; grid-template-columns:1fr 420px; gap:24px;
+  max-width:1100px; margin:24px auto; padding:0 16px;
+}
+.pm-login .hero{
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  background:#fff; border-radius:16px; padding:24px;
+  box-shadow:0 0 0 1px rgba(0,0,0,.04), 0 8px 24px rgba(0,0,0,.06);
+}
+.pm-login .card{
+  background:#fff; border-radius:16px; padding:24px;
+  box-shadow:0 0 0 1px rgba(0,0,0,.04), 0 8px 24px rgba(0,0,0,.06);
+}
+.pm-login .card h2{margin:0 0 8px 0}
+.pm-login .kv label{display:block; font-size:14px; margin:10px 0 6px; color:#555}
+.pm-login input[type="text"], .pm-login input[type="password"]{
+  width:100%; border:1px solid #e6e2f2; border-radius:10px; padding:10px 12px; background:#fff;
+}
+.pm-login .btn{width:100%; background:#6540a6; color:#fff; border:none; border-radius:10px; padding:11px 14px; font-weight:800}
+.pm-login .hero-text{margin-top:16px; text-align:center}
+.pm-login .hero-text h2{margin:0; font-size:22px; font-weight:800; color:#4a176c}
+.pm-login .hero-text p{margin:6px 0 0; font-size:15px; color:#666}
+@media (max-width:960px){
+  .pm-login .wrap{grid-template-columns:1fr; max-width:720px}
+}
+/* ===== My Page (scoped, final) ===== */
+.pm-mypage .main{padding:24px 24px 40px}
+.pm-mypage .main-inner{max-width:980px; margin:0 auto}
+.pm-mypage .page-title{font-size:28px; font-weight:900; margin:0 0 16px 0}
+
+/* 레이아웃: grid / content-wrap 둘 다 허용 */
+.pm-mypage .grid,
+.pm-mypage .content-wrap{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:24px;
+}
+
+/* 카드(패널) */
+.pm-mypage .panel{
+  border:1px solid #ebdefc;
+  border-radius:12px;
+  background:#fff;
+  padding:18px;
+  box-shadow:0 0 0 1px rgba(0,0,0,.02);
+}
+
+/* 필드 간격/라벨 */
+.pm-mypage .field{display:flex; flex-direction:column; margin-bottom:16px}
+.pm-mypage .field label{font-weight:800; color:#4b4b4b; margin:0 0 6px}
+
+/* 인풋 공통 */
+.pm-mypage input[type="text"],
+.pm-mypage input[type="email"],
+.pm-mypage input[type="tel"],
+.pm-mypage input[type="password"]{
+  width:100%;
+  height:44px;
+  padding:10px 12px;
+  border:1px solid #cfcfe7;
+  border-radius:8px;
+  background:#fff;
+}
+
+/* 읽기 전용/비활성 강조 */
+.pm-mypage input[readonly],
+.pm-mypage input:disabled{
+  background:#eee !important;
+  border-color:#ddd !important;
+  color:#555 !important;
+  cursor:default;
+}
+
+/* 읽기 전용 텍스트 박스(필요 시) */
+.pm-mypage .readonly-box{
+  height:44px; display:flex; align-items:center;
+  padding:0 12px; border:1px solid #ddd; border-radius:8px;
+  background:#eee; color:#555;
+}
+
+/* 우측 액션 */
+.pm-mypage .actions{display:flex; justify-content:flex-end; gap:10px; margin-top:10px}
+.pm-mypage .btn.primary{background:#7a55c6; color:#fff}
+
+/* 반응형 */
+@media (max-width:900px){
+  .pm-mypage .grid,
+  .pm-mypage .content-wrap{grid-template-columns:1fr}
+  .pm-mypage .main{padding:20px}
+}
+
+/* ===== Project Manager Update (scoped) ===== */
+.pm-manager .main{ padding:32px }
+.pm-manager .page-title{ font-size:28px; font-weight:900; margin:0 0 18px 0 }
+
+/* 2열 레이아웃 */
+.pm-manager .manager-wrap{
+  display:grid;
+  grid-template-columns: 1fr 1fr;
+  gap:32px;
+  align-items:start;
+}
+
+/* 패널 헤더 */
+.pm-manager .panel .panel-title{
+  margin:0 0 10px 0;
+  font-size:16px; font-weight:900; color:#3b2f66;
+}
+
+/* 스크롤 상자 */
+.pm-manager .listbox{
+  height:380px;
+  overflow:auto;
+  padding:8px;
+  border:1px solid #dcd5f3;
+  border-radius:10px;
+  background:#fff;
+}
+
+/* 멤버 카드 (체크박스 있을 때 기본 구조: [22px | 1fr]) */
+.pm-manager .member-card{
+  display:grid;
+  grid-template-columns: 22px 1fr;
+  gap:10px;
+  align-items:start;
+  padding:12px;
+  margin:8px 0;
+  border:1px solid #cfcfe7;
+  border-radius:10px;
+  background:#fff;
+  box-shadow:0 0 0 1px rgba(0,0,0,.02);
+  cursor:pointer;
+}
+.pm-manager .member-card input[type="checkbox"]{
+  width:18px; height:18px; margin-top:2px;
+}
+
+/* 카드 본문 (줄바꿈 보장 + 줄 간격) */
+.pm-manager .member-card .card-body{
+  grid-column: 2;
+  display:flex;
+  flex-direction:column;
+  gap:2px;
+}
+.pm-manager .member-card .line1,
+.pm-manager .member-card .line2,
+.pm-manager .member-card .line3{ display:block }
+.pm-manager .member-card .line1{ margin-bottom:2px }
+.pm-manager .member-card .name{ font-weight:800 }
+.pm-manager .member-card .small{ font-size:12px; color:#666 }
+
+/* 체크박스 없는 카드 전용 → 1컬럼 */
+.pm-manager .member-card.no-check{
+  grid-template-columns: 1fr;
+}
+.pm-manager .member-card.no-check .card-body{
+  grid-column: 1;
+}
+
+/* 상태 점 */
+.pm-manager .s-dot{
+  display:inline-block;
+  width:8px; height:8px;
+  border-radius:999px;
+  box-shadow:0 0 0 2px #fff inset;
+}
+.pm-manager .s-dot.green{ background:#25d366 }
+.pm-manager .s-dot.purple{ background:#8a5be5 }
+.pm-manager .s-dot.gray{ background:#bdbdbd }
+
+/* 하단 버튼 정렬 및 통일 */
+.pm-manager .mgr-actions .btn.is-lg{
+  margin-top:18px;
+  height:44px;
+  padding:10px 16px;
+  border-radius:12px;
+}
+
+/* ===== Schedule (공통) ===== */
+
+/* 레이아웃 */
+.pm-schedule .sched-layout {
+  display:grid;
+   grid-template-columns:  minmax(520px, 1fr) 420px; /* 캘린더 | 우측 목록 */
+  gap:18px;
+  align-items:start;
+}
+@media (max-width:980px){
+  .pm-schedule .sched-layout{ grid-template-columns:1fr; } /* 우측 목록 아래로 */
+}
+
+/* 캘린더 헤더 */
+.pm-schedule .calendar-header {
+  display:flex; align-items:center; justify-content:center; gap:10px;
+  margin-bottom:10px;
+}
+.pm-schedule .calendar-header .year-month {
+  display:flex; align-items:baseline; gap:8px;
+}
+.pm-schedule .calendar-header .year { font-weight:800; color:#4b4b4b }
+.pm-schedule .calendar-header .month { margin:0; font-size:20px; font-weight:900 }
+
+/* 캘린더 표 */
+.pm-schedule .calendar { width:100%; border-collapse:collapse; }
+.pm-schedule .calendar th,
+.pm-schedule .calendar td {
+  text-align:center; vertical-align:top;
+  padding:8px 4px;
+  height:72px;
+  border-bottom:1px solid #f0f0f5;
+}
+.pm-schedule .calendar thead th { color:#666; font-weight:800 }
+.pm-schedule .day { display:flex; flex-direction:column; align-items:center; gap:4px }
+.pm-schedule .day.empty { background:#f9f9fb; border-radius:8px }
+
+/* 선택된 날짜 표시 */
+.pm-schedule .day.selected {
+  background:#f3e8ff;
+  border:2px solid #8a5be5;
+  border-radius:8px;
+  font-weight:900;
+  color:#5b33c4;
+}
+
+/* 도트 */
+.pm-schedule .calendar .dot { width:8px; height:8px; border-radius:999px; display:inline-block; }
+.pm-schedule .dot { width:10px; height:10px; border-radius:50%; margin-top:4px; flex-shrink:0; }
+.pm-schedule .dot.green  { background:#25d366 }
+.pm-schedule .dot.orange { background:#ff9800 }
+.pm-schedule .dot.blue   { background:#2196f3 }
+.pm-schedule .dot.purple { background:#8a5be5 }
+.pm-schedule .dot.yellow { background:#ffc107 }
+.pm-schedule .dot.black  { background:#222 }
+
+/* 우측 일정 목록 */
+.pm-schedule .sched-list .panel-title {
+  margin:0 0 8px 0; font-size:16px; font-weight:900; color:#3b2f66;
+}
+.pm-schedule .sched-ul {
+  list-style:none; margin:0; padding:0;
+  display:flex; flex-direction:column;
+  border-top:1px solid #e6e2f2;
+}
+.pm-schedule .sched-ul li {
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:10px;
+  padding:12px 0;
+  border-bottom:1px solid #e6e2f2;
+}
+
+/* 일정 텍스트 */
+.pm-schedule .sched-line { flex:1; display:flex; flex-direction:column; gap:4px; }
+.pm-schedule .sched-line .when { font-size:13px; color:#555; font-weight:600; }
+.pm-schedule .sched-line .what { font-size:14px; color:#222; line-height:1.5; font-weight:400; }
+
+/* 일정 액션 버튼 */
+.pm-schedule .sched-actions,
+.pm-schedule .sched-ul li .actions {
+  margin-left:auto;
+  display:flex;
+  gap:6px;
+  flex-shrink:0;
+  align-items:center;
+}
+.pm-schedule .sched-actions .btn-xs,
+.pm-schedule .sched-ul li .actions .btn-xs {
+  border:1px solid #ccc;
+  border-radius:6px;
+  padding:4px 8px;
+  font-size:12px;
+  background:#fff;
+  cursor:pointer;
+}
+
+/* ===== Schedule Add/Edit (추가/수정 폼) ===== */
+.pm-schedule .sched-add-form,
+.pm-schedule .sched-edit-form {
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+  padding:12px;
+  border:1px solid #dcd5f3;
+  border-radius:10px;
+  background:#fafaff;
+  margin-top:10px;
+}
+.pm-schedule .sched-add-form input,
+.pm-schedule .sched-edit-form input {
+  border:1px solid #cfcfe7;
+  border-radius:6px;
+  padding:8px 10px;
+  font-size:14px;
+  width:100%;
+}
+
+/* dot 선택 */
+.pm-schedule .dot-picker {
+  display:flex; gap:8px; align-items:center; flex-wrap:wrap;
+}
+.pm-schedule .dot-picker input[type="radio"] { display:none }
+.pm-schedule .dot-picker label { cursor:pointer }
+.pm-schedule .dot-picker .dot {
+  width:14px; height:14px; border-radius:50%;
+  border:2px solid transparent;
+  display:inline-block;
+}
+.pm-schedule .dot-picker input[type="radio"]:checked + .dot {
+  border-color:#333;
+}
+
+/* 시간 선택 */
+.pm-schedule .time-picker {
+  display:flex; align-items:center; gap:4px; flex-wrap:wrap;
+}
+.pm-schedule .time-picker select {
+  border:1px solid #cfcfe7;
+  border-radius:6px;
+  padding:4px 6px;
+  background:#fff;
+}
+
+/* 폼 하단 버튼 */
+.pm-schedule .sched-add-form .actions,
+.pm-schedule .sched-edit-form .actions {
+  display:flex; justify-content:flex-end; gap:8px; margin-top:6px;
+}
+.pm-schedule .sched-add-form .btn-xs,
+.pm-schedule .sched-edit-form .btn-xs {
+  border:1px solid #ccc;
+  border-radius:6px;
+  padding:6px 10px;
+  background:#fff;
+  font-size:13px;
+  cursor:pointer;
+}
+
+/* 일정 추가 버튼 */
+.pm-schedule .add-btn {
+  margin-top:10px;
+  width:100%;
+}
+.add-btn.active {
+  background-color: #f9f2ff;
+  border: 1px solid #d0b8f0;
+  color: #999;
+  cursor: default;
+  opacity: 0.7;
+}
+
+
+/* ===== FileBox (scoped) ===== */
+
+/* 섹션 타이틀(H2) */
+.filebox-h2{
+  margin: 12px 0 14px;
+  font-size: 24px;
+  font-weight: 900;
+  letter-spacing: -0.3px;
+}
+
+/* 폴더 그리드(카드) */
+.file-grid{
+  display:flex;
+  flex-wrap:wrap;
+  gap:24px;
+}
+.file-card {
+  display: block; /* a 태그 자체를 block으로 */
+  width: 220px;
+  min-height: 140px;
+  border: 1.2px solid #222;
+  border-radius: 12px;
+  background: #fff;
+  box-shadow: 2px 2px 0 #222;
+  padding: 16px;
+  text-decoration: none; /* 링크 밑줄 제거 */
+  color: inherit;        /* 글자색 상속 */
+}
+.file-card .file-name {
+  display: block;
+  font-size: 20px;
+  font-weight: 900;
+  color: #111;
+}
+.file-card .file-count {
+  display: block;
+  margin-top: 6px;
+  font-size: 12px;
+  color: #555;
+  font-weight: 800;
+}
+
+/* 브레드크럼 */
+.breadcrumbs{
+  margin:8px 0 12px;
+  font-size:22px;
+  font-weight:900;
+}
+.breadcrumbs .sep{ margin:0 8px; color:#999 }
+
+/* 파일 테이블(목록) */
+.file-table{
+  width:100%;
+  border-collapse:collapse;
+}
+.file-table thead th{
+  text-align:left;
+  font-size:16px;
+  color:#6b6b6b;
+  font-weight:900;
+  padding:14px 16px;
+  border-bottom:2px solid #222;
+}
+.file-table th.left, .file-table td.left{ text-align:left }
+.file-table tbody td{
+  padding:14px 16px;
+  border-bottom:1px solid #eee;
+  color:#222;
+  white-space:nowrap;
+}
+.file-table tbody tr:hover td{ background:#fafafa }
+
+/* 검색바 */
+.searchbar{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  max-width:560px;
+  margin:6px 0 18px;
+}
+.search-input{
+  flex:1;
+  height:40px;
+  padding:8px 12px;
+  border:2px solid #222;
+  border-radius:18px;
+  font-size:18px;
+  font-weight:700;
+  background:#fff;
+}
+.search-btn{
+  width:40px; height:40px;
+  border:2px solid #222; border-radius:10px;
+  background:#fff; font-size:18px; line-height:1;
+  cursor:pointer;
+}
+
+/* 파일함: 사이드 내 ‘active’는 기존 .nav a.active 재사용 */
+
+
+.todo-card { display:flex; flex-direction:column; } /* 이미 있으나 재확인 */
+.todo-list { flex:1; }                               /* 리스트가 위쪽 공간을 먹게 */
+.todo-card .footer-actions {
+  margin-top:auto;                /* 맨 아래로 밀기 */
+  justify-content:flex-end;       /* 오른쪽 정렬 */
+}
+/* ===============================
+   Schedule Add/Edit 공통 톤 통일
+   =============================== */
+
+/* 0) (수정 모드일 때) li 레이아웃을 한 줄에서 블록으로 전환 */
+.pm-schedule .sched-ul li.sched-editing{
+  display:block;       /* 기존 flex → block */
+  padding:0;           /* 여백은 내부 폼이 담당 */
+}
+
+/* 1) 폼 컨테이너 공통 (추가/수정) */
+.pm-schedule .sched-add-form,
+.pm-schedule .sched-edit-form{
+  width:100%;
+  display:flex;
+  flex-direction:column;
+  gap:12px;                        /* 요소 간 간격 통일 */
+  padding:14px;                    /* 내부 여백 넉넉하게 */
+  border:1px solid #dcd5f3;
+  border-radius:10px;
+  background:#fafaff;              /* 동일 톤 */
+  margin-top:10px;
+}
+
+/* 2) 텍스트 입력 */
+.pm-schedule .sched-add-form input[type="text"],
+.pm-schedule .sched-edit-form input[type="text"]{
+  height:44px;
+  font-size:16px;
+  padding:10px 12px;
+  border:1px solid #cfcfe7;
+  border-radius:6px;
+  background:#fff;
+  width:100%;
+}
+
+/* 3) 도트 선택(크기/클릭감 통일) */
+.pm-schedule .sched-add-form .dot-picker .dot,
+.pm-schedule .sched-edit-form .dot-picker .dot{
+  width:16px; height:16px;
+  border-radius:50%;
+  border:2px solid transparent;
+  display:inline-block;
+}
+.pm-schedule .sched-add-form .dot-picker input[type="radio"],
+.pm-schedule .sched-edit-form .dot-picker input[type="radio"]{
+  display:none;
+}
+.pm-schedule .sched-add-form .dot-picker input[type="radio"]:checked + .dot,
+.pm-schedule .sched-edit-form .dot-picker input[type="radio"]:checked + .dot{
+  border-color:#333;
+}
+
+/* 4) 시간 선택(드롭다운 사이즈/줄바꿈 통일) */
+.pm-schedule .sched-add-form .time-picker,
+.pm-schedule .sched-edit-form .time-picker{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  flex-wrap:wrap;                  /* 좁을 때 줄바꿈 허용 */
+}
+.pm-schedule .sched-add-form select,
+.pm-schedule .sched-edit-form select{
+  height:36px;
+  font-size:15px;
+  padding:6px 8px;
+  min-width:64px;                  /* 숫자 한 자리여도 너무 좁지 않게 */
+  border:1px solid #cfcfe7;
+  border-radius:6px;
+  background:#fff;
+}
+
+/* 5) 하단 액션 버튼 정렬/간격 통일 */
+.pm-schedule .sched-add-form .actions,
+.pm-schedule .sched-edit-form .actions{
+  display:flex;
+  justify-content:flex-end;        /* 우측 정렬 */
+  gap:8px;
+  margin-top:8px;
+}
+.pm-schedule .sched-add-form .actions .btn-xs,
+.pm-schedule .sched-edit-form .actions .btn-xs{
+  border:1px solid #ccc;
+  border-radius:6px;
+  padding:6px 10px;
+  background:#fff;
+  font-size:13px;
+  cursor:pointer;
+}
