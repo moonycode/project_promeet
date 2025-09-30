@@ -2,7 +2,7 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8" />
-  <title>파일함 - 검색</title>
+  <title>파일함 - 메인</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <link rel="stylesheet" href="common.css" />
 </head>
@@ -30,52 +30,55 @@
         </div>
       </div>
 
-    <nav class="nav">
+  <nav class="nav">
         <a href="#">프로젝트</a>
         <a class="active" href="#">파일함</a>
         <a href="#">일정관리</a>
         <a href="#">마이페이지</a>
-    </nav>
+
+      </nav>
 
       <button class="logout">로그아웃</button>
     </div>
 
     <!-- Main -->
-    <div class="main">
-      <h1 class="page-title" style="gap:8px"><span style="font-size:36px;font-weight:900">파일함</span></h1>
-
+<div class="main">
+  <h1 class="page-title" style="gap:8px">
+    <span style="font-size:36px;font-weight:900">파일함</span>
+  </h1>
       <div class="searchbar">
-        <input class="search-input" type="text" value="헤더이미지" placeholder="파일명 검색" />
+        <input class="search-input" type="text" value="" placeholder="파일명 검색" />
         <button class="search-btn" aria-label="검색">🔍</button>
       </div>
+      
+      <section class="section">
 
-      <section class="panel" style="padding:0">
-        <table class="file-table">
-          <thead>
-            <tr>
-              <th class="left">파일명</th>
-              <th>업무명</th>
-              <th>프로젝트명</th>
-              <th>작성자</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td class="left">헤더이미지.png</td>
-              <td>UI명세서</td>
-              <td>A프로젝트</td>
-              <td>이서준</td>
-            </tr>
-            <tr>
-              <td class="left">헤더이미지.jpg</td>
-              <td>UI세부내역서</td>
-              <td>D프로젝트</td>
-              <td>이순신</td>
-            </tr>
-          </tbody>
-        </table>
-      </section>
-    </div>
+  <div class="file-grid">
+  <a class="file-card" href="foldersInProject.html">
+    <span class="file-name">A프로젝트</span>
+    <span class="small">AA기업<br>React와 node.js를 이용한...</span>
+  </a>
+  <a class="file-card" href="foldersInProject.html">
+     <span class="file-name">C프로젝트</span>
+     <span class="small">CC기업<br>웹 애플리케이션 개발</span>
+  </a>
+  <a class="file-card" href="foldersInProject.html">
+    <span class="file-name">D프로젝트</span>
+    <span class="small">DD기업<br>웹 애플리케이션 개발</span>
+  </a>
+  <a class="file-card" href="foldersInProject.html">
+    <span class="file-name">E프로젝트</span>
+    <span class="small">EE기업<br>웹 애플리케이션 개발</span>
+  </a>
+    <a class="file-card" href="foldersInProject.html">
+    <span class="file-name">F프로젝트</span>
+    <span class="small">FF기업<br>웹 애플리케이션 개발</span>
+  </a>
+</div>
+
+  </section>
+   
+</div>
   </div>
 </body>
 </html>

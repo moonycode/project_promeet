@@ -128,13 +128,51 @@ button,select,input{font:inherit}
 .detail-titlebar{display:flex;align-items:center;gap:12px}
 .icon-back{width:36px;height:36px;border:2px solid #111;border-radius:8px;display:flex;align-items:center;justify-content:center;font-weight:800}
 .detail-title{font-size:36px;font-weight:900;letter-spacing:-.5px}
+.detail-title {
+  white-space: normal;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;   /* flex 안에서 줄어들 때 대비 */
+  display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 3;  /* 최대 3줄 */
+  line-height: 1.18;
+  
+}
+
+@media (max-width: 1100px){
+  .detail-title{ -webkit-line-clamp: 3; }
+}
+
+/* 더 줄면: 한 줄만 보이고 말줄임 (…) */
+@media (max-width: 720px){
+  .detail-title{ -webkit-line-clamp: 1; }
+}
+
 .detail-dates{justify-self: end;}
+.detail-dates{
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  white-space: nowrap; /* 넓을 땐 한 줄 */
+}
+
+@media (max-width: 720px){
+  .detail-dates{
+    display: inline-flex;
+    flex-direction: column;
+    align-items: flex-end;   /* 오른쪽 정렬(기존 디자인 톤 유지) */
+    gap: 4px;
+    line-height: 1.2;
+  }
+  .detail-dates .endline{
+    white-space: nowrap;     /* "~ 끝날짜"는 같은 줄에 붙여 유지 */
+  }
+}
 .member-pill{display:flex;align-items:center;gap:8px;justify-content:flex-end;justify-self: end;}
 .member-pill .avatar-s{width:36px;height:36px;border-radius:999px;overflow:hidden;background:#fff;border:1.5px solid #111;display:flex;align-items:center;justify-content:center}
 .member-pill .plus{font-weight:900;font-size:20px}
 
 /* ===== Task Detail (body layout) ===== */
-.detail-body{display:grid;grid-template-columns:1fr 420px;gap:18px}
+.detail-body{display:grid;grid-template-columns:minmax(420px,1fr) 420px;gap:18px}
 
 /* ===== Checklist card ===== */
 .todo-card,.comment-card2{background:#fff;border:1.6px solid #222;border-radius:10px;padding:16px}
@@ -253,9 +291,17 @@ button,select,input{font:inherit}
 }
 .attached-list .file + .file::before{ content:", "; }
 
+
+
+
+
+
+
 /* ===================== */
 /* ====== Add-ons ====== */
 /* ===================== */
+
+
 
 /* --- Login page (scoped) --- */
 .pm-login .header{
@@ -813,3 +859,91 @@ button,select,input{font:inherit}
   font-size:13px;
   cursor:pointer;
 }
+/* ===== Task Table: Head controls (HTML4, no JS) ===== */
+
+/* 공통: 드롭다운 있는 머리글 */
+.task-table th.th-filter { position:relative; padding:0; }
+.th-wrap{ position:relative; display:block; height:100%; }
+.th-label{
+  display:block; padding:12px 14px;
+  font-weight:800; color:#6b6b6b; cursor:default;
+}
+.th-wrap:hover .th-label{
+  background:#faf7ff; color:#4b3aa0;
+  box-shadow:inset 0 -2px 0 #e2d9ff;
+}
+
+/* 호버로만 열리는 패널 */
+.dd-panel{
+  display:none;
+  position:absolute; top:100%; left:0;
+  min-width:220px; z-index:20; margin-top:6px; padding:12px;
+  background:#fff; border:1px solid #e6e2f2; border-radius:10px;
+  box-shadow:0 8px 24px rgba(0,0,0,.08);
+}
+.th-wrap:hover .dd-panel{ display:block; }
+
+.dd-panel .row{ display:flex; align-items:center; gap:8px; }
+.dd-panel .lbl{ font-size:12px; font-weight:900; color:#666; }
+.dd-panel .select-s{
+  height:36px; padding:6px 8px;
+  border:1px solid #cfcfe7; border-radius:8px; background:#fff;
+}
+
+/* 시작일/마감일: 글자 옆 정렬 버튼 인라인 */
+.task-table th.th-sort{
+  white-space:nowrap;
+  font-weight:800; color:#6b6b6b;
+  padding:12px 14px;
+}
+.th-sort .th-text{ vertical-align:middle; }
+.sort-inline{
+  display:inline-flex; gap:6px; margin-left:8px; vertical-align:middle;
+}
+.btn-sort{
+  display:inline-block; min-width:22px; height:22px; line-height:20px;
+  text-align:center; font-weight:900;
+  border:1px solid #b7b3d8; border-radius:6px; background:#fff;
+  font-size:12px; cursor:default;  /* JS 없음 표시 */
+}
+.btn-sort:hover{ background:#f3e7ff; border-color:#c7b6f3; color:#5b33c4; }
+
+@media (max-width:720px){
+  .dd-panel{ min-width:200px; }
+}
+
+/* =========================
+   삭제된 코멘트 / 답글 처리
+   ========================= */
+
+/* 공통 스타일 */
+.cmt4.is-deleted,
+.r3.is-deleted {
+  position: relative;
+  padding: 14px 16px;
+  background: #fbf9ff;
+  border: 1px dashed #e3ddf9;
+  border-radius: 10px;
+}
+
+/* 삭제된 코멘트/답글 내부 내용 감춤 */
+.cmt4.is-deleted .line1,
+.cmt4.is-deleted .line2,
+.cmt4.is-deleted .line3,
+.cmt4.is-deleted .line4,
+.r3.is-deleted .rline1,
+.r3.is-deleted .rline2,
+.r3.is-deleted .rline3 {
+  display: none !important;
+}
+
+/* 대체 문구 */
+.cmt4.is-deleted::before,
+.r3.is-deleted::before {
+  content: "삭제된 코멘트입니다.";
+  display: block;
+  color: #8a86a3;
+  font-size: 14px;
+  line-height: 1.5;
+}
+.is-edited{color: #8a86a3;}

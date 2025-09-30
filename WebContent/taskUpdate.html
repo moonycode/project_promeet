@@ -60,18 +60,74 @@
 </div>
       <div class="task-wrap">
         <table class="task-table">
-          <thead>
-            <tr>
-              <th>업무명</th>
-              <th>담당자</th>
-              <th>진행상태</th>
-              <th>시작일</th>
-              <th>마감일</th>
-              <th>우선순위</th>
-              <th>진척도</th>
-              <th></th>
-            </tr>
-          </thead>
+         <thead>
+  <tr>
+    <th>업무명</th>
+    <th>담당자</th>
+
+    <!-- 진행상태: 선택만 (드롭다운 패널) -->
+    <th class="th-filter">
+      <div class="th-wrap">
+        <span class="th-label">진행상태 ▾</span>
+        <div class="dd-panel">
+          <div class="row">
+            <span class="lbl">선택</span>
+            <select class="select-s">
+              <option selected="selected">전체</option>
+              <option>완료</option>
+              <option>진행</option>
+              <option>대기</option>
+              <option>보류</option>
+              <option>기타</option>
+            </select>
+          </div>
+        </div>
+      </div>
+    </th>
+
+    <!-- 시작일: 글자 옆 정렬 버튼(오름/내림) -->
+    <th class="th-sort">
+      <span class="th-text">시작일</span>
+      <span class="sort-inline">
+        <span class="btn-sort" title="오름차">▲</span>
+        <span class="btn-sort" title="내림차">▼</span>
+      </span>
+    </th>
+
+    <!-- 마감일: 글자 옆 정렬 버튼(오름/내림) -->
+    <th class="th-sort">
+      <span class="th-text">마감일</span>
+      <span class="sort-inline">
+        <span class="btn-sort" title="오름차">▲</span>
+        <span class="btn-sort" title="내림차">▼</span>
+      </span>
+    </th>
+
+    <!-- 우선순위: 선택만 (드롭다운 패널) -->
+    <th class="th-filter">
+      <div class="th-wrap">
+        <span class="th-label">우선순위 ▾</span>
+        <div class="dd-panel">
+          <div class="row">
+            <span class="lbl">선택</span>
+            <select class="select-s">
+              <option selected="selected">전체</option>
+              <option>긴급</option>
+              <option>높음</option>
+              <option>보통</option>
+              <option>낮음</option>
+              <option>없음</option>
+            </select>
+          </div>
+        </div>
+      </div>
+    </th>
+
+    <th>진척도</th>
+    <th>&nbsp;</th>
+  </tr>
+</thead>
+
           <tbody>
             <tr class="row-edit">
               <td><input class="input-s" type="text" value="UI 명세서" /></td>

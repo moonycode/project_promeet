@@ -29,13 +29,12 @@
     </div>
   </div>
 
-    <nav class="nav">
-        <a class="active" href="#">프로젝트</a>
-        <a href="#">파일함</a>
-        <a href="#">일정관리</a>
-        <a href="#">마이페이지</a>
-    </nav>
-      
+  <nav class="nav">
+    <a class="active" href="#">프로젝트</a>
+    <a href="#">파일함</a>
+    <a href="#">일정관리</a>
+    <a href="#">마이페이지</a>
+  </nav>
 
   <button class="logout">로그아웃</button>
 </div>
@@ -53,25 +52,83 @@
         </div>
       </div>
 
-           <div class="desc-wrap">
-  <div class="desc-box">&lt;업무관리 플랫폼&gt; 기획중입니다.<br/>1. UI 명세서</div>
-  <span class="btn-outline">프로젝트 수정</span>
-</div>
+      <!-- 설명 + 수정 버튼 -->
+      <div class="desc-wrap">
+        <div class="desc-box">&lt;업무관리 플랫폼&gt; 기획중입니다.<br/>1. UI 명세서</div>
+        <span class="btn-outline">프로젝트 수정</span>
+      </div>
 
-      <div class="task-wrap">
+        <div class="task-wrap">
         <table class="task-table">
-          <thead>
-            <tr>
-              <th>업무명</th>
-              <th>담당자</th>
-              <th>진행상태</th>
-              <th>시작일</th>
-              <th>마감일</th>
-              <th>우선순위</th>
-              <th>진척도</th>
-              <th></th>
-            </tr>
-          </thead>
+        <thead>
+  <tr>
+    <th>업무명</th>
+    <th>담당자</th>
+
+    <!-- 진행상태: 선택만 (드롭다운 패널) -->
+    <th class="th-filter">
+      <div class="th-wrap">
+        <span class="th-label">진행상태 ▾</span>
+        <div class="dd-panel">
+          <div class="row">
+            <span class="lbl">선택</span>
+            <select class="select-s">
+              <option selected="selected">전체</option>
+              <option>완료</option>
+              <option>진행</option>
+              <option>대기</option>
+              <option>보류</option>
+              <option>기타</option>
+            </select>
+          </div>
+        </div>
+      </div>
+    </th>
+
+    <!-- 시작일: 글자 옆 정렬 버튼(오름/내림) -->
+    <th class="th-sort">
+      <span class="th-text">시작일</span>
+      <span class="sort-inline">
+        <span class="btn-sort" title="오름차">▲</span>
+        <span class="btn-sort" title="내림차">▼</span>
+      </span>
+    </th>
+
+    <!-- 마감일: 글자 옆 정렬 버튼(오름/내림) -->
+    <th class="th-sort">
+      <span class="th-text">마감일</span>
+      <span class="sort-inline">
+        <span class="btn-sort" title="오름차">▲</span>
+        <span class="btn-sort" title="내림차">▼</span>
+      </span>
+    </th>
+
+    <!-- 우선순위: 선택만 (드롭다운 패널) -->
+    <th class="th-filter">
+      <div class="th-wrap">
+        <span class="th-label">우선순위 ▾</span>
+        <div class="dd-panel">
+          <div class="row">
+            <span class="lbl">선택</span>
+            <select class="select-s">
+              <option selected="selected">전체</option>
+              <option>긴급</option>
+              <option>높음</option>
+              <option>보통</option>
+              <option>낮음</option>
+              <option>없음</option>
+            </select>
+          </div>
+        </div>
+      </div>
+    </th>
+
+    <th>진척도</th>
+    <th>&nbsp;</th>
+  </tr>
+</thead>
+
+
           <tbody>
             <tr>
               <td>UI 명세서</td>
@@ -80,9 +137,7 @@
               <td>2025-09-15</td>
               <td>2025-09-17</td>
               <td>긴급</td>
-              <td class="progress-cell">
-                100%
-              </td>
+              <td class="progress-cell">100%</td>
               <td><span class="btn-xs">수정</span> <span class="btn-xs">삭제</span></td>
             </tr>
             <tr>
@@ -92,9 +147,7 @@
               <td>2025-09-17</td>
               <td>2025-09-22</td>
               <td>긴급</td>
-              <td class="progress-cell">
-                <div class="progressbar-s"><div class="bar" style="width:70%"></div></div>
-              </td>
+              <td class="progress-cell">70%</td>
               <td><span class="btn-xs">수정</span> <span class="btn-xs">삭제</span></td>
             </tr>
             <tr>
@@ -104,9 +157,7 @@
               <td>2025-08-15</td>
               <td>2025-09-15</td>
               <td>낮음</td>
-              <td class="progress-cell">
-                0%
-              </td>
+              <td class="progress-cell">0%</td>
               <td><span class="btn-xs">수정</span> <span class="btn-xs">삭제</span></td>
             </tr>
             <tr>
@@ -116,9 +167,7 @@
               <td>2025-10-10</td>
               <td>2025-11-21</td>
               <td></td>
-              <td class="progress-cell">
-                0%
-              </td>
+              <td class="progress-cell">0%</td>
               <td><span class="btn-xs">수정</span> <span class="btn-xs">삭제</span></td>
             </tr>
           </tbody>
