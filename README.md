@@ -1,4 +1,5 @@
-# ProMeet - 프로젝트 관리 솔루션 (MVC Model2)
+# KOSTA 1차 프로젝트 - 1조
+## ProMeet - 프로젝트 관리 솔루션 (MVC Model2)
 
 ## 프로젝트 소개
 - **기간**: 9/22 ~ 10/17
@@ -38,6 +39,69 @@
 ![ERD](docs/promeet_erd.jpg)
 
 ---
+
+# Git 운영 원칙
+**브랜치 전략**: Main **단일 브랜치** 운영
+
+---
+
+## 기본 원칙
+- 모두 **`main`에 직접 커밋/푸시**합니다.
+- 작업 시작 전에 **겹치는 파일/영역을 톡으로 공유**합니다.
+- 푸시 전에 항상 **최신 내역을 먼저 가져옵니다**.
+
+---
+
+## Git Rebase 가이드 ? **Merge 금지**
+> **팀 규칙:** `git pull origin main` (**merge pull**) **금지**  
+> **항상** `git pull --rebase origin main` 을 사용하세요.
+우리 팀은 **메인 단일 브랜치 + 선형(깔끔) 히스토리**를 원칙으로 합니다.  
+따라서 **merge는 사용하지 않고**, 항상 **rebase로 최신화**합니다.
+
+### 왜 Rebase인가?
+- **머지 커밋이 생기지 않음** → 히스토리가 **일자형(선형)** 으로 깔끔
+- **충돌 지점이 명확** → “내 커밋을 최신 위에 재생”하므로 충돌 원인 파악이 쉬움
+- **리뷰/회귀 분석 용이** → 커밋 흐름이 직관적
+
+> _푸시 전엔 항상 `git pull --rebase origin main`, 푸시 후 되돌림은 `revert`_  
+
+
+---
+
+## 필수 워크플로우 (매번)
+```bash
+git pull --rebase origin main        # 내 로컬 최신화
+git status                           # 변경 내역 확인
+git add -A                           # 스테이징
+git commit -m "feat(<scope>): <subject>"  # 컨벤션 메시지
+git push                              # main으로 푸시
+```
+
+## 충돌 처리 (겹쳤을 때)
+``` bash
+git pull --rebase origin main        # 리베이스 시작 → 충돌 표시되면
+# 파일 열어 충돌표시(<<< === >>>) 수동 해결
+git add <수정한파일명>               # 해결한 파일 스테이징
+git rebase --continue                # 다음 충돌 진행 또는 리베이스 완료
+git push                              # 완료 후 푸시
+```
+
+## 리베이스 중 실수했을 때 (중단/복구)
+``` bash
+git rebase --abort                   # 리베이스 시작 직전 상태로 되돌림
+git reflog                           # 잃어버린 지점(HEAD 이동 이력) 찾기
+git checkout -b rescue <해시>        # 복구용 브랜치로 보존
+```
+
+## 되돌리기 (실수했을 때)
+- 푸시 전: rebase/스쿼시/커밋 수정 등 자유롭게 정리 가능
+- 푸시 후: 이미 원격에 공개된 커밋 → 리베이스 금지 (공용 히스토리 재작성 금지)
+
+### 안전한 되돌림 절차(푸시 후):
+``` bash
+git revert <커밋해시>                 # 되돌림 커밋 생성(기록 보존)
+git push
+```
 
 ### Conventional Commits - 간단 가이드
 
