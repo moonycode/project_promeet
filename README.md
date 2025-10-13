@@ -1,4 +1,4 @@
-# ProMeet ? 프로젝트 관리 솔루션 (MVC Model2)
+# ProMeet - 프로젝트 관리 솔루션 (MVC Model2)
 
 ## 프로젝트 소개
 - **기간**: 9/22 ~ 10/17
@@ -32,14 +32,14 @@
 ---
 
 ## 아키텍처 다이어그램
-![Architecture](<docs/promeet_architecture.jpg)
+![Architecture](docs/promeet_architecture.jpg)
 
 ## ERD
 ![ERD](docs/promeet_erd.jpg)
 
 ---
 
-### Conventional Commits ? 간단 가이드
+### Conventional Commits - 간단 가이드
 
 #### 형식
     <type>(<scope>): <subject>
