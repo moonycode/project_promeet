@@ -53,7 +53,7 @@ button,select,input{font:inherit}
 .progress-bar{height:100%;background:#111}
 .meta{font-size:12px;color:#444}
 .people{position:absolute;top:8px;right:8px;width:28px;height:28px;border-radius:999px;background:#fff;border:1.2px solid #222;box-shadow:2px 2px 0 #222;display:flex;align-items:center;justify-content:center;font-size:16px;line-height:1}
-.people::before{content:"👥"}
+.people::before{content:"�윉�"}
 .people .count{position:absolute;top:-6px;right:-6px;min-width:18px;height:18px;padding:0 4px;border-radius:999px;background:#e7b6f9;border:1.2px solid #222;font-size:11px;font-weight:800;display:flex;align-items:center;justify-content:center;box-shadow:1px 1px 0 #222}
 
 /* ===== Project Task Pages ===== */
@@ -132,8 +132,8 @@ button,select,input{font:inherit}
   white-space: normal;
   overflow: hidden;
   text-overflow: ellipsis;
-  max-width: 100%;   /* flex 안에서 줄어들 때 대비 */
-  display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 3;  /* 최대 3줄 */
+  max-width: 100%;   /* flex �븞�뿉�꽌 以꾩뼱�뱾 �븣 ��鍮� */
+  display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 3;  /* 理쒕� 3以� */
   line-height: 1.18;
   
 }
@@ -142,7 +142,7 @@ button,select,input{font:inherit}
   .detail-title{ -webkit-line-clamp: 3; }
 }
 
-/* 더 줄면: 한 줄만 보이고 말줄임 (…) */
+/* �뜑 以꾨㈃: �븳 以꾨쭔 蹂댁씠怨� 留먯쨪�엫 (��) */
 @media (max-width: 720px){
   .detail-title{ -webkit-line-clamp: 1; }
 }
@@ -152,19 +152,19 @@ button,select,input{font:inherit}
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  white-space: nowrap; /* 넓을 땐 한 줄 */
+  white-space: nowrap; /* �꼻�쓣 �븧 �븳 以� */
 }
 
 @media (max-width: 720px){
   .detail-dates{
     display: inline-flex;
     flex-direction: column;
-    align-items: flex-end;   /* 오른쪽 정렬(기존 디자인 톤 유지) */
+    align-items: flex-end;   /* �삤瑜몄そ �젙�젹(湲곗〈 �뵒�옄�씤 �넠 �쑀吏�) */
     gap: 4px;
     line-height: 1.2;
   }
   .detail-dates .endline{
-    white-space: nowrap;     /* "~ 끝날짜"는 같은 줄에 붙여 유지 */
+    white-space: nowrap;     /* "~ �걹�궇吏�"�뒗 媛숈� 以꾩뿉 遺숈뿬 �쑀吏� */
   }
 }
 .member-pill{display:flex;align-items:center;gap:8px;justify-content:flex-end;justify-self: end;}
@@ -199,9 +199,9 @@ button,select,input{font:inherit}
 .footer-actions .btn{padding:10px 18px;border-radius:12px}
 
 /* ===== Tiny icon helpers ===== */
-.i-paperclip::before{content:"📎"}
-.i-reply::before{content:"💬"}
-.i-like::before{content:"👍"}
+.i-paperclip::before{content:"�윋�"}
+.i-reply::before{content:"�윊�"}
+.i-like::before{content:"�윉�"}
 .l-reply{display:inline-block;transform:translateY(-1px);font-weight:900}
 
 /* ===== Comment Thread (4-line comment / 3-line reply) ===== */
@@ -210,48 +210,48 @@ button,select,input{font:inherit}
 }
 .cmt-list{display:flex;flex-direction:column;gap:16px}
 
-/* 각 댓글 블록(4줄) */
+/* 媛� �뙎湲� 釉붾줉(4以�) */
 .cmt4{border-bottom:1px solid #e9e6f5;padding-bottom:14px}
 .cmt4:last-child{border-bottom:none}
 
-/* 1줄: 이름 + (옵션)첨부아이콘 — 이름 옆에 딱 붙음 */
+/* 1以�: �씠由� + (�샃�뀡)泥⑤��븘�씠肄� �� �씠由� �쁿�뿉 �뵳 遺숈쓬 */
 .cmt4 .line1,.r3 .rline1{display:flex;align-items:center;justify-content:flex-start;gap:6px}
 .name-wrap{display:flex;align-items:center;gap:6px}
 .name-wrap .name,.cmt4 .name,.r3 .name{font-weight:800}
 .attach-icon{display:none;font-size:18px;line-height:1}
 .has-attach .attach-icon{display:inline;margin-left:6px}
 
-/* 2줄: 본문 */
+/* 2以�: 蹂몃Ц */
 .cmt4 .line2,.r3 .rline2{margin-top:6px}
 
-/* 3줄: 작은 글씨(날짜 + 첨부목록 줄바꿈) */
+/* 3以�: �옉�� 湲��뵪(�궇吏� + 泥⑤�紐⑸줉 以꾨컮轅�) */
 .cmt4 .line3,.r3 .rline3{
   margin-top:4px;font-size:12px;color:#7a748a;display:flex;flex-direction:column;gap:4px
 }
-/* 날짜시간 옆에 액션을 '바로' 붙임 */
+/* �궇吏쒖떆媛� �쁿�뿉 �븸�뀡�쓣 '諛붾줈' 遺숈엫 */
 .meta-row{
   display:flex;
   align-items:center;
-  gap:8px;            /* 날짜 ↔ 액션 간격 */
+  gap:8px;            /* �궇吏� �넄 �븸�뀡 媛꾧꺽 */
 }
 .meta-actions{display:flex;gap:8px}
 .meta-actions a{font-size:12px;font-weight:800;color:#5b33c4;text-decoration:none}
 .meta-actions a:hover{text-decoration:underline}
 
-/* 첨부목록(인라인 표시) */
+/* 泥⑤�紐⑸줉(�씤�씪�씤 �몴�떆) */
 .inline-files{ color:#7a748a; }
 .inline-files .file + .file::before{ content:", "; }
 
-/* 4줄: '답글' 버튼 왼쪽 정렬 */
+/* 4以�: '�떟湲�' 踰꾪듉 �쇊履� �젙�젹 */
 .cmt4 .line4{margin-top:8px;display:flex;justify-content:flex-start}
 .btn-reply{border:1.5px solid #222;border-radius:12px;padding:6px 12px;background:#f6d7ff;font-weight:800}
 
-/* 대댓글 스택(3줄) */
+/* ���뙎湲� �뒪�깮(3以�) */
 .reply-stack{margin-top:10px;display:flex;flex-direction:column;gap:10px}
 .r3{padding-left:18px;border-left:3px solid #efeafb}
 .r3 .arrow{margin-right:6px;font-weight:900}
 
-/* === 입력란 === */
+/* === �엯�젰�� === */
 .reply-editor,.comment-editor{display:grid;grid-template-columns:1fr auto auto;gap:10px;margin-top:10px}
 .reply-editor input[type="text"],
 .comment-editor input[type="text"]{border:1px solid #222;border-radius:10px;padding:10px 12px}
@@ -259,22 +259,22 @@ button,select,input{font:inherit}
 .btn-gray{background:#fff}
 .btn-pink{background:#f6d7ff}
 
-/* 인라인(답글 전용-점선박스) 그대로 유지 */
+/* �씤�씪�씤(�떟湲� �쟾�슜-�젏�꽑諛뺤뒪) 洹몃�濡� �쑀吏� */
 .reply-editor.inline{
   margin-top:10px;background:#fbf7ff;border:1px dashed #cfc6eb;border-radius:12px;padding:10px
 }
 
-/* 수정중(확인/취소) — 주황빛 박스 */
+/* �닔�젙以�(�솗�씤/痍⑥냼) �� 二쇳솴鍮� 諛뺤뒪 */
 .reply-editor.editing{
   margin-top:10px;background:#fbf7ff;border:1px dashed #cfc6eb;border-radius:12px;padding:10px
 }
 
-/* 새 답글 작성(일반)도 수정중과 동일 배경 적용 */
+/* �깉 �떟湲� �옉�꽦(�씪諛�)�룄 �닔�젙以묎낵 �룞�씪 諛곌꼍 �쟻�슜 */
 .reply-editor.writing{
   margin-top:10px;background:#fbf7ff;border:1px dashed #cfc6eb;border-radius:12px;padding:10px
 }
 
-/* 새 댓글 작성란(전역) — 진한 윤곽선 박스 */
+/* �깉 �뙎湲� �옉�꽦��(�쟾�뿭) �� 吏꾪븳 �쑄怨쎌꽑 諛뺤뒪 */
 .comment-editor{
   background:#ffffff;
   border:2px solid #2b2b2b;
@@ -283,7 +283,7 @@ button,select,input{font:inherit}
   box-shadow:2px 2px 0 #2b2b2b;
 }
 
-/* 편집중 첨부 목록(입력란 아래) */
+/* �렪吏묒쨷 泥⑤� 紐⑸줉(�엯�젰�� �븘�옒) */
 .attached-list{
   margin-top:6px;
   font-size:12px;
@@ -342,7 +342,7 @@ button,select,input{font:inherit}
 .pm-mypage .main-inner{max-width:980px; margin:0 auto}
 .pm-mypage .page-title{font-size:28px; font-weight:900; margin:0 0 16px 0}
 
-/* 레이아웃: grid / content-wrap 둘 다 허용 */
+/* �젅�씠�븘�썐: grid / content-wrap �몮 �떎 �뿀�슜 */
 .pm-mypage .grid,
 .pm-mypage .content-wrap{
   display:grid;
@@ -350,7 +350,7 @@ button,select,input{font:inherit}
   gap:24px;
 }
 
-/* 카드(패널) */
+/* 移대뱶(�뙣�꼸) */
 .pm-mypage .panel{
   border:1px solid #ebdefc;
   border-radius:12px;
@@ -359,11 +359,11 @@ button,select,input{font:inherit}
   box-shadow:0 0 0 1px rgba(0,0,0,.02);
 }
 
-/* 필드 간격/라벨 */
+/* �븘�뱶 媛꾧꺽/�씪踰� */
 .pm-mypage .field{display:flex; flex-direction:column; margin-bottom:16px}
 .pm-mypage .field label{font-weight:800; color:#4b4b4b; margin:0 0 6px}
 
-/* 인풋 공통 */
+/* �씤�뭼 怨듯넻 */
 .pm-mypage input[type="text"],
 .pm-mypage input[type="email"],
 .pm-mypage input[type="tel"],
@@ -376,7 +376,7 @@ button,select,input{font:inherit}
   background:#fff;
 }
 
-/* 읽기 전용/비활성 강조 */
+/* �씫湲� �쟾�슜/鍮꾪솢�꽦 媛뺤“ */
 .pm-mypage input[readonly],
 .pm-mypage input:disabled{
   background:#eee !important;
@@ -385,18 +385,18 @@ button,select,input{font:inherit}
   cursor:default;
 }
 
-/* 읽기 전용 텍스트 박스(필요 시) */
+/* �씫湲� �쟾�슜 �뀓�뒪�듃 諛뺤뒪(�븘�슂 �떆) */
 .pm-mypage .readonly-box{
   height:44px; display:flex; align-items:center;
   padding:0 12px; border:1px solid #ddd; border-radius:8px;
   background:#eee; color:#555;
 }
 
-/* 우측 액션 */
+/* �슦痢� �븸�뀡 */
 .pm-mypage .actions{display:flex; justify-content:flex-end; gap:10px; margin-top:10px}
 .pm-mypage .btn.primary{background:#7a55c6; color:#fff}
 
-/* 반응형 */
+/* 諛섏쓳�삎 */
 @media (max-width:900px){
   .pm-mypage .grid,
   .pm-mypage .content-wrap{grid-template-columns:1fr}
@@ -407,7 +407,7 @@ button,select,input{font:inherit}
 .pm-manager .main{ padding:32px }
 .pm-manager .page-title{ font-size:28px; font-weight:900; margin:0 0 18px 0 }
 
-/* 2열 레이아웃 */
+/* 2�뿴 �젅�씠�븘�썐 */
 .pm-manager .manager-wrap{
   display:grid;
   grid-template-columns: 1fr 1fr;
@@ -415,13 +415,13 @@ button,select,input{font:inherit}
   align-items:start;
 }
 
-/* 패널 헤더 */
+/* �뙣�꼸 �뿤�뜑 */
 .pm-manager .panel .panel-title{
   margin:0 0 10px 0;
   font-size:16px; font-weight:900; color:#3b2f66;
 }
 
-/* 스크롤 상자 */
+/* �뒪�겕濡� �긽�옄 */
 .pm-manager .listbox{
   height:380px;
   overflow:auto;
@@ -431,7 +431,7 @@ button,select,input{font:inherit}
   background:#fff;
 }
 
-/* 멤버 카드 (체크박스 있을 때 기본 구조: [22px | 1fr]) */
+/* 硫ㅻ쾭 移대뱶 (泥댄겕諛뺤뒪 �엳�쓣 �븣 湲곕낯 援ъ“: [22px | 1fr]) */
 .pm-manager .member-card{
   display:grid;
   grid-template-columns: 22px 1fr;
@@ -449,7 +449,7 @@ button,select,input{font:inherit}
   width:18px; height:18px; margin-top:2px;
 }
 
-/* 카드 본문 (줄바꿈 보장 + 줄 간격) */
+/* 移대뱶 蹂몃Ц (以꾨컮轅� 蹂댁옣 + 以� 媛꾧꺽) */
 .pm-manager .member-card .card-body{
   grid-column: 2;
   display:flex;
@@ -463,7 +463,7 @@ button,select,input{font:inherit}
 .pm-manager .member-card .name{ font-weight:800 }
 .pm-manager .member-card .small{ font-size:12px; color:#666 }
 
-/* 체크박스 없는 카드 전용 → 1컬럼 */
+/* 泥댄겕諛뺤뒪 �뾾�뒗 移대뱶 �쟾�슜 �넂 1而щ읆 */
 .pm-manager .member-card.no-check{
   grid-template-columns: 1fr;
 }
@@ -471,7 +471,7 @@ button,select,input{font:inherit}
   grid-column: 1;
 }
 
-/* 상태 점 */
+/* �긽�깭 �젏 */
 .pm-manager .s-dot{
   display:inline-block;
   width:8px; height:8px;
@@ -482,7 +482,7 @@ button,select,input{font:inherit}
 .pm-manager .s-dot.purple{ background:#8a5be5 }
 .pm-manager .s-dot.gray{ background:#bdbdbd }
 
-/* 하단 버튼 정렬 및 통일 */
+/* �븯�떒 踰꾪듉 �젙�젹 諛� �넻�씪 */
 .pm-manager .mgr-actions .btn.is-lg{
   margin-top:18px;
   height:44px;
@@ -490,20 +490,20 @@ button,select,input{font:inherit}
   border-radius:12px;
 }
 
-/* ===== Schedule (공통) ===== */
+/* ===== Schedule (怨듯넻) ===== */
 
-/* 레이아웃 */
+/* �젅�씠�븘�썐 */
 .pm-schedule .sched-layout {
   display:grid;
-   grid-template-columns:  minmax(520px, 1fr) 420px; /* 캘린더 | 우측 목록 */
+   grid-template-columns:  minmax(520px, 1fr) 420px; /* 罹섎┛�뜑 | �슦痢� 紐⑸줉 */
   gap:18px;
   align-items:start;
 }
 @media (max-width:980px){
-  .pm-schedule .sched-layout{ grid-template-columns:1fr; } /* 우측 목록 아래로 */
+  .pm-schedule .sched-layout{ grid-template-columns:1fr; } /* �슦痢� 紐⑸줉 �븘�옒濡� */
 }
 
-/* 캘린더 헤더 */
+/* 罹섎┛�뜑 �뿤�뜑 */
 .pm-schedule .calendar-header {
   display:flex; align-items:center; justify-content:center; gap:10px;
   margin-bottom:10px;
@@ -514,7 +514,7 @@ button,select,input{font:inherit}
 .pm-schedule .calendar-header .year { font-weight:800; color:#4b4b4b }
 .pm-schedule .calendar-header .month { margin:0; font-size:20px; font-weight:900 }
 
-/* 캘린더 표 */
+/* 罹섎┛�뜑 �몴 */
 .pm-schedule .calendar { width:100%; border-collapse:collapse; }
 .pm-schedule .calendar th,
 .pm-schedule .calendar td {
@@ -527,7 +527,7 @@ button,select,input{font:inherit}
 .pm-schedule .day { display:flex; flex-direction:column; align-items:center; gap:4px }
 .pm-schedule .day.empty { background:#f9f9fb; border-radius:8px }
 
-/* 선택된 날짜 표시 */
+/* �꽑�깮�맂 �궇吏� �몴�떆 */
 .pm-schedule .day.selected {
   background:#f3e8ff;
   border:2px solid #8a5be5;
@@ -536,17 +536,21 @@ button,select,input{font:inherit}
   color:#5b33c4;
 }
 
-/* 도트 */
+/* �룄�듃 */
 .pm-schedule .calendar .dot { width:8px; height:8px; border-radius:999px; display:inline-block; }
 .pm-schedule .dot { width:10px; height:10px; border-radius:50%; margin-top:4px; flex-shrink:0; }
-.pm-schedule .dot.green  { background:#25d366 }
-.pm-schedule .dot.orange { background:#ff9800 }
-.pm-schedule .dot.blue   { background:#2196f3 }
-.pm-schedule .dot.purple { background:#8a5be5 }
-.pm-schedule .dot.yellow { background:#ffc107 }
-.pm-schedule .dot.black  { background:#222 }
+.pm-schedule .dot.red    { background: #e60000; } /* 빨강 */
+.pm-schedule .dot.orange { background: #ff7a00; } /* 주황 */
+.pm-schedule .dot.yellow { background: #ffcc00; } /* 노랑 */
+.pm-schedule .dot.green  { background: #25d366; } /* 초록 */
+.pm-schedule .dot.blue   { background: #1e90ff; } /* 파랑 */
+.pm-schedule .dot.navy   { background: #001f7f; } /* 남색 */
+.pm-schedule .dot.purple { background: #8a2be2; } /* 보라 */
+.pm-schedule .dot.black  { background: #000000; } /* 검정 */
+.pm-schedule .dot.white  { background: #ffffff; border: 1px solid #ccc; } /* 흰색 (테두리 추가) */
 
-/* 우측 일정 목록 */
+
+/* �슦痢� �씪�젙 紐⑸줉 */
 .pm-schedule .sched-list .panel-title {
   margin:0 0 8px 0; font-size:16px; font-weight:900; color:#3b2f66;
 }
@@ -564,12 +568,12 @@ button,select,input{font:inherit}
   border-bottom:1px solid #e6e2f2;
 }
 
-/* 일정 텍스트 */
+/* �씪�젙 �뀓�뒪�듃 */
 .pm-schedule .sched-line { flex:1; display:flex; flex-direction:column; gap:4px; }
 .pm-schedule .sched-line .when { font-size:13px; color:#555; font-weight:600; }
 .pm-schedule .sched-line .what { font-size:14px; color:#222; line-height:1.5; font-weight:400; }
 
-/* 일정 액션 버튼 */
+/* �씪�젙 �븸�뀡 踰꾪듉 */
 .pm-schedule .sched-actions,
 .pm-schedule .sched-ul li .actions {
   margin-left:auto;
@@ -588,7 +592,7 @@ button,select,input{font:inherit}
   cursor:pointer;
 }
 
-/* ===== Schedule Add/Edit (추가/수정 폼) ===== */
+/* ===== Schedule Add/Edit (異붽�/�닔�젙 �뤌) ===== */
 .pm-schedule .sched-add-form,
 .pm-schedule .sched-edit-form {
   display:flex;
@@ -609,7 +613,7 @@ button,select,input{font:inherit}
   width:100%;
 }
 
-/* dot 선택 */
+/* dot �꽑�깮 */
 .pm-schedule .dot-picker {
   display:flex; gap:8px; align-items:center; flex-wrap:wrap;
 }
@@ -624,7 +628,7 @@ button,select,input{font:inherit}
   border-color:#333;
 }
 
-/* 시간 선택 */
+/* �떆媛� �꽑�깮 */
 .pm-schedule .time-picker {
   display:flex; align-items:center; gap:4px; flex-wrap:wrap;
 }
@@ -635,7 +639,7 @@ button,select,input{font:inherit}
   background:#fff;
 }
 
-/* 폼 하단 버튼 */
+/* �뤌 �븯�떒 踰꾪듉 */
 .pm-schedule .sched-add-form .actions,
 .pm-schedule .sched-edit-form .actions {
   display:flex; justify-content:flex-end; gap:8px; margin-top:6px;
@@ -650,7 +654,7 @@ button,select,input{font:inherit}
   cursor:pointer;
 }
 
-/* 일정 추가 버튼 */
+/* �씪�젙 異붽� 踰꾪듉 */
 .pm-schedule .add-btn {
   margin-top:10px;
   width:100%;
@@ -666,7 +670,7 @@ button,select,input{font:inherit}
 
 /* ===== FileBox (scoped) ===== */
 
-/* 섹션 타이틀(H2) */
+/* �꽮�뀡 ���씠��(H2) */
 .filebox-h2{
   margin: 12px 0 14px;
   font-size: 24px;
@@ -674,14 +678,14 @@ button,select,input{font:inherit}
   letter-spacing: -0.3px;
 }
 
-/* 폴더 그리드(카드) */
+/* �뤃�뜑 洹몃━�뱶(移대뱶) */
 .file-grid{
   display:flex;
   flex-wrap:wrap;
   gap:24px;
 }
 .file-card {
-  display: block; /* a 태그 자체를 block으로 */
+  display: block; /* a �깭洹� �옄泥대�� block�쑝濡� */
   width: 220px;
   min-height: 140px;
   border: 1.2px solid #222;
@@ -689,8 +693,8 @@ button,select,input{font:inherit}
   background: #fff;
   box-shadow: 2px 2px 0 #222;
   padding: 16px;
-  text-decoration: none; /* 링크 밑줄 제거 */
-  color: inherit;        /* 글자색 상속 */
+  text-decoration: none; /* 留곹겕 諛묒쨪 �젣嫄� */
+  color: inherit;        /* 湲��옄�깋 �긽�냽 */
 }
 .file-card .file-name {
   display: block;
@@ -706,7 +710,7 @@ button,select,input{font:inherit}
   font-weight: 800;
 }
 
-/* 브레드크럼 */
+/* 釉뚮젅�뱶�겕�읆 */
 .breadcrumbs{
   margin:8px 0 12px;
   font-size:22px;
@@ -714,7 +718,7 @@ button,select,input{font:inherit}
 }
 .breadcrumbs .sep{ margin:0 8px; color:#999 }
 
-/* 파일 테이블(목록) */
+/* �뙆�씪 �뀒�씠釉�(紐⑸줉) */
 .file-table{
   width:100%;
   border-collapse:collapse;
@@ -736,7 +740,7 @@ button,select,input{font:inherit}
 }
 .file-table tbody tr:hover td{ background:#fafafa }
 
-/* 검색바 */
+/* 寃��깋諛� */
 .searchbar{
   display:flex;
   align-items:center;
@@ -761,40 +765,40 @@ button,select,input{font:inherit}
   cursor:pointer;
 }
 
-/* 파일함: 사이드 내 ‘active’는 기존 .nav a.active 재사용 */
+/* �뙆�씪�븿: �궗�씠�뱶 �궡 �쁝ctive�숇뒗 湲곗〈 .nav a.active �옱�궗�슜 */
 
 
-.todo-card { display:flex; flex-direction:column; } /* 이미 있으나 재확인 */
-.todo-list { flex:1; }                               /* 리스트가 위쪽 공간을 먹게 */
+.todo-card { display:flex; flex-direction:column; } /* �씠誘� �엳�쑝�굹 �옱�솗�씤 */
+.todo-list { flex:1; }                               /* 由ъ뒪�듃媛� �쐞履� 怨듦컙�쓣 癒밴쾶 */
 .todo-card .footer-actions {
-  margin-top:auto;                /* 맨 아래로 밀기 */
-  justify-content:flex-end;       /* 오른쪽 정렬 */
+  margin-top:auto;                /* 留� �븘�옒濡� 諛�湲� */
+  justify-content:flex-end;       /* �삤瑜몄そ �젙�젹 */
 }
 /* ===============================
-   Schedule Add/Edit 공통 톤 통일
+   Schedule Add/Edit 怨듯넻 �넠 �넻�씪
    =============================== */
 
-/* 0) (수정 모드일 때) li 레이아웃을 한 줄에서 블록으로 전환 */
+/* 0) (�닔�젙 紐⑤뱶�씪 �븣) li �젅�씠�븘�썐�쓣 �븳 以꾩뿉�꽌 釉붾줉�쑝濡� �쟾�솚 */
 .pm-schedule .sched-ul li.sched-editing{
-  display:block;       /* 기존 flex → block */
-  padding:0;           /* 여백은 내부 폼이 담당 */
+  display:block;       /* 湲곗〈 flex �넂 block */
+  padding:0;           /* �뿬諛깆� �궡遺� �뤌�씠 �떞�떦 */
 }
 
-/* 1) 폼 컨테이너 공통 (추가/수정) */
+/* 1) �뤌 而⑦뀒�씠�꼫 怨듯넻 (異붽�/�닔�젙) */
 .pm-schedule .sched-add-form,
 .pm-schedule .sched-edit-form{
   width:100%;
   display:flex;
   flex-direction:column;
-  gap:12px;                        /* 요소 간 간격 통일 */
-  padding:14px;                    /* 내부 여백 넉넉하게 */
+  gap:12px;                        /* �슂�냼 媛� 媛꾧꺽 �넻�씪 */
+  padding:14px;                    /* �궡遺� �뿬諛� �꼮�꼮�븯寃� */
   border:1px solid #dcd5f3;
   border-radius:10px;
-  background:#fafaff;              /* 동일 톤 */
+  background:#fafaff;              /* �룞�씪 �넠 */
   margin-top:10px;
 }
 
-/* 2) 텍스트 입력 */
+/* 2) �뀓�뒪�듃 �엯�젰 */
 .pm-schedule .sched-add-form input[type="text"],
 .pm-schedule .sched-edit-form input[type="text"]{
   height:44px;
@@ -806,7 +810,7 @@ button,select,input{font:inherit}
   width:100%;
 }
 
-/* 3) 도트 선택(크기/클릭감 통일) */
+/* 3) �룄�듃 �꽑�깮(�겕湲�/�겢由�媛� �넻�씪) */
 .pm-schedule .sched-add-form .dot-picker .dot,
 .pm-schedule .sched-edit-form .dot-picker .dot{
   width:16px; height:16px;
@@ -823,30 +827,30 @@ button,select,input{font:inherit}
   border-color:#333;
 }
 
-/* 4) 시간 선택(드롭다운 사이즈/줄바꿈 통일) */
+/* 4) �떆媛� �꽑�깮(�뱶濡��떎�슫 �궗�씠利�/以꾨컮轅� �넻�씪) */
 .pm-schedule .sched-add-form .time-picker,
 .pm-schedule .sched-edit-form .time-picker{
   display:flex;
   align-items:center;
   gap:8px;
-  flex-wrap:wrap;                  /* 좁을 때 줄바꿈 허용 */
+  flex-wrap:wrap;                  /* 醫곸쓣 �븣 以꾨컮轅� �뿀�슜 */
 }
 .pm-schedule .sched-add-form select,
 .pm-schedule .sched-edit-form select{
   height:36px;
   font-size:15px;
   padding:6px 8px;
-  min-width:64px;                  /* 숫자 한 자리여도 너무 좁지 않게 */
+  min-width:64px;                  /* �닽�옄 �븳 �옄由ъ뿬�룄 �꼫臾� 醫곸� �븡寃� */
   border:1px solid #cfcfe7;
   border-radius:6px;
   background:#fff;
 }
 
-/* 5) 하단 액션 버튼 정렬/간격 통일 */
+/* 5) �븯�떒 �븸�뀡 踰꾪듉 �젙�젹/媛꾧꺽 �넻�씪 */
 .pm-schedule .sched-add-form .actions,
 .pm-schedule .sched-edit-form .actions{
   display:flex;
-  justify-content:flex-end;        /* 우측 정렬 */
+  justify-content:flex-end;        /* �슦痢� �젙�젹 */
   gap:8px;
   margin-top:8px;
 }
@@ -861,7 +865,7 @@ button,select,input{font:inherit}
 }
 /* ===== Task Table: Head controls (HTML4, no JS) ===== */
 
-/* 공통: 드롭다운 있는 머리글 */
+/* 怨듯넻: �뱶濡��떎�슫 �엳�뒗 癒몃━湲� */
 .task-table th.th-filter { position:relative; padding:0; }
 .th-wrap{ position:relative; display:block; height:100%; }
 .th-label{
@@ -873,7 +877,7 @@ button,select,input{font:inherit}
   box-shadow:inset 0 -2px 0 #e2d9ff;
 }
 
-/* 호버로만 열리는 패널 */
+/* �샇踰꾨줈留� �뿴由щ뒗 �뙣�꼸 */
 .dd-panel{
   display:none;
   position:absolute; top:100%; left:0;
@@ -890,7 +894,7 @@ button,select,input{font:inherit}
   border:1px solid #cfcfe7; border-radius:8px; background:#fff;
 }
 
-/* 시작일/마감일: 글자 옆 정렬 버튼 인라인 */
+/* �떆�옉�씪/留덇컧�씪: 湲��옄 �쁿 �젙�젹 踰꾪듉 �씤�씪�씤 */
 .task-table th.th-sort{
   white-space:nowrap;
   font-weight:800; color:#6b6b6b;
@@ -904,7 +908,7 @@ button,select,input{font:inherit}
   display:inline-block; min-width:22px; height:22px; line-height:20px;
   text-align:center; font-weight:900;
   border:1px solid #b7b3d8; border-radius:6px; background:#fff;
-  font-size:12px; cursor:default;  /* JS 없음 표시 */
+  font-size:12px; cursor:default;  /* JS �뾾�쓬 �몴�떆 */
 }
 .btn-sort:hover{ background:#f3e7ff; border-color:#c7b6f3; color:#5b33c4; }
 
@@ -913,10 +917,10 @@ button,select,input{font:inherit}
 }
 
 /* =========================
-   삭제된 코멘트 / 답글 처리
+   �궘�젣�맂 肄붾찘�듃 / �떟湲� 泥섎━
    ========================= */
 
-/* 공통 스타일 */
+/* 怨듯넻 �뒪���씪 */
 .cmt4.is-deleted,
 .r3.is-deleted {
   position: relative;
@@ -926,7 +930,7 @@ button,select,input{font:inherit}
   border-radius: 10px;
 }
 
-/* 삭제된 코멘트/답글 내부 내용 감춤 */
+/* �궘�젣�맂 肄붾찘�듃/�떟湲� �궡遺� �궡�슜 媛먯땄 */
 .cmt4.is-deleted .line1,
 .cmt4.is-deleted .line2,
 .cmt4.is-deleted .line3,
@@ -937,10 +941,10 @@ button,select,input{font:inherit}
   display: none !important;
 }
 
-/* 대체 문구 */
+/* ��泥� 臾멸뎄 */
 .cmt4.is-deleted::before,
 .r3.is-deleted::before {
-  content: "삭제된 코멘트입니다.";
+  content: "�궘�젣�맂 肄붾찘�듃�엯�땲�떎.";
   display: block;
   color: #8a86a3;
   font-size: 14px;

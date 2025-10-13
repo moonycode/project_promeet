@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="TasksMapper">
+
+  <resultMap id="TaskRowFlatMap" type="com.oopsw.model.vo.TaskRowFlatVO">
+    <result property="taskNo" column="task_no"/>
+    <result property="taskName" column="task_name"/>
+    <result property="projectNo" column="project_no"/>
+    <result property="startDate" column="start_date"/>
+    <result property="endDate" column="end_date"/>
+    <result property="taskStatus" column="task_status"/>
+    <result property="priority" column="priority"/>
+    <result property="employeeId" column="employee_id"/>
+    <result property="employeeName" column="employee_name"/>
+    <result property="checklistNo" column="checklist_no"/>
+    <result property="completeFlag" column="complete_flag"/>
+    <result property="checklistDelDate" column="c_del_date"/>
+  </resultMap>
+
+  <sql id="TasksFlatBase">
+    SELECT
+      t.task_no, t.task_name, t.project_no, t.start_date, t.end_date, t.task_status, t.priority,
+      pj.employee_id, e.name AS employee_name,
+      c.checklist_no, c.complete_flag, c.del_date AS c_del_date
+    FROM tasks t
+    LEFT JOIN task_join tj
+           ON t.task_no = tj.task_no AND tj.join_flag = 1
+    LEFT JOIN project_join pj
+           ON tj.project_join_no = pj.project_join_no
+    LEFT JOIN employees e
+           ON pj.employee_id = e.employee_id AND e.resign_date IS NULL
+    LEFT JOIN checklist c
+           ON t.task_no = c.task_no
+    WHERE t.del_date IS NULL
+      AND t.project_no = #{projectNo}
+  </sql>
+
+  <select id="selectTasksOrderByStartAsc" resultMap="TaskRowFlatMap">
+    <include refid="TasksFlatBase"/>
+    ORDER BY t.start_date ASC
+  </select>
+
+  <select id="selectTasksOrderByStartDesc" resultMap="TaskRowFlatMap">
+    <include refid="TasksFlatBase"/>
+    ORDER BY t.start_date DESC
+  </select>
+
+  <select id="selectTasksOrderByEndAsc" resultMap="TaskRowFlatMap">
+    <include refid="TasksFlatBase"/>
+    ORDER BY t.end_date ASC
+  </select>
+
+  <select id="selectTasksOrderByEndDesc" resultMap="TaskRowFlatMap">
+    <include refid="TasksFlatBase"/>
+    ORDER BY t.end_date DESC
+  </select>
+
+  <resultMap id="TaskAssigneeSummaryMap" type="com.oopsw.model.vo.TaskAssigneeSummaryVO">
+    <result property="taskNo" column="task_no"/>
+    <result property="firstManagerName" column="first_manager_name"/>
+    <result property="memberCount" column="member_count"/>
+  </resultMap>
+
+  <select id="selectTaskAssigneeSummary" resultMap="TaskAssigneeSummaryMap">
+    SELECT
+      t.task_no,
+      MIN(e.name) AS first_manager_name,
+      COUNT(e.employee_id) AS member_count
+    FROM tasks t
+    LEFT JOIN task_join tj ON t.task_no = tj.task_no AND tj.join_flag = 1
+    LEFT JOIN project_join pj ON tj.project_join_no = pj.project_join_no
+    LEFT JOIN employees e ON e.employee_id = pj.employee_id AND e.resign_date IS NULL
+    WHERE t.del_date IS NULL
+      AND t.project_no = #{projectNo}
+    GROUP BY t.task_no
+    ORDER BY t.task_no
+  </select>
+
+  <resultMap id="TaskAssigneeEditViewMap" type="com.oopsw.model.vo.TaskAssigneeEditViewVO">
+    <result property="employeeId" column="employee_id"/>
+    <result property="name" column="name"/>
+    <result property="department" column="department"/>
+    <result property="phoneNumber" column="phone_number"/>
+    <result property="email" column="email"/>
+    <result property="joinFlag" column="join_flag"/>
+  </resultMap>
+
+  <select id="selectAssigneeEditView" resultMap="TaskAssigneeEditViewMap">
+    SELECT
+      e.employee_id, e.name, e.department, e.phone_number, e.email,
+      NVL(tj.join_flag, 0) AS join_flag
+    FROM employees e
+    JOIN project_join pj
+      ON pj.employee_id = e.employee_id
+     AND pj.project_no  = #{projectNo}
+    LEFT JOIN task_join tj
+      ON tj.project_join_no = pj.project_join_no
+     AND tj.task_no = #{taskNo}
+    WHERE e.resign_date IS NULL
+  </select>
+
+  <insert id="insertTask" parameterType="com.oopsw.model.vo.TaskVO">
+  <!-- 키 미리 채번 -->
+  <selectKey keyProperty="taskNo" resultType="int" order="BEFORE">
+    SELECT tasks_seq.NEXTVAL FROM dual
+  </selectKey>
+
+  INSERT INTO tasks (
+    task_no, project_no, task_name, task_status,
+    start_date, end_date, in_date, up_date, priority, del_date
+  ) VALUES (
+    #{taskNo},
+    #{projectNo},
+    #{taskName},
+    #{taskStatus},
+    #{startDate, jdbcType=DATE},
+    #{endDate,   jdbcType=DATE},
+    SYSDATE,
+    NULL,
+    #{priority},
+    NULL
+  )
+</insert>
+
+
+  <insert id="insertTaskJoin" parameterType="com.oopsw.model.vo.TaskJoinVO">
+    INSERT INTO task_join (task_join_no, task_no, project_join_no, in_date, up_date, join_flag)
+    VALUES (task_join_seq.NEXTVAL, #{taskNo}, #{projectJoinNo}, SYSDATE, NULL, 1)
+  </insert>
+
+<update id="updateTask" parameterType="com.oopsw.model.vo.TaskVO">
+  UPDATE tasks
+     SET task_name   = NVL(#{taskName}, task_name),
+         task_status = NVL(#{taskStatus}, task_status),
+         start_date  = NVL(#{startDate, jdbcType=DATE}, start_date),
+         end_date    = NVL(#{endDate,   jdbcType=DATE}, end_date),
+         priority    = NVL(#{priority}, priority),
+         up_date     = SYSDATE
+   WHERE task_no = #{taskNo}
+</update>
+
+  <update id="softDeleteTask">
+    UPDATE tasks SET del_date = SYSDATE WHERE task_no = #{taskNo}
+  </update>
+
+  <update id="removeTaskMember">
+    UPDATE task_join
+       SET up_date = SYSDATE, join_flag = 0
+     WHERE task_no = #{taskNo}
+       AND project_join_no = #{projectJoinNo}
+       AND join_flag = 1
+  </update>
+
+  <update id="readdTaskMember">
+    UPDATE task_join
+       SET up_date = SYSDATE, join_flag = 1
+     WHERE task_no = #{taskNo}
+       AND project_join_no = #{projectJoinNo}
+       AND join_flag = 0
+  </update>
+
+  <select id="findProjectJoinNo" resultType="int">
+    SELECT pj.project_join_no
+      FROM project_join pj
+     WHERE pj.project_no = #{projectNo}
+       AND pj.employee_id = #{employeeId}
+     ORDER BY pj.project_join_no DESC
+  </select>
+</mapper>
