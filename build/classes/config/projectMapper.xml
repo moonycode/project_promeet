@@ -5,23 +5,22 @@
 
 <mapper namespace="projectMapper">
 
-    <!-- 진행중 프로젝트 조회 -->
     <select id="getOngoingProjects" parameterType="String" resultType="com.oopsw.model.ProjectVO">
         SELECT
 		    p.project_no,
-		    p.project_name,
-		    pmc.member_count,
+		    p.project_name AS projectName,
+		    pmc.memberCount,
 		    p.client,
 		    p.description,
-		    NVL(tc.total_cnt, 0) AS total_cnt,
-		    NVL(tc.done_cnt, 0)  AS done_cnt,
+		    NVL(tc.total_cnt, 0) AS totalCnt,
+		    NVL(tc.done_cnt, 0)  AS doneCnt,
 		    CASE WHEN p.end_date IS NULL THEN NULL
 		         ELSE TRUNC(p.end_date - SYSDATE)
 		    END AS dday
 		FROM projects p
 		LEFT JOIN (
 		    SELECT project_no,
-		    SUM(join_flag) AS member_count
+		    SUM(join_flag) AS memberCount
 		    FROM project_join
 		    GROUP BY project_no
 		) pmc ON pmc.project_no = p.project_no
@@ -37,29 +36,29 @@
 		WHERE
 		    p.del_date IS NULL AND p.complete_date IS NULL
 		    AND (
-		        p.creator_id = #{creatorId} 
+		        p.creator_id = #{employeeId} 
 		        OR
 		        p.project_no IN (
 		            SELECT project_no
 		            FROM project_join
-		            WHERE employee_id = #{creatorId} 
+		            WHERE employee_id = #{employeeId} 
 		            AND join_flag = 1
 		        )
 		    )
+		ORDER BY p.project_no ASC
     </select>
 
-    <!-- 완료된 프로젝트 조회 -->
     <select id="getCompletedProjects" parameterType="String" resultType="com.oopsw.model.ProjectVO">
         SELECT
 		    p.project_no,
-		    p.project_name,
-		    pmc.member_count,
+		    p.project_name AS projectName,
+		    pmc.memberCount,
 		    p.client,
 		    p.description
 		FROM projects p
 		LEFT JOIN (
 		    SELECT project_no,
-		    SUM(join_flag) AS member_count
+		    SUM(join_flag) AS memberCount
 		    FROM project_join
 		    GROUP BY project_no
 		) pmc ON pmc.project_no = p.project_no
@@ -80,7 +79,7 @@
 		ORDER BY p.complete_date DESC
     </select>
     
-    <!-- 프로젝트 등록(추가) -->
+    
     <insert id="insertProject" parameterType="java.util.Map">
         INSERT INTO projects (
             project_no, 
@@ -105,7 +104,6 @@
         )
     </insert>
     
-    <!-- 프로젝트 등록(추가)시 참여자로 자동 등록 -->
     <insert id="insertProjectManager" parameterType="java.util.Map">
     	INSERT INTO project_join (
 		  project_join_no, 
@@ -126,22 +124,24 @@
 		)
     </insert>
     
-    <!-- 수정할 프로젝트 선택 -->
-    <select id="selectUpdateProject" parameterType="int" resultType="com.oopsw.model.ProjectVO">
-    	SELECT
-		  project_no AS projectNo,
-		  creator_id AS creatorId,
-		  project_name AS projectName,
-		  client,
-		  start_date AS startDate,
-		  end_date AS endDate,
-		  description
-		FROM  projects
-		WHERE project_no = #{projectNo} AND del_date IS NULL
+    <select id="getProjectByNo" parameterType="int" resultType="com.oopsw.model.ProjectVO">
+	    SELECT
+	        project_no AS projectNo,
+	        project_name AS projectName,
+	        client,
+	        description,
+	        creator_id AS creatorId,
+	        start_date AS startDate,
+	        end_date AS endDate,
+	        in_date AS inDate,
+	        up_date AS dateUp,
+	        complete_date AS completeDate,
+	        del_date AS delDate
+	    FROM projects
+	    WHERE project_no = #{projectNo} AND del_date IS NULL
+	</select>
     
-    </select>
-    
-    <!-- 프로젝트 수정 -->
+
 	<update id="updateProject" parameterType="java.util.Map">
         UPDATE projects SET
             project_name = #{projectName}, 
@@ -154,7 +154,7 @@
             project_no = #{projectNo}
     </update>
     
-    <!-- 프로젝트 종료(완료) -->
+
     <update id="completeProject" parameterType="int">
         UPDATE projects SET 
             complete_date = SYSDATE
@@ -162,30 +162,27 @@
          	project_no = #{projectNo}
     </update>
     
-    <!-- 프로젝트 삭제 -->
+
     <update id="deleteProject" parameterType="int">
     	UPDATE projects SET 
     		del_date = SYSDATE
 	 	WHERE project_no = #{projectNo}
     </update>
     
-    <!-- 삭제된 프로젝트(휴지통) -->
+
     <select id="getBinProjects" parameterType="String" resultType="com.oopsw.model.ProjectVO">
 	    SELECT
 	        p.project_no,
-	        p.project_name,
-	        pmc.member_count,
+	        p.project_name AS projectName,
+	        pmc.memberCount,
 	        p.client,
 	        p.description,
-	        NVL(tc.total_cnt, 0) AS total_cnt,
-	        NVL(tc.done_cnt, 0) AS done_cnt,
-	        CASE WHEN p.end_date IS NULL THEN NULL
-	             ELSE TRUNC(p.end_date - SYSDATE)
-	        END AS dday
+	        NVL(tc.total_cnt, 0) AS totalCnt,
+	        NVL(tc.done_cnt, 0) AS doneCnt
 	    FROM projects p
 	    LEFT JOIN (
 	        SELECT project_no,
-	        SUM(join_flag) AS member_count
+	        SUM(join_flag) AS memberCount
 	        FROM project_join
 	        GROUP BY project_no
 	    ) pmc ON pmc.project_no = p.project_no
@@ -213,7 +210,6 @@
 	    ORDER BY p.del_date DESC
 	</select>
     
-    <!-- 복원할 프로젝트 선택 -->
     <select id="selectBinProject" parameterType="int" resultType="com.oopsw.model.ProjectVO">
 		SELECT 
 		    project_no AS projectNo, 
@@ -230,6 +226,7 @@
     <!-- 프로젝트 복원 -->
     <update id="restoreProject" parameterType="int">
     	UPDATE projects SET 
+    		complete_date = NULL,
     		del_date = NULL
  		WHERE project_no = #{projectNo}
     </update>

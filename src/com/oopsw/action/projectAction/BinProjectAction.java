@@ -9,8 +9,8 @@ import com.oopsw.action.Action;
 import com.oopsw.model.ProjectDAO;
 import com.oopsw.model.ProjectVO;
 
-public class ProjectAction implements Action {
-
+public class BinProjectAction implements Action{
+	
 	@Override
     public String execute(HttpServletRequest request) throws ServletException, IOException {
         
@@ -22,7 +22,7 @@ public class ProjectAction implements Action {
         int projectNo = Integer.parseInt(projectNoStr);
         
         ProjectDAO dao = new ProjectDAO();
-        ProjectVO project = dao.getProjectByNo(projectNo);
+        ProjectVO project = dao.selectBinProject(projectNo);
 
         if (project != null) {
             request.setAttribute("project", project);
@@ -32,3 +32,4 @@ public class ProjectAction implements Action {
         }
     }
 }
+

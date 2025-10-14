@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Login - ProMeet</title>
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/common.css" />
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/CSS/common.css" />
 </head>
 <body class="pm-login">
     <div class="header">

@@ -7,7 +7,7 @@
 <head>
   <meta charset="UTF-8" />
   <title>ProMeet 프로젝트 관리</title>
-  <link rel="stylesheet" href="${pageContext.request.contextPath}/common.css" />
+  <link rel="stylesheet" href="${pageContext.request.contextPath}/CSS/common.css" />
 </head>
 <body>
   <div class="container">
@@ -79,7 +79,6 @@
                 
                 <div class="card-footer">
 				    <c:set var="progress" value="${project.totalCnt > 0 ? (project.doneCnt * 100.0) / project.totalCnt : 0}" />
-				
 				    <div class="small">
 				        진행도 
 				        <fmt:formatNumber value="${progress}" pattern="#0.0" />% 
@@ -87,7 +86,6 @@
 				    <div class="progress">
 				        <div class="progress-bar" style="width:<c:out value="${progress}" />%"></div>
 				    </div>
-				
 				    <div class="meta">
 				    <c:choose><c:when test="${project.dday != null and project.dday < 0}">D+<c:out value="${project.dday * -1}" /></c:when><c:when test="${project.dday != null and project.dday >= 0}">D-<c:out value="${project.dday}" /></c:when><c:otherwise>D-0</c:otherwise></c:choose>
 				    </div>
