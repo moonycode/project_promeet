@@ -5,7 +5,6 @@
 
 <mapper namespace="employeeMapper">
 
-	<!-- 로그인 -->
     <select id="loginCheck" parameterType="java.util.Map" resultType="com.oopsw.model.EmployeeVO">
         SELECT 
             employee_id AS employeeId,
@@ -19,14 +18,12 @@
             AND resign_date IS NULL
     </select>
     
-    <!-- 로그인 시 상태변경(출근) -->
     <update id="goWorkStatus" parameterType="String">
     	UPDATE employees SET 
     		work_status = '출근' 
 		WHERE employee_id = #{employeeId}
     </update>
     
-    <!-- 마이페이지 비밀번호 변경 -->
     <update id="updatePassword" parameterType="java.util.Map">
     	UPDATE employees SET 
     		password = #{newPassword}, 
