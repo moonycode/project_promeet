@@ -79,18 +79,21 @@
 `frontend`, `backend`, `dao`, `service`, `mapper`, `controller`, `jsp`, `css`, `js`, `projects`, `tasks`, `schedules`, `auth`, `config`, `core`, `infra`
 
 #### subject 규칙
-- **명령형·현재시제**, **50자 내외**, **마침표 X**  
-  - 예) `프로젝트 목록 쿼리에 팀장 포함 로직 추가`
+- **영어로 쓰기**, **명령형·현재시제**, **명령형·현재시제**, **50자 내외**, **마침표 X**  
+  - 예) 프로젝트 목록 쿼리에 팀장 포함 로직 추가 => add logic to include project manager in project list query
+  
 
 
 #### 예시
-    feat(projects): 진행/휴지통 목록 쿼리 개편
-    - 팀장 프로젝트 포함 로직 추가
-    - 휴지통에서도 total/done/dday 집계 노출
+feat(projects): revamp active/bin project queries
+- include manager-owned projects in list
+- show total/done/dday stats even in bin view
+**꼭 한 줄로 쓰지 않아도 됨. 추가 설명사항 있을시에 정리해서 기재하기**
 
-    fix(mapper): trailing comma 제거로 ORA-00923 해결
+fix(mapper): resolve ORA-00923 by removing trailing comma
 
-    chore: .gitignore에 /captures, /build 추가
+chore: add /captures and /build to .gitignore
+
 
 
 
