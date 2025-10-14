@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper 
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="detailMapper">
+	<!-- 답글 삭제 -->
+	<update id="deleteReply" parameterType="int">
+		update replies
+		set
+		del_date = SYSDATE
+		where reply_no = #{value}
+	</update>
+	<!-- 답글 수정 -->
+	<update id="updateReply" parameterType="com.oopsw.model.ReplyVO">
+		UPDATE replies
+		SET
+		contents = #{contents}, up_date = SYSDATE
+		WHERE reply_no = #{replyNo}
+	</update>
+	<!-- 답글 작성 -->
+	<insert id="addReply" parameterType="com.oopsw.model.ReplyVO">
+		INSERT INTO replies (
+		reply_no,
+		comment_no,
+		project_join_no,
+		contents,
+		file_name,
+		file_path,
+		in_date,
+		up_date,
+		del_date
+		) VALUES (
+		replies_seq.NEXTVAL,
+		#{commentNo},
+		#{projectJoinNo},
+		#{contents},
+		#{fileName,
+		jdbcType=VARCHAR},
+		#{filePath, jdbcType=VARCHAR},
+		SYSDATE,
+		NULL,
+		NULL
+		)
+	</insert>
+	<!-- 댓글 삭제 -->
+	<update id="deleteComment" parameterType="int">
+		UPDATE comments
+		SET
+		del_date = SYSDATE
+		WHERE comment_no = #{value}
+	</update>
+	<!-- 댓글 수정 -->
+	<update id="updateComment" parameterType="com.oopsw.model.CommentVO">
+		UPDATE comments
+		SET
+		contents = #{contents},up_date = SYSDATE
+		where comment_no =
+		#{commentNo}
+	</update>
+	<!-- 댓글 작성 -->
+	<insert id="addComment" parameterType="com.oopsw.model.CommentVO">
+		INSERT INTO comments (
+		comment_no,
+		task_no,
+		project_join_no,
+		contents,
+		file_name,
+		file_path,
+		in_date,
+		up_date,
+		del_date
+		) VALUES (
+		comments_seq.NEXTVAL,
+		#{taskNo},
+		#{projectJoinNo},
+		#{contents},
+		#{fileName, jdbcType=VARCHAR},
+		#{filePath, jdbcType=VARCHAR},
+		SYSDATE,
+		NULL,
+		NULL
+		)
+	</insert>
+	<!-- 해당 업무 댓글 조회 -->
+	<select id="getComments" resultType="com.oopsw.model.CommentReplyVO">
+		SELECT
+		t.task_name AS
+		taskName,
+		c.comment_no AS commentNo,
+		ec.name AS commentWriter,
+		c.contents AS commentContents,
+		c.in_date AS commentIndate,
+		c.file_name AS commentFilename,
+		r.reply_no AS replyNo,   
+		er.name AS
+		replyWriter,
+		r.contents AS repliesContents,
+		r.in_date AS repliesIndate,
+		r.file_name AS repliesFilename,
+		c.up_date AS commentUpdate,
+		r.up_date AS
+		repliesUpdate,
+		c.del_date AS commentDeldate,
+		r.del_date AS
+		repliesDeldate
+		FROM comments c
+		JOIN tasks t ON c.task_no = t.task_no
+		JOIN project_join pjc ON c.project_join_no = pjc.project_join_no
+		JOIN
+		employees ec ON pjc.employee_id = ec.employee_id
+		LEFT JOIN replies r ON
+		c.comment_no = r.comment_no
+		LEFT JOIN project_join pjr ON
+		r.project_join_no = pjr.project_join_no
+		LEFT JOIN employees er ON
+		pjr.employee_id = er.employee_id
+		WHERE t.task_no = #{taskNo}
+		ORDER BY
+		c.in_date, r.in_date
+	</select>
+	<!-- 체크리스트 삭제 -->
+	<update id="deleteCheckList" parameterType="int">
+		UPDATE checklist
+		SET
+		del_date = SYSDATE
+		WHERE checklist_no = #{value}
+	</update>
+	<!-- 체크리스트 수정 -->
+	<update id="updateCheckList" parameterType="com.oopsw.model.CheckListVO">
+		UPDATE checklist
+		SET
+		complete_flag=#{completeFlag},
+		contents=#{contents},
+		up_date=SYSDATE
+		WHERE checklist_no=#{checkListNo}
+	</update>
+	<!-- 체크리스트 추가 -->
+	<insert id="addCheckList" parameterType="com.oopsw.model.CheckListVO">
+		INSERT INTO checklist (
+		checklist_no,
+		task_no,
+		contents,
+		complete_flag,
+		in_date,
+		up_date,
+		del_date
+		)
+		VALUES (
+		checklist_seq.NEXTVAL,
+		#{taskNo},
+		#{contents},
+		0,
+		SYSDATE,
+		NULL,
+		NULL
+		)
+	</insert>
+	<!-- 체크리스트 조회 -->
+	<select id="getCheckList" parameterType="int"
+		resultType="com.oopsw.model.CheckListVO">
+		select checklist_no AS checkListNo, task_no AS taskNo,
+		complete_flag AS completeFlag,contents,del_date AS delDate from
+		checklist
+		where task_no = #{taskNo}
+	</select>
+</mapper>
