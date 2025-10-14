@@ -16,9 +16,13 @@ import com.oopsw.action.employeeAction.LoginAction;
 import com.oopsw.action.employeeAction.LoginUIAction;
 import com.oopsw.action.projectAction.AddProjectAction;
 import com.oopsw.action.projectAction.AddProjectUIAction;
+import com.oopsw.action.projectAction.BinProjectAction;
+import com.oopsw.action.projectAction.BinProjectUIAction;
 import com.oopsw.action.projectAction.CompleteProjectAction;
 import com.oopsw.action.projectAction.DeleteProjectAction;
+import com.oopsw.action.projectAction.ProjectAction;
 import com.oopsw.action.projectAction.ProjectUIAction;
+import com.oopsw.action.projectAction.RestoreProjectAction;
 import com.oopsw.action.projectAction.UpdateProjectAction;
 import com.oopsw.action.projectAction.UpdateProjectUIAction;
 
@@ -29,6 +33,18 @@ public class ActionFactory {
 		Action a=null;
 		
 		switch(cmd){
+		case "getBinProject":
+			a = new BinProjectAction();
+			break;
+		case "restoreProject":
+			a = new RestoreProjectAction();
+			break;
+		case "binProjectUI":
+			a = new BinProjectUIAction();
+			break;
+		case "getProject":
+			a = new ProjectAction();
+			break;
 		case "deleteReply":
 			a =new DeleteReplyAction();
 			break;
