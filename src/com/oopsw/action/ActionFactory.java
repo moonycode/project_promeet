@@ -1,5 +1,17 @@
 package com.oopsw.action;
 
+import com.oopsw.action.detailAction.AddCheckListAction;
+import com.oopsw.action.detailAction.AddCommentAction;
+import com.oopsw.action.detailAction.AddReplyAction;
+import com.oopsw.action.detailAction.CheckListAction;
+import com.oopsw.action.detailAction.CommentReplyAction;
+import com.oopsw.action.detailAction.DeleteCheckListAction;
+import com.oopsw.action.detailAction.DeleteCommentAction;
+import com.oopsw.action.detailAction.DeleteReplyAction;
+import com.oopsw.action.detailAction.DetailTaskUIAction;
+import com.oopsw.action.detailAction.UpdateCheckListAction;
+import com.oopsw.action.detailAction.UpdateCommentAction;
+import com.oopsw.action.detailAction.UpdateReplyAction;
 import com.oopsw.action.employeeAction.LoginAction;
 import com.oopsw.action.employeeAction.LoginUIAction;
 import com.oopsw.action.projectAction.AddProjectAction;
@@ -17,6 +29,42 @@ public class ActionFactory {
 		Action a=null;
 		
 		switch(cmd){
+		case "deleteReply":
+			a =new DeleteReplyAction();
+			break;
+		case "updateReply":
+			a =new UpdateReplyAction();
+			break;
+		case "addReply":
+			a =new AddReplyAction();
+			break;
+		case "deleteComment":
+			a =new DeleteCommentAction();
+			break;
+		case "updateComment":
+			a =new UpdateCommentAction();
+			break;
+		case "addComment":
+			a =new AddCommentAction();
+			break;
+		case "commentReply":
+			a =new CommentReplyAction();
+			break;
+		case "deleteCheckList":
+			a =new DeleteCheckListAction();
+			break;
+		case "updateCheckList":
+			a =new UpdateCheckListAction();
+			break;
+		case "addCheckList":
+			a =new AddCheckListAction();
+			break;
+		case "checkList":
+			a =new CheckListAction();
+			break;
+		case "detailTaskUI":
+			a = new DetailTaskUIAction();
+			break;
 		case "deleteProject":
 			a = new DeleteProjectAction();
 			break;

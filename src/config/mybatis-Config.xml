@@ -18,6 +18,7 @@ PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
   <mappers>
     <mapper resource="config/ProjectMembersMapper.xml"/>
     <mapper resource="config/ProjectHeaderMapper.xml"/>
+    <mapper resource="config/detailMapper.xml"/>
     <mapper resource="config/TasksMapper.xml"/>
   </mappers>
   
