@@ -13,15 +13,14 @@ public class EmployeeVO {
 	private String workStatus;
 	private String position;
 	private Date inDate;
-	private Date upDate;
-	
+	private Date dateUp;
 	private Date resignDate;
-	private int projectLeader; // char->int
+	private int projectCreatorFlag;
 	
 	public EmployeeVO(){}
 	public EmployeeVO(String employeeId, String name, String department, String phoneNumber, String email,
-			String password, String workStatus, String position, Date inDate, Date upDate, Date resignDate,
-			int projectLeader) {
+			String password, String workStatus, String position, Date inDate, Date dateUp, Date resignDate,
+			int projectCreatorFlag) {
 		setEmployeeId(employeeId);
 		setName(name);
 		setDepartment(department);
@@ -31,9 +30,9 @@ public class EmployeeVO {
 		setWorkStatus(workStatus);
 		setPosition(position);
 		setInDate(inDate);
-		setUpDate(upDate);
+		setDateUp(dateUp);
 		setResignDate(resignDate);
-		setProjectLeader(projectLeader); 
+		setProjectCreatorFlag(projectCreatorFlag); 
 	}
 
 	public String getEmployeeId() {
@@ -90,11 +89,11 @@ public class EmployeeVO {
 	public void setInDate(Date inDate) {
 		this.inDate = inDate;
 	}
-	public Date getUpDate() {
-		return upDate;
+	public Date getDateUp() {
+		return dateUp;
 	}
-	public void setUpDate(Date upDate) {
-		this.upDate = upDate;
+	public void setDateUp(Date dateUp) {
+		this.dateUp = dateUp;
 	}
 	public Date getResignDate() {
 		return resignDate;
@@ -103,18 +102,18 @@ public class EmployeeVO {
 		this.resignDate = resignDate;
 	}
 	public int getProjectLeader() {
-		return projectLeader;
+		return projectCreatorFlag;
 	}
-	public void setProjectLeader(int projectLeader) {
-		this.projectLeader = projectLeader;
+	public void setProjectCreatorFlag(int projectCreatorFlag) {
+		this.projectCreatorFlag = projectCreatorFlag;
 	}
 
 	@Override
 	public String toString() {
 		return "EmployeeVO [employeeId=" + employeeId + ", name=" + name + ", department=" + department
 				+ ", phoneNumber=" + phoneNumber + ", email=" + email + ", workStatus=" + workStatus + ", position="
-				+ position + ", inDate=" + inDate + ", upDate=" + upDate + ", resignDate=" + resignDate
-				+ ", projectLeader=" + projectLeader + "]";
+				+ position + ", inDate=" + inDate + ", dateUp=" + dateUp + ", resignDate=" + resignDate
+				+ ", projectCreatorFlag=" + projectCreatorFlag + "]";
 	}
 	
 	

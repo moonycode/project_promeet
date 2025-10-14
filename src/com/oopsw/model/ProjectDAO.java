@@ -85,20 +85,21 @@ public class ProjectDAO {
         return result;
     }
     
-    // 프로젝트 수정을 위한 프로젝트 읽어오기
-    public ProjectVO selectUpdateProject(int projectNo) {
+    //프로젝트 선택
+    public ProjectVO getProjectByNo(int projectNo) {
         SqlSession session = null;
-        ProjectVO vo = null;
+        ProjectVO project = null;
         try {
             session = DBCP.getSqlSessionFactory().openSession();
-            vo = session.selectOne("projectMapper.selectUpdateProject", projectNo); 
+            project = session.selectOne("projectMapper.getProjectByNo", projectNo); 
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
             if (session != null) session.close();
         }
-        return vo;
+        return project;
     }
+ 
     
     // 프로젝트 수정
     public int updateProject(ProjectVO vo, String startDate, String endDate) {

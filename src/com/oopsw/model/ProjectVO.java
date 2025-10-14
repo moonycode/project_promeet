@@ -5,16 +5,16 @@ import java.util.Date;
 public class ProjectVO {
 	
 	private int projectNo;
-	private String managerId;// employeeId -> managerId
+	private String creatorId;
 	private String projectName;
 	private String client;
 	private Date startDate;
 	private Date endDate;
 	private Date inDate;
-	private Date upDate;
-	private Date completeDate; // ëˆ„ë½
+	private Date dateUp; //upDate=>dateUp //db upDate¶ó´Â ¸Þ¼­µå°¡ ÀÖÀ½
+	private Date completeDate;
 	private String description;
-	private Date delDate; // delFlag->delDate
+	private Date delDate;
 	private int memberCount;
 	private int totalCnt;
 	private int doneCnt;
@@ -22,17 +22,17 @@ public class ProjectVO {
 	
 	
 	public ProjectVO(){}
-	public ProjectVO(int projectNo, String managerId, String projectName, String client, Date startDate, Date endDate,
-			Date inDate, Date upDate, Date completeDate, String description, Date delDate, int memberCount, int totalCnt, int doneCnt,
+	public ProjectVO(int projectNo, String creatorId, String projectName, String client, Date startDate, Date endDate,
+			Date inDate, Date dateUp, Date completeDate, String description, Date delDate, int memberCount, int totalCnt, int doneCnt,
 			int dday) {
 		setProjectName(projectName);
-		setManagerId(managerId);
+		setCreatorId(creatorId);
 		setProjectName(projectName);
 		setClient(client);
 		setStartDate(startDate);
 		setEndDate(endDate);
 		setInDate(inDate);
-		setUpDate(upDate);
+		setDateUp(dateUp);
 		setCompleteDate(completeDate);
 		setDescription(description);
 		setDelDate(delDate);
@@ -48,11 +48,11 @@ public class ProjectVO {
 	public void setProjectNo(int projectNo) {
 		this.projectNo = projectNo;
 	}
-	public String getManagerId() {
-		return managerId;
+	public String getCreatorId() {
+		return creatorId;
 	}
-	public void setManagerId(String managerId) {
-		this.managerId = managerId;
+	public void setCreatorId(String creatorId) {
+		this.creatorId = creatorId;
 	}
 	public String getProjectName() {
 		return projectName;
@@ -84,11 +84,11 @@ public class ProjectVO {
 	public void setInDate(Date inDate) {
 		this.inDate = inDate;
 	}
-	public Date getUpDate() {
-		return upDate;
+	public Date getDateUp() {
+		return dateUp;
 	}
-	public void setUpDate(Date upDate) {
-		this.upDate = upDate;
+	public void setDateUp(Date dateUp) {
+		this.dateUp = dateUp;
 	}
 	public Date getCompleteDate() {
 		return completeDate;
@@ -136,13 +136,9 @@ public class ProjectVO {
 	
 	@Override
 	public String toString() {
-		return "ProjectVO [projectNo=" + projectNo + ", managerId=" + managerId + ", projectName=" + projectName
+		return "ProjectVO [projectNo=" + projectNo + ", creatorId=" + creatorId + ", projectName=" + projectName
 				+ ", client=" + client + ", startDate=" + startDate + ", endDate=" + endDate + ", inDate=" + inDate
-				+ ", upDate=" + upDate + ", completeDate=" + completeDate + ", description=" + description + ", delDate=" + delDate 
+				+ ", dateUp=" + dateUp + ", completeDate=" + completeDate + ", description=" + description + ", delDate=" + delDate 
 				+ ", memberCount=" + memberCount + ", totalCnt=" + totalCnt + ", doneCnt=" + doneCnt + ", dday=" + dday + "]";
 	}
-	
-	
-	
-	
 }
