@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<title>업무 상세 - 보기</title>
+<link rel="stylesheet" href="CSS/common.css" />
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+</head>
+
+<body>
+	<div class="container">
+		<!-- === 사이드바는 네 코드 유지 === -->
+
+		<div class="main">
+			<div class="detail-body">
+				<div class="todo-card view">
+					<div class="todo-list-wrap">
+						<div class="todo-list" id="todoList"></div>
+					</div>
+						<button id="btnAddLine" class="btn-primary" style="display: none;">추가</button>
+					<div class="footer-actions">
+						<button id="btnToggleEdit" class="btn-primary">수정</button>
+						<button id="btnCancel" class="btn-primary" style="display: none;">취소</button>
+					</div>
+				</div>
+
+				<section class="cmt-panel">
+					<div class="cmt-list" id="commentList">
+						<div class="comment-editor">
+							<input id="newComment" type="text" placeholder="댓글 내용을 입력하세요" />
+							<button id="btnAddComment" class="btn-small btn-pink">등록</button>
+						</div>
+					</div>
+				</section>
+			</div>
+		</div>
+	</div>
+
+
+	<script>
+	$(document).ready(function(){
+		    const taskNo = 3;
+		    let isEditMode = false;
+			function getChecklist() {
+				  $.ajax({
+				    url: "controller",
+				    data: { cmd: "checkList", taskNo },
+				    dataType: "json",
+				    success: function(list) {
+				      loadChecklist(list || []);  
+				    }
+				  });
+				}
+
+			function loadChecklist(list) {
+				const $todo = $("#todoList");
+				$todo.empty(); 
+				const activeList = list.filter(function(item) {
+				    return !item.delDate;
+				  });
+
+				  activeList.forEach(function(item) {
+				    const checked = item.completeFlag ? "checked" : "";
+				    const disabled = isEditMode ? "" : "disabled";
+
+				    $todo.append(`
+				      <div class="todo-line" data-id="${item.checkListNo}">
+				        <input type="checkbox" class="chk" ${checked} ${disabled}/>
+				        <input type="text" class="todo-input" value="${item.contents}" ${disabled}/>
+				        ${isEditMode ? '<button class="del-ico">×</button>' : ''}
+				      </div>
+				    `);
+				  });
+				}
+
+		    function saveChecklist(){
+		    	$(".todo-line").each(function(){
+		    	    const checkListNo = $(this).data("id");
+		    	    const contents = $(this).find(".todo-input").val().trim();
+		    	    const completeFlag = $(this).find(".chk").is(":checked") ? 1 : 0;
+		    	    if(!contents) return;
+
+		    	    const payload = checkListNo
+		    	      ? { cmd: "updateCheckList", checkListNo, contents, completeFlag }
+		    	      : { cmd: "addCheckList", taskNo, contents };
+
+		    	    $.ajax({  
+		    	      url: "controller",
+		    	      data: payload,
+		    	      success: function() {
+		    	      }
+		    	    });
+		    	  }); 
+		    	}
+		    function deleteChecklist(checkListNo){
+		    	$.ajax({
+		    		url: "controller",
+		    	    data: { cmd: "deleteCheckList", checkListNo },
+		    	    success: function(){
+		    	    }
+		    	  });
+		    	}
+
+		    $("#btnToggleEdit").on("click", function(){
+		      if(!isEditMode){
+		        $(this).text("저장");
+		        $("#btnAddLine").show();
+		        $("#btnCancel").show();
+		        $(".todo-card").removeClass("view");
+		      }else{
+		        $("#btnToggleEdit").text("수정");
+		        $("#btnAddLine").hide();
+		        $("#btnCancel").hide();
+		        $(".todo-card").addClass("view");
+		        $(".todo-line[data-delete='true']").each(function(){
+		            const checkListNo = $(this).data("id");
+		            if(checkListNo) deleteChecklist(checkListNo);
+		          });
+		        saveChecklist();
+		      }
+		        isEditMode = !isEditMode;
+		        getChecklist();
+		    });
+		    $("#btnCancel").on("click", function(){
+		        $("#btnToggleEdit").text("수정");
+		        $("#btnAddLine").hide();
+		        $("#btnCancel").hide();
+		        $(".todo-card").addClass("view");
+		        getChecklist();
+		    });
+		    $("#btnAddLine").on("click", function(){
+		      $("#todoList").append(`
+		        <div class="todo-line new-item">
+		          <input type="checkbox" class="chk" disabled />
+		          <input type="text" class="todo-input" placeholder="새 항목 입력..." />
+		          <button class="del-ico">×</button>
+		        </div>
+		      `); 
+		    });
+
+		    $(document).on("click", ".del-ico", function(){
+		    	  const $line = $(this).closest(".todo-line");
+		    	  const checkListNo = $line.data("id");
+		    	  
+		    	  if(!checkListNo){
+		    	    $line.remove();
+		    	    return;
+		    	  }
+		    	  
+		    	  $line.attr("data-delete", "true");
+		    	  $line.hide();
+		    	});
+
+		    function loadComments(){
+		      $.ajax({
+		        url: "controller",
+		        data: { cmd: "commentReply", taskNo },
+		        dataType: "json",
+		        success: function(list){
+		          const $commentList = $("#commentList");
+		          $commentList.find("article.cmt4").remove();
+
+		          const grouped = {};
+		          list.forEach(function(item){
+		            if(!grouped[item.commentNo]) grouped[item.commentNo] = { comment: item, replies: [] };
+		            if(item.replyNo) grouped[item.commentNo].replies.push(item);
+		          });
+
+		          Object.values(grouped).forEach(function({ comment, replies }){
+		        	  const cDel = comment.commentDeldate;
+		        	  const cClass = cDel ? "cmt4 is-deleted" : "cmt4";
+		        	  const cText = comment.commentContents;
+
+		            let html = `
+		              <article class="${cClass}">
+		                <div class="line1"><div class="name">${comment.commentWriter || "익명"}</div></div>
+		                <div class="line2">${cDel ? "" : escapeHtml(cText)}</div>
+		                <div class="line3">
+		                  <div class="meta-row">
+		                    <time>${comment.commentIndate || ""}</time>
+		                    ${!cDel ? `
+		                      <div class="meta-actions">
+		                        <a href="#" class="btnEdit" data-id="${comment.commentNo}" data-type="comment">수정</a>
+		                        <a href="#" class="btnDel" data-id="${comment.commentNo}" data-type="comment">삭제</a>
+		                      </div>` : ""}
+		                  </div>
+		                </div>
+		                <div class="line4">
+		                  ${!cDel ? `<button class="btn-reply" data-id="${comment.commentNo}">답글</button>` : ""}
+		                </div>
+		                <div class="reply-stack">
+		            `;
+
+		            replies.forEach(function(r){
+		              const rDel = r.repliesDeldate;
+		              const rText = rDel ? "삭제된 답글입니다." : (r.repliesContents || "");
+		              const rClass = rDel ? "r3 is-deleted" : "r3";
+		              html += `
+		                <div class="${rClass}">
+		                  <div class="rline1">
+		                    <span class="arrow">ㄴ</span>
+		                    <span class="name">${r.replyWriter || "익명"}</span>
+		                  </div>
+		                  <div class="rline2">${rText}</div>
+		                  <div class="rline3">
+		                    <div class="meta-row">
+		                      <time>${r.repliesIndate || ""}</time>
+		                      ${!rDel ? `
+		                        <div class="meta-actions">
+		                          <a href="#" class="btnEdit" data-id="${r.replyNo}" data-type="reply">수정</a>
+		                          <a href="#" class="btnDel" data-id="${r.replyNo}" data-type="reply">삭제</a>
+		                        </div>` : ""}
+		                    </div>
+		                  </div>
+		                </div>`;
+		            });
+
+		            html += `</div></article>`;
+		            $commentList.prepend(html);
+		          });
+		        }
+		      });
+		    }
+
+		    $("#btnAddComment").on("click", function(){
+		      const contents = $("#newComment").val().trim();
+		      if(!contents) return alert("내용을 입력하세요");
+
+		      $.ajax({
+		        url: "controller",
+		        data: { cmd: "addComment", taskNo, projectJoinNo: 1, contents },
+		        success: function(){
+		          $("#newComment").val("");
+		          loadComments();
+		        }
+		      });
+		    });
+
+		    $(document).on("click", ".btnDel", function(){
+		      const id = $(this).data("id");
+		      const type = $(this).data("type");
+		      const cmd = type === "reply" ? "deleteReply" : "deleteComment";
+		      if(!confirm("정말 삭제하시겠습니까?")) return;
+		      $.ajax({
+		        url: "controller",
+		        data: { cmd, [`${type}No`]: id },
+		        success: function(){ loadComments(); }
+		      });
+		    });
+
+		    $(document).on("click", ".btnEdit", function(e){
+		      e.preventDefault();
+		      const id = $(this).data("id");
+		      const type = $(this).data("type");
+		      const $article = $(this).closest(type === "reply" ? ".r3" : ".cmt4");
+		      const $content = type === "reply" ? $article.find(".rline2") : $article.find(".line2");
+		      const originalText = $content.text();
+
+		      if($article.find("textarea").length) return;
+
+		      $content.html(`
+		        <textarea class="editArea">${originalText}</textarea>
+		        <button class="btnSaveEdit" data-id="${id}" data-type="${type}">수정 완료</button>
+		        <button class="btnCancelEdit">취소</button>
+		      `);
+		    });
+
+		    $(document).on("click", ".btnCancelEdit", function(){
+		      const $area = $(this).closest(".cmt4, .r3");
+		      const $textArea = $area.find("textarea");
+		      const prevText = $textArea.val();
+		      $area.find(".line2, .rline2").text(prevText);
+		    });
+
+		    $(document).on("click", ".btnSaveEdit", function(){
+		      const id = $(this).data("id");
+		      const type = $(this).data("type");
+		      const cmd = type === "reply" ? "updateReply" : "updateComment";
+		      const $area = $(this).closest(".cmt4, .r3");
+		      const newText = $area.find("textarea").val().trim();
+		      if(!newText) return alert("내용을 입력하세요");
+
+		      const payload = type === "reply"
+		        ? { cmd, replyNo: id, contents: newText }
+		        : { cmd, commentNo: id, contents: newText };
+
+		      $.ajax({
+		        url: "controller",
+		        data: payload,
+		        success: function(){
+		          alert("수정되었습니다.");
+		          loadComments();
+		        }
+		      });
+		    });
+
+		    getChecklist();
+		    loadComments();
+
+		  });
+	</script>
+</body>
+</html>
+
