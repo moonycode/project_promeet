@@ -13,9 +13,20 @@ public class ScheduleVO {
 	private Date endTime;
 	
 	public ScheduleVO(){}
+	
 	public ScheduleVO(int scheduleNo, String employeeId, Date scheduleDate, String scheduleType, String title,
 			Date startTime, Date endTime) {
 		setScheduleNo(scheduleNo);
+		setEmployeeId(employeeId);
+		setScheduleDate(scheduleDate);
+		setScheduleType(scheduleType);
+		setTitle(title);
+		setStartTime(startTime);
+		setEndTime(endTime);
+	}
+	
+	public ScheduleVO(String employeeId, Date scheduleDate, String scheduleType, String title,
+			Date startTime, Date endTime) {
 		setEmployeeId(employeeId);
 		setScheduleDate(scheduleDate);
 		setScheduleType(scheduleType);
