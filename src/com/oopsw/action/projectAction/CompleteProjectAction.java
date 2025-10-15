@@ -24,10 +24,8 @@ public class CompleteProjectAction implements Action {
         int result = dao.completeProject(projectNo); 
 
         if (result > 0) {
-            //완료 성공 시
             return "controller?cmd=projectUI";
         } else {
-            //완료 실패 시
             return "controller?cmd=projectUI";
         }
     }

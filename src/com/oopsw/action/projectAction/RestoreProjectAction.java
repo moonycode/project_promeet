@@ -25,10 +25,8 @@ public class RestoreProjectAction implements Action {
 		int result = dao.deleteProject(projectNo);	
 
 		if (result > 0) {
-			//복구 성공 시
             return "controller?cmd=projectUI";
 		} else {
-			//복구 실패 시
             return "controller?cmd=projectUI";
 		}
 	}
