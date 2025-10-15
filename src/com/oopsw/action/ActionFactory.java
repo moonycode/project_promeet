@@ -25,6 +25,11 @@ import com.oopsw.action.projectAction.ProjectUIAction;
 import com.oopsw.action.projectAction.RestoreProjectAction;
 import com.oopsw.action.projectAction.UpdateProjectAction;
 import com.oopsw.action.projectAction.UpdateProjectUIAction;
+import com.oopsw.action.sceduleAction.AddScheduleAction;
+import com.oopsw.action.sceduleAction.DeleteScheduleAction;
+import com.oopsw.action.sceduleAction.DotScheduleAction;
+import com.oopsw.action.sceduleAction.ScheduleUIAction;
+import com.oopsw.action.sceduleAction.UpdateScheduleAction;
 
 public class ActionFactory {	
 	private ActionFactory(){}
@@ -33,6 +38,21 @@ public class ActionFactory {
 		Action a=null;
 		
 		switch(cmd){
+		case "updateSchedule":
+			a=new UpdateScheduleAction();
+			break;
+		case "deleteSchedule":
+			a=new DeleteScheduleAction();
+			break;
+		case "addSchedule":
+			a=new AddScheduleAction();
+			break;
+		case "dotSchedule":
+			a=new DotScheduleAction();
+			break;
+		case "scheduleUI":
+			a=new ScheduleUIAction();
+			break;
 		case "getBinProject":
 			a = new BinProjectAction();
 			break;
