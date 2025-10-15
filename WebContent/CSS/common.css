@@ -541,12 +541,15 @@ button,select,input{font:inherit}
 /* 도트 */
 .pm-schedule .calendar .dot { width:8px; height:8px; border-radius:999px; display:inline-block; }
 .pm-schedule .dot { width:10px; height:10px; border-radius:50%; margin-top:4px; flex-shrink:0; }
-.pm-schedule .dot.green  { background:#25d366 }
-.pm-schedule .dot.orange { background:#ff9800 }
-.pm-schedule .dot.blue   { background:#2196f3 }
-.pm-schedule .dot.purple { background:#8a5be5 }
-.pm-schedule .dot.yellow { background:#ffc107 }
-.pm-schedule .dot.black  { background:#222 }
+.pm-schedule .dot.red    { background: #e60000; }
+.pm-schedule .dot.orange { background: #ff7a00; }
+.pm-schedule .dot.yellow { background: #ffcc00; }
+.pm-schedule .dot.green  { background: #25d366; }
+.pm-schedule .dot.blue   { background: #1e90ff; }
+.pm-schedule .dot.navy   { background: #001f7f; }
+.pm-schedule .dot.purple { background: #8a2be2; }
+.pm-schedule .dot.black  { background: #000000; }
+.pm-schedule .dot.white  { background: #ffffff; border: 1px solid #ccc; }
 
 /* 우측 일정 목록 */
 .pm-schedule .sched-list .panel-title {
@@ -852,8 +855,10 @@ button,select,input{font:inherit}
   gap:8px;
   margin-top:8px;
 }
-.pm-schedule .sched-add-form .actions .btn-xs,
-.pm-schedule .sched-edit-form .actions .btn-xs{
+.pm-schedule .sched-add-form .actions .save-xs,
+.pm-schedule .sched-add-form .actions .cancel-xs,
+.pm-schedule .sched-edit-form .actions .save-xs,
+.pm-schedule .sched-edit-form .actions .cancel-xs {
   border:1px solid #ccc;
   border-radius:6px;
   padding:6px 10px;
@@ -1057,4 +1062,22 @@ button,select,input{font:inherit}
 /* 완료 카드에서 D-Day와 진행도는 숨깁니다. */
 .project-card.completed-project-card .card-footer {
     display: none;
+}
+
+.sched-delete-btn {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    float: right;    
+    color: #888;
+    font-size: 14px;
+}
+
+.sched-delete-btn:hover {
+    color: red;
+}
+
+.pm-schedule .edit-btn {
+  margin-top:10px;
+  width:100%;
 }
