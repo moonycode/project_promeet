@@ -15,6 +15,7 @@ $(document).ready(function() {
     function updateCalendar() {
         $('.year').text(year + '년');
         $('.month').text(month + '월');
+        
 
         var firstDay = new Date(year, month - 1, 1).getDay();
         var lastDate = new Date(year, month, 0).getDate();
@@ -238,6 +239,12 @@ $(document).ready(function() {
     });
 
     $('.sched-ul').on('click', '.sched-delete-btn', function() {
+        if (!confirm('정말로 삭제하시겠습니까?')) {
+            return;
+        }
+
+    	
+    	
         var li = $(this).closest('li');
         var scheduleNo = li.data('schedule-no');
 
@@ -351,8 +358,6 @@ $(document).ready(function() {
         li.css('opacity', '0.5');
     });
 
-
-
     
     $('.sched-ul').on('click', '.sched-edit-form .cancel-xs', function() {
         var form = $(this).closest('.sched-edit-form');
@@ -403,6 +408,17 @@ $(document).ready(function() {
                 });
                 form.remove();
             }
+        });
+    });
+    
+    $('.month').on('click', function() {
+        selectedDate = null;
+
+        $('.calendar .day').removeClass('selected');
+
+        fetchDotList(function() {
+            updateCalendar();
+            renderScheduleList(dotList);
         });
     });
 

@@ -10,13 +10,13 @@ public class SearchFileBoxVO {
 	String taskNo;
 	String projectNo;
 	Date delDate;
-	
-	
+	String inDate;
+	String writerName;
 	
 	public SearchFileBoxVO() {}
 
 	public SearchFileBoxVO(String fileName, String filePath, String projectName, String taskName, String taskNo,
-			String projectNo, Date delDate) {
+			String projectNo, Date delDate, String inDate, String writerName) {
 		super();
 		this.fileName = fileName;
 		this.filePath = filePath;
@@ -25,56 +25,120 @@ public class SearchFileBoxVO {
 		this.taskNo = taskNo;
 		this.projectNo = projectNo;
 		this.delDate = delDate;
+		this.inDate = inDate;
+		this.writerName = writerName;
 	}
-	
+
+
+
 	public String getFileName() {
 		return fileName;
 	}
+
+
+
 	public void setFileName(String fileName) {
 		this.fileName = fileName;
 	}
+
+
+
 	public String getFilePath() {
 		return filePath;
 	}
+
+
+
 	public void setFilePath(String filePath) {
 		this.filePath = filePath;
 	}
+
+
+
 	public String getProjectName() {
 		return projectName;
 	}
+
+
+
 	public void setProjectName(String projectName) {
 		this.projectName = projectName;
 	}
+
+
+
 	public String getTaskName() {
 		return taskName;
 	}
+
+
+
 	public void setTaskName(String taskName) {
 		this.taskName = taskName;
 	}
+
+
+
 	public String getTaskNo() {
 		return taskNo;
 	}
+
+
+
 	public void setTaskNo(String taskNo) {
 		this.taskNo = taskNo;
 	}
+
+
+
 	public String getProjectNo() {
 		return projectNo;
 	}
+
+
+
 	public void setProjectNo(String projectNo) {
 		this.projectNo = projectNo;
 	}
+
+
+
 	public Date getDelDate() {
 		return delDate;
 	}
+
+
+
 	public void setDelDate(Date delDate) {
 		this.delDate = delDate;
 	}
-	@Override
-	public String toString() {
-		return "SearchFileBoxVO [fileName=" + fileName + ", filePath=" + filePath + ", projectName=" + projectName
-				+ ", taskName=" + taskName + ", taskNo=" + taskNo + ", projectNo=" + projectNo + ", delDate=" + delDate
-				+ "]";
+
+
+
+	public String getInDate() {
+		return inDate;
 	}
+
+
+
+	public void setInDate(String inDate) {
+		this.inDate = inDate;
+	}
+
+
+
+	public String getWriterName() {
+		return writerName;
+	}
+
+
+
+	public void setWriterName(String writerName) {
+		this.writerName = writerName;
+	}
+
+
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -82,12 +146,17 @@ public class SearchFileBoxVO {
 		result = prime * result + ((delDate == null) ? 0 : delDate.hashCode());
 		result = prime * result + ((fileName == null) ? 0 : fileName.hashCode());
 		result = prime * result + ((filePath == null) ? 0 : filePath.hashCode());
+		result = prime * result + ((inDate == null) ? 0 : inDate.hashCode());
 		result = prime * result + ((projectName == null) ? 0 : projectName.hashCode());
 		result = prime * result + ((projectNo == null) ? 0 : projectNo.hashCode());
 		result = prime * result + ((taskName == null) ? 0 : taskName.hashCode());
 		result = prime * result + ((taskNo == null) ? 0 : taskNo.hashCode());
+		result = prime * result + ((writerName == null) ? 0 : writerName.hashCode());
 		return result;
 	}
+
+
+
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -112,6 +181,11 @@ public class SearchFileBoxVO {
 				return false;
 		} else if (!filePath.equals(other.filePath))
 			return false;
+		if (inDate == null) {
+			if (other.inDate != null)
+				return false;
+		} else if (!inDate.equals(other.inDate))
+			return false;
 		if (projectName == null) {
 			if (other.projectName != null)
 				return false;
@@ -132,9 +206,23 @@ public class SearchFileBoxVO {
 				return false;
 		} else if (!taskNo.equals(other.taskNo))
 			return false;
+		if (writerName == null) {
+			if (other.writerName != null)
+				return false;
+		} else if (!writerName.equals(other.writerName))
+			return false;
 		return true;
 	}
-	
+
+
+
+	@Override
+	public String toString() {
+		return "SearchFileBoxVO [fileName=" + fileName + ", filePath=" + filePath + ", projectName=" + projectName
+				+ ", taskName=" + taskName + ", taskNo=" + taskNo + ", projectNo=" + projectNo + ", delDate=" + delDate
+				+ ", inDate=" + inDate + ", writerName=" + writerName + "]";
+	}
+
 	
     
 }

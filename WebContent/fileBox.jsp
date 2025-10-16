@@ -15,7 +15,7 @@
 		<!-- Main -->
 		<div class="main">
 			<h1 class="page-title" style="gap: 8px">
-				<span style="font-size: 36px; font-weight: 900">파일함</span>
+				<span style="font-size: 36px; font-weight: 900" class="fileBox">파일함</span>
 			</h1>
 			<div class="searchbar">
 				<input class="search-input" type="text" value=""
