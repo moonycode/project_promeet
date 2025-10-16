@@ -12,8 +12,11 @@ import com.oopsw.action.detailAction.DetailTaskUIAction;
 import com.oopsw.action.detailAction.UpdateCheckListAction;
 import com.oopsw.action.detailAction.UpdateCommentAction;
 import com.oopsw.action.detailAction.UpdateReplyAction;
+import com.oopsw.action.employeeAction.ChangePasswordAction;
 import com.oopsw.action.employeeAction.LoginAction;
 import com.oopsw.action.employeeAction.LoginUIAction;
+import com.oopsw.action.employeeAction.LogoutAction;
+import com.oopsw.action.employeeAction.MyPageUIAction;
 import com.oopsw.action.projectAction.AddProjectAction;
 import com.oopsw.action.projectAction.AddProjectUIAction;
 import com.oopsw.action.projectAction.BinProjectAction;
@@ -38,6 +41,15 @@ public class ActionFactory {
 		Action a=null;
 		
 		switch(cmd){
+		case "logout":
+			a = new LogoutAction();
+			break;
+		case "changePassword":
+			a = new ChangePasswordAction();
+			break;
+		case "myPageUI":
+			a = new MyPageUIAction();
+			break;
 		case "updateSchedule":
 			a=new UpdateScheduleAction();
 			break;

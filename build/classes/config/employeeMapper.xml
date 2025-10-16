@@ -18,17 +18,32 @@
             AND resign_date IS NULL
     </select>
     
+
     <update id="goWorkStatus" parameterType="String">
     	UPDATE employees SET 
     		work_status = '출근' 
 		WHERE employee_id = #{employeeId}
     </update>
     
+    
+    <select id="getEmployeeInfo" parameterType="java.util.Map" resultType="com.oopsw.model.EmployeeVO">
+    	SELECT
+    		employee_id AS employeeId,
+    		position,
+    		phone_number AS phoneNumber,
+    		email,
+    		project_creator_flag AS projectCreatorFlag,
+    		password
+    	FROM employees
+    	WHERE
+    		employee_id = #{employeeId}    		
+    </select>
+
     <update id="updatePassword" parameterType="java.util.Map">
     	UPDATE employees SET 
     		password = #{newPassword}, 
 			up_date  = SYSDATE 
-		WHERE employee_id = #{employeeId}
+		WHERE employee_id = #{employeeId} and password=#{currentPassword}
     </update>
 
 </mapper>

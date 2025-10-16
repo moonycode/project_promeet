@@ -101,7 +101,7 @@ public class EmployeeVO {
 	public void setResignDate(Date resignDate) {
 		this.resignDate = resignDate;
 	}
-	public int getProjectLeader() {
+	public int getProjectCreatorFlag() {
 		return projectCreatorFlag;
 	}
 	public void setProjectCreatorFlag(int projectCreatorFlag) {

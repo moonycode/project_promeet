@@ -43,10 +43,10 @@
         <a class="active" href="controller?cmd=projectUI">프로젝트</a> 
         <a href="#">파일함</a>
         <a href="#">일정관리</a>
-        <a href="#">마이페이지</a>
+        <a href="controller?cmd=myPageUI">마이페이지</a>
       </nav>
         
-      <button class="logout">로그아웃</button>
+      <a href="controller?cmd=logout" class="logout">로그아웃</a>
     </div>
     <div class="main">
       <div class="header">
