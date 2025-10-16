@@ -2,7 +2,7 @@ package test.com.oopsw.model;
 
 import static org.junit.Assert.*;
 
-import java.util.UUID; // ºñ¹Ğ¹øÈ£ º¯°æ Å×½ºÆ®¸¦ À§ÇÑ ·£´ı ¹®ÀÚ¿­ »ı¼º¿ë
+import java.util.UUID; // ï¿½ï¿½Ğ¹ï¿½È£ ï¿½ï¿½ï¿½ï¿½ ï¿½×½ï¿½Æ®ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ú¿ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 
 import org.junit.Before;
 import org.junit.Test;
@@ -24,22 +24,18 @@ public class EmployeeDAOTest {
         
         assertNotNull(result); 
         assertEquals("1004014", result.getEmployeeId()); 
-        assertEquals("È«±æµ¿", result.getName());
-        assertEquals("°úÀå", result.getPosition());
-        assertEquals("Ãâ±Ù", result.getWorkStatus()); 
+        assertEquals("í™ê¸¸ë™", result.getName());
+        assertEquals("ê³¼ì¥", result.getPosition());
+        assertEquals("ì¶œê·¼", result.getWorkStatus()); 
     }
 
-    /**
-     * ·Î±×ÀÎ ½ÇÆĞ (null ¹İÈ¯)
-     */
+
     @Test
     public void loginCheck_InvalidIdTest() throws Exception {
         assertNull(dao.loginCheck("9999999", "1234"));
     }
 
-    /**
-     * À¯È¿ ID, Æ²¸° PW·Î ·Î±×ÀÎ ½ÇÆĞ (null ¹İÈ¯)
-     */
+
     @Test
     public void loginCheck_InvalidPasswordTest() throws Exception {
         assertNull(dao.loginCheck("1004014", "wrongpassword"));
@@ -50,14 +46,13 @@ public class EmployeeDAOTest {
         assertEquals(1, dao.goWorkStatus("1004014")); 
     }
 
-    /**
-     * ¸¶ÀÌÆäÀÌÁö ºñ¹Ğ¹øÈ£ º¯°æ ¼º°ø È®ÀÎ
-     */
+
     @Test
     public void updatePasswordTest() throws Exception {
-        String newPassword = UUID.randomUUID().toString(); // »õ·Î¿î ÀÓ½Ã ºñ¹Ğ¹øÈ£
+    	String currentPassword = "8fT2kP1q!";
+        String newPassword = "1111";
       
-        assertEquals(1, dao.updatePassword("1004014", newPassword));
-        assertEquals(1, dao.updatePassword("1004014", "8fT2kP1q!"));  // Å×½ºÆ® Á÷ÈÄ ¿ø·¡ ºñ¹Ğ¹øÈ£·Î º¹±¸
+        assertEquals(1, dao.updatePassword("1004014", currentPassword, newPassword));
+        assertEquals(1, dao.updatePassword("1004014", "1111" ,"8fT2kP1q!"));
     }
 }
