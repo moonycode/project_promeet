@@ -1,9 +1,11 @@
-package com.oopsw.action;
+package com.oopsw.action.fileboxAction;
 
 import java.io.IOException;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
+
+import com.oopsw.action.Action;
 
 public class FileBoxUIAction implements Action {
 

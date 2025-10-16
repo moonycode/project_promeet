@@ -1,4 +1,4 @@
-package com.oopsw.action;
+package com.oopsw.action.fileboxAction;
 
 import java.io.IOException;
 import java.util.List;
@@ -6,6 +6,7 @@ import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 
+import com.oopsw.action.Action;
 import com.oopsw.model.FileBoxDAO;
 import com.oopsw.model.ProjectFileBoxVO;
 
