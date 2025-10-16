@@ -1,4 +1,4 @@
-package com.oopsw.action.fileboxAction;
+package com.oopsw.action.fileBoxAction;
 
 import java.io.IOException;
 
