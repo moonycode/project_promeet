@@ -50,6 +50,21 @@ public class ActionFactory {
 		case "myPageUI":
 			a = new MyPageUIAction();
 			break;
+		case "filesTaskFileBox":
+			a=new filesTaskFileBoxAction();
+			break;
+		case "projectFileBox":
+			a=new projectFileBoxAction();
+			break;
+		case "searchFileBox":
+			a=new SearchFileBoxAction();
+			break;
+		case "fileBox":
+			a=new FileBoxAction();
+			break;
+		case "fileBoxUI":
+			a=new FileBoxUIAction();
+			break;
 		case "updateSchedule":
 			a=new UpdateScheduleAction();
 			break;

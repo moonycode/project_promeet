@@ -39,7 +39,7 @@ public class AddScheduleAction implements Action {
 		}
 
 		request.setAttribute("result", result);
-		return "Json/scheduleReultCheck.jsp";
+		return "Json/jsonResult.jsp";
 
 	}
 }

@@ -21,7 +21,7 @@ public class DeleteScheduleAction implements Action {
 	    boolean result = dao.deleteSchedule(scheduleNo);
 
 		request.setAttribute("result", result);
-		return "Json/scheduleReultCheck.jsp";
+		return "Json/jsonResult.jsp";
 	}
 
 }

@@ -64,7 +64,7 @@ $(document).ready(function() {
 
         for (var j = 0; j < dotList.length; j++) {
             var schedule = dotList[j];
-            var ymd = schedule.schedule_date.split('-');
+            var ymd = schedule.scheduleDate.split('-');
             var y = parseInt(ymd[0], 10);
             var m = parseInt(ymd[1], 10);
             var d = parseInt(ymd[2], 10);
@@ -72,7 +72,7 @@ $(document).ready(function() {
             if (y === year && m === month && d === date) {
                 count++;
                 if (count <= MAX_DOTS) {
-                    spanDot += '<span class="dot ' + schedule.schedule_type + '" title="' + schedule.title + '"></span>';
+                    spanDot += '<span class="dot ' + schedule.scheduleType + '" title="' + schedule.title + '"></span>';
                 }
             }
         }
@@ -93,14 +93,14 @@ $(document).ready(function() {
 
         $.each(filteredList, function(i, item) {
         	var li = $('<li>')
-            .data('schedule-no', item.schedule_no)
-            .data('color', item.schedule_type)
-            .data('date', item.schedule_date);
+            .data('schedule-no', item.scheduleNo)
+            .data('color', item.scheduleType)
+            .data('date', item.scheduleDate);
         	
-            var dot = $('<span>').addClass('dot ' + item.schedule_type);
+            var dot = $('<span>').addClass('dot ' + item.scheduleType);
             var when = $('<div>').addClass('when').text(
-                formatDate(item.schedule_date) + ' ' + 
-                (item.start_time ? item.start_time + (item.end_time ? ' ~ ' + item.end_time : '') : '')
+                formatDate(item.scheduleDate) + ' ' + 
+                (item.startTime ? item.startTime + (item.endTime ? ' ~ ' + item.endTime : '') : '')
             );
             var what = $('<div>').addClass('what').text(item.title);
             var deleteBtn = $('<button>').addClass('sched-delete-btn').html('<i class="fas fa-times"></i>');
@@ -116,11 +116,11 @@ $(document).ready(function() {
             if (selectedDate) {
                 $('.add-btn').show();
                 $('.panel-title').text("일정목록");
-                return item.schedule_date === selectedDate;
+                return item.scheduleDate === selectedDate;
             } else {
                 $('.add-btn').hide();
                 $('.panel-title').text("현재 월 전체일정목록");
-                var parts = item.schedule_date.split('-');
+                var parts = item.scheduleDate.split('-');
                 return parts[0] === currentYear && parts[1] === currentMonth;
             }
         });
@@ -130,10 +130,12 @@ $(document).ready(function() {
         $.ajax({
             url: "controller",
             method: 'GET',
-            dataType: "json",
             data: { cmd: "dotSchedule" },
-            success: function(response) {
-                dotList = response;
+            success: function(jsonResponse) {
+                var jsonResponse = JSON.parse(jsonResponse);
+            	dotList = jsonResponse.data;
+                list = dotList;
+
                 if (callback) callback();
             },
             error: function() {
@@ -209,7 +211,6 @@ $(document).ready(function() {
         $.ajax({
             url: 'controller',
             type: 'POST',
-            dataType: 'json',
             data: {
                 cmd: "addSchedule",
                 scheduleDate: selectedDate,
@@ -256,7 +257,7 @@ $(document).ready(function() {
                 }
             },
             error: function() {
-                showAlert('서버 통신 오류');
+                showAlert('삭제 요청 서버 통신 오류');
             }
         });
     });

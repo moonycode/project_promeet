@@ -6,7 +6,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <!-- 공통 스타일 -->
 <link rel="stylesheet" href="CSS/common.css" />
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+<link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
 </head>
 <body class="pm-schedule">
 	<div class="container">
@@ -41,7 +42,7 @@
 
 			</nav>
 
-			<button class="logout">로그아웃</button>	
+			<button class="logout">로그아웃</button>
 		</div>
 
 		<!-- 메인 -->
@@ -87,20 +88,28 @@
 						<ul class="sched-ul"></ul>
 					</div>
 
-
 					<!-- 일정 추가 폼 -->
 					<div class="sched-add-form">
 						<input type="text" class="input-s" placeholder="일정명 입력" />
 
 						<!-- dot 선택 -->
 						<div class="dot-picker">
-							<label><input type="radio" name="color" value="green"><span
-								class="dot green"></span></label> <label><input type="radio"
-								name="color" value="purple"><span class="dot purple"></span></label>
+							<label><input type="radio" name="color" value="red"><span
+								class="dot red"></span></label> <label><input type="radio"
+								name="color" value="orange"><span class="dot orange"></span></label>
 							<label><input type="radio" name="color" value="yellow"><span
 								class="dot yellow"></span></label> <label><input type="radio"
+								name="color" value="green"><span class="dot green"></span></label>
+							<label><input type="radio" name="color" value="blue"><span
+								class="dot blue"></span></label> <label><input type="radio"
+								name="color" value="navy"><span class="dot navy"></span></label>
+							<label><input type="radio" name="color" value="purple"><span
+								class="dot purple"></span></label> <label><input type="radio"
 								name="color" value="black"><span class="dot black"></span></label>
+							<label><input type="radio" name="color" value="white"><span
+								class="dot white"></span></label>
 						</div>
+
 
 						<!-- 시간 선택 -->
 						<div class="time-picker">
@@ -117,11 +126,11 @@
 				</aside>
 			</div>
 		</div>
-	</div>
-	<div id="customAlert"
-		style="display: none; position: fixed; top: 30%; left: 50%; transform: translateX(-50%); background: #fff; border: 1px solid #ccc; padding: 20px; z-index: 9999;">
-		<p id="alertMessage"></p>
-		<button onclick="$('#customAlert').hide()">확인</button>
-	</div>
-	<script src="JS/schedule.js"></script>
+		<div id="customAlert"
+			style="display: none; position: fixed; top: 30%; left: 50%; transform: translateX(-50%); background: #fff; border: 1px solid #ccc; padding: 20px; z-index: 9999;">
+			<p id="alertMessage"></p>
+			<button onclick="$('#customAlert').hide()">확인</button>
+		</div>		
+		</div>
+		<script src="JS/schedule.js"></script>
 </body>
