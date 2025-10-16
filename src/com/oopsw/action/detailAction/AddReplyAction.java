@@ -10,6 +10,9 @@ import com.oopsw.model.CommentReplyDAO;
 import com.oopsw.model.CommentVO;
 import com.oopsw.model.ReplyVO;
 
+import util.CreateJsonResponse;
+import util.JsonResponse;
+
 public class AddReplyAction implements Action {
 
 	@Override
@@ -17,16 +20,16 @@ public class AddReplyAction implements Action {
 		String commentNo = request.getParameter("commentNo");
 		String contents = request.getParameter("contents");
 		String projectJoinNo = request.getParameter("projectJoinNo");
-		int result = 0;
-
 		try{
-			result = new CommentReplyDAO().addReply(new ReplyVO(Integer.valueOf(commentNo),Integer.valueOf(projectJoinNo),contents,null,null));
+			JsonResponse<Integer> response = 
+					new JsonResponse<>("success", "추가 완료",new CommentReplyDAO().addReply(new ReplyVO(Integer.valueOf(commentNo),Integer.valueOf(projectJoinNo),contents,null,null)));
+			String jsonResponse = CreateJsonResponse.toJson(response);
+			request.setAttribute("jsonResponse", jsonResponse);
 		}catch(Exception e){
 			e.printStackTrace();
 		}	
 
-		request.setAttribute("result",result);
-		return "reply.jsp";
+		return "Json/jsonResult.jsp";
 	}
 
 }

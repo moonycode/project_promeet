@@ -7,22 +7,26 @@ import javax.servlet.http.HttpServletRequest;
 
 import com.oopsw.action.Action;
 import com.oopsw.model.CheckListDAO;
-import com.oopsw.model.CheckListVO;
+
+import util.CreateJsonResponse;
+import util.JsonResponse;
 
 public class DeleteCheckListAction implements Action {
 
 	@Override
 	public String execute(HttpServletRequest request) throws ServletException, IOException {
 		String checkListNo = request.getParameter("checkListNo");
-		int result = 0;
 		try{
-			result = new CheckListDAO().deleteChecklist(Integer.valueOf(checkListNo));
+			JsonResponse<Integer> response = 
+					new JsonResponse<>("success", "삭제 완료", new CheckListDAO().deleteChecklist(Integer.valueOf(checkListNo)));
+			String jsonResponse = CreateJsonResponse.toJson(response);
+			request.setAttribute("jsonResponse", jsonResponse);
+
 		}catch(Exception e){
 			e.printStackTrace();
 		}	
 
-		request.setAttribute("result",result);
-		return "checkList.jsp";
+		return "Json/jsonResult.jsp";
 	}
 
 }

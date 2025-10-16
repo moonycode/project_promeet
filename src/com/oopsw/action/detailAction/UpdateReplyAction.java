@@ -10,22 +10,26 @@ import com.oopsw.model.CommentReplyDAO;
 import com.oopsw.model.CommentVO;
 import com.oopsw.model.ReplyVO;
 
+import util.CreateJsonResponse;
+import util.JsonResponse;
+
 public class UpdateReplyAction implements Action {
 
 	@Override
 	public String execute(HttpServletRequest request) throws ServletException, IOException {
 		String replyNo = request.getParameter("replyNo");
 		String contents = request.getParameter("contents");
-		int result = 0;
 
 		try{
-			result = new CommentReplyDAO().updateReply(new ReplyVO(Integer.valueOf(replyNo),contents));
+			JsonResponse<Integer> response = 
+					new JsonResponse<>("success", "수정 완료",new CommentReplyDAO().updateReply(new ReplyVO(Integer.valueOf(replyNo),contents)));
+			String jsonResponse = CreateJsonResponse.toJson(response);
+			request.setAttribute("jsonResponse", jsonResponse);
 		}catch(Exception e){
 			e.printStackTrace();
 		}	
 
-		request.setAttribute("result",result);
-		return "reply.jsp";
+		return "Json/jsonResult.jsp";
 	}
 
 }

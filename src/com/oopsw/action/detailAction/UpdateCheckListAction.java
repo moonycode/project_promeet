@@ -11,6 +11,9 @@ import com.oopsw.action.Action;
 import com.oopsw.model.CheckListDAO;
 import com.oopsw.model.CheckListVO;
 
+import util.CreateJsonResponse;
+import util.JsonResponse;
+
 public class UpdateCheckListAction implements Action {
 
 	@Override
@@ -19,21 +22,21 @@ public class UpdateCheckListAction implements Action {
 		String[] contents = request.getParameterValues("contents");
 		String[] completeFlag = request.getParameterValues("completeFlag");
 		List<CheckListVO> list = new ArrayList<>();
-		int result = 0;
 		try{
 			if (checkListNo != null && contents != null && completeFlag != null) {
 				for (int i = 0; i < checkListNo.length; i++) {
 					list.add(new CheckListVO(Integer.valueOf(checkListNo[i]), contents[i], Integer.valueOf(completeFlag[i])));
 				}
-
-				result = new CheckListDAO().updateChecklist(list);
+				JsonResponse<Integer> response = 
+						new JsonResponse<>("success", "수정 완료",new CheckListDAO().updateChecklist(list));
+				String jsonResponse = CreateJsonResponse.toJson(response);
+				request.setAttribute("jsonResponse", jsonResponse);
 			}
 		}catch(Exception e){
 			e.printStackTrace();
 		}	
 
-		request.setAttribute("result",result);
-		return "checkList.jsp";
+		return "Json/jsonResult.jsp";
 
 	}
 }

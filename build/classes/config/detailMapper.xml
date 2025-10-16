@@ -88,11 +88,13 @@
 		t.task_name AS
 		taskName,
 		c.comment_no AS commentNo,
+		ec.employee_id AS commentWriterId,
 		ec.name AS commentWriter,
 		c.contents AS commentContents,
 		c.in_date AS commentIndate,
 		c.file_name AS commentFilename,
 		r.reply_no AS replyNo,   
+		er.employee_id AS replyWriterId,
 		er.name AS
 		replyWriter,
 		r.contents AS repliesContents,

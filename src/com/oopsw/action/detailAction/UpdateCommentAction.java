@@ -13,22 +13,26 @@ import com.oopsw.model.CheckListVO;
 import com.oopsw.model.CommentReplyDAO;
 import com.oopsw.model.CommentVO;
 
+import util.CreateJsonResponse;
+import util.JsonResponse;
+
 public class UpdateCommentAction implements Action {
 
 	@Override
 	public String execute(HttpServletRequest request) throws ServletException, IOException {
 		String commentNo = request.getParameter("commentNo");
 		String contents = request.getParameter("contents");
-		int result = 0;
 
 		try{
-			result = new CommentReplyDAO().updateComment(new CommentVO(Integer.valueOf(commentNo),contents));
+			JsonResponse<Integer> response = 
+					new JsonResponse<>("success", "수정 완료",new CommentReplyDAO().updateComment(new CommentVO(Integer.valueOf(commentNo),contents)));
+			String jsonResponse = CreateJsonResponse.toJson(response);
+			request.setAttribute("jsonResponse", jsonResponse);
 		}catch(Exception e){
 			e.printStackTrace();
 		}	
 
-		request.setAttribute("result",result);
-		return "comment.jsp";
+		return "Json/jsonResult.jsp";
 	}
 
 }

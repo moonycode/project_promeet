@@ -8,20 +8,24 @@ import javax.servlet.http.HttpServletRequest;
 import com.oopsw.action.Action;
 import com.oopsw.model.CommentReplyDAO;
 
+import util.CreateJsonResponse;
+import util.JsonResponse;
+
 public class DeleteReplyAction implements Action {
 
 	@Override
 	public String execute(HttpServletRequest request) throws ServletException, IOException {
 		String replyNo = request.getParameter("replyNo");
-		int result = 0;
 		try{
-			result = new CommentReplyDAO().deleteReply(Integer.valueOf(replyNo));
+			JsonResponse<Integer> response = 
+					new JsonResponse<>("success", "삭제 완료", new CommentReplyDAO().deleteReply(Integer.valueOf(replyNo)));
+			String jsonResponse = CreateJsonResponse.toJson(response);
+			request.setAttribute("jsonResponse", jsonResponse);
 		}catch(Exception e){
 			e.printStackTrace();
 		}	
 
-		request.setAttribute("result",result);
-		return "reply.jsp";
+		return "Json/jsonResult.jsp";
 	}
 
 }

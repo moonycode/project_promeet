@@ -5,24 +5,27 @@ import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 
 import com.oopsw.action.Action;
 import com.oopsw.model.CheckListDAO;
 import com.oopsw.model.CheckListVO;
-import com.oopsw.model.CommentReplyDAO;
-import com.oopsw.model.CommentReplyVO;
+
+import util.CreateJsonResponse;
+import util.JsonResponse;
 
 
 public class CheckListAction implements Action {
 	public String execute(HttpServletRequest request) throws ServletException, IOException {
 		String taskNo = request.getParameter("taskNo");
 		try{
-			request.setAttribute("list", new CheckListDAO().getChecklist(Integer.valueOf(taskNo)));
+			JsonResponse<List<CheckListVO>> response = 
+					new JsonResponse<>("success", "검색 완료", new CheckListDAO().getChecklist(Integer.valueOf(taskNo)));
+			String jsonResponse = CreateJsonResponse.toJson(response);
+			request.setAttribute("jsonResponse", jsonResponse);
 		}catch(Exception e){
 			e.printStackTrace();
 		}	
-		return "checkList.jsp";
+		return "Json/jsonResult.jsp";
 	}
 }
 

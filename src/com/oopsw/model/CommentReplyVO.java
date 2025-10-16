@@ -5,7 +5,8 @@ import java.util.Date;
 public class CommentReplyVO {
     private int commentNo;
     private int replyNo;
-	
+	private String commentWriterId;
+	private String replyWriterId;
     private String taskName;
     private String commentWriter;
     private String commentContents;
@@ -21,9 +22,14 @@ public class CommentReplyVO {
     private Date repliesDeldate;
     
     public CommentReplyVO(){}
-	public CommentReplyVO(String taskName, String commentWriter, String commentContents, Date commentIndate,
-			String commentFilename, String replyWriter, String repliesContents, Date repliesIndate,
-			String repliesFilename, Date commentUpdate, Date repliesUpdate, Date commentDeldate, Date repliesDeldate,int commentNo,int replyNo) {
+	public CommentReplyVO(int commentNo, int replyNo, String commentWriterId, String replyWriterId, String taskName,
+			String commentWriter, String commentContents, Date commentIndate, String commentFilename,
+			String replyWriter, String repliesContents, Date repliesIndate, String repliesFilename, Date commentUpdate,
+			Date repliesUpdate, Date commentDeldate, Date repliesDeldate) {
+		setCommentNo(commentNo);
+		setReplyNo(replyNo);
+		setCommentWriterId(commentWriterId);
+		setReplyWriterId(replyWriterId);
 		setTaskName(taskName);
 		setCommentWriter(commentWriter);
 		setCommentContents(commentContents);
@@ -37,9 +43,8 @@ public class CommentReplyVO {
 		setRepliesUpdate(repliesUpdate);
 		setCommentDeldate(commentDeldate);
 		setRepliesDeldate(repliesDeldate);
-		setCommentNo(commentNo);
-		setReplyNo(replyNo);
 	}
+
 	public String getTaskName() {
 		return taskName;
 	}
@@ -130,14 +135,32 @@ public class CommentReplyVO {
 	public void setReplyNo(int replyNo) {
 		this.replyNo = replyNo;
 	}
+
+	public String getCommentWriterId() {
+		return commentWriterId;
+	}
+
+	public void setCommentWriterId(String commentWriterId) {
+		this.commentWriterId = commentWriterId;
+	}
+
+	public String getReplyWriterId() {
+		return replyWriterId;
+	}
+
+	public void setReplyWriterId(String replyWriterId) {
+		this.replyWriterId = replyWriterId;
+	}
+
 	@Override
 	public String toString() {
-		return "CommentReplyVO [commentNo=" + commentNo + ", replyNo=" + replyNo + ", taskName=" + taskName
-				+ ", commentWriter=" + commentWriter + ", commentContents=" + commentContents + ", commentIndate="
-				+ commentIndate + ", commentFilename=" + commentFilename + ", replyWriter=" + replyWriter
-				+ ", repliesContents=" + repliesContents + ", repliesIndate=" + repliesIndate + ", repliesFilename="
-				+ repliesFilename + ", commentUpdate=" + commentUpdate + ", repliesUpdate=" + repliesUpdate
-				+ ", commentDeldate=" + commentDeldate + ", repliesDeldate=" + repliesDeldate + "]";
+		return "CommentReplyVO [commentNo=" + commentNo + ", replyNo=" + replyNo + ", commentWriterId="
+				+ commentWriterId + ", replyWriterId=" + replyWriterId + ", taskName=" + taskName + ", commentWriter="
+				+ commentWriter + ", commentContents=" + commentContents + ", commentIndate=" + commentIndate
+				+ ", commentFilename=" + commentFilename + ", replyWriter=" + replyWriter + ", repliesContents="
+				+ repliesContents + ", repliesIndate=" + repliesIndate + ", repliesFilename=" + repliesFilename
+				+ ", commentUpdate=" + commentUpdate + ", repliesUpdate=" + repliesUpdate + ", commentDeldate="
+				+ commentDeldate + ", repliesDeldate=" + repliesDeldate + "]";
 	}
 	
     
