@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%request.setAttribute("myPageActive", "active");%>
 <c:set var="user" value="${sessionScope.user}" />
 <c:set var="info" value="${requestScope.myPageInfo}" />
 
@@ -17,8 +18,8 @@
             font-weight: bold;
             min-height: 20px;
         }
-        .msg-success { color: #28a745; }
-        .msg-error { color: #dc3545; }
+        .msg-success { color: blue; }
+        .msg-error { color: red; }
         .panel .field input:not([disabled]) { 
             border: 1px solid #ccc; 
             padding: 8px;
@@ -29,41 +30,7 @@
 <body class="pm-mypage">
     <div class="container">
         
-        <div class="sidebar">
-            <div class="logo-wrap">
-        </div>
-      <div class="avatar">
-        </div>
-      <div class="user-name-position">
-        <c:if test="${not empty user}">
-            <c:out value="${user.name}" /> 
-            <c:out value="${user.position}" />
-        </c:if>
-        <c:if test="${empty user}">
-             로그인 필요
-        </c:if>
-    </div>
-            <div class="status-board">
-                <div class="row">
-                    <label for="status">상태</label>
-                    <select id="status" name="status">
-                        <option <c:if test="${user.workStatus eq '출근'}">selected</c:if>>출근</option>
-                        <option <c:if test="${user.workStatus eq '자리비움'}">selected</c:if>>자리비움</option>
-                        <option <c:if test="${user.workStatus eq '외근'}">selected</c:if>>외근</option>
-                        <option <c:if test="${user.workStatus eq '퇴근'}">selected</c:if>>퇴근</option>
-                    </select>
-                </div>
-            </div>
-            
-            <nav class="nav">
-                <a href="controller?cmd=projectUI">프로젝트</a>
-                <a href="#">파일함</a>
-                <a href="#">일정관리</a>
-                <a class="active" href="controller?cmd=myPageUI">마이페이지</a>
-            </nav>
-            
-            <button class="logout">로그아웃</button>
-        </div>
+        <%@ include file="Jspf/sidebar.jspf" %>
 
         <div class="main">
             <div class="main-inner">

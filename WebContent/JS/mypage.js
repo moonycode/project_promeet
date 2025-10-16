@@ -9,6 +9,7 @@ $(document).ready(function() {
     }
 
     function displayMessage(msg, isSuccess) {
+    	console.log("displayMessage 실행:", msg, isSuccess);
         clearMessage();
         $msgArea.addClass(isSuccess ? 'msg-success' : 'msg-error').text(msg);
     }
@@ -17,7 +18,6 @@ $(document).ready(function() {
         $currentPass.val('');
         $newPass.val('');
         $confirmPass.val('');
-        clearMessage();
     }
 
     $('#cancel-btn').on('click', function() {
@@ -53,18 +53,29 @@ $(document).ready(function() {
                 currentPassword: currentPassword,
                 newPassword: newPassword
             },
-            success: function(responseString) {
-            	console.log("서버 응답:", responseString);
-            	var jsonResponse = JSON.parse(responseString);
+            success: function(responseText) {
+            	console.log("서버 응답:", responseText);
+            	
+            	let jsonResponse;
+                try {
+                    jsonResponse = JSON.parse(responseText);
+                } catch (e) {
+                    console.error("JSON 파싱 오류:", e);
+                    displayMessage('서버 응답 형식이 올바르지 않습니다.', false);
+                    return;
+                }
+            	
             	const isSuccess = jsonResponse.status === 'success';
-        		displayMessage(jsonResponse.message, isSuccess)
+            	const message = jsonResponse.message || (isSuccess ? '비밀번호를 변경했습니다.' : '비밀번호 변경 실패');
+            	displayMessage(message, isSuccess);
+            	
             	if(isSuccess){
             		clearInputs();
             	}
             },
             error: function(xhr, status, error) {
                 console.error("Error:", status, error, xhr.responseText);
-                displayMessage('비밀번호 변경을 실패했습니다.', false);
+                displayMessage('비밀번호 변경 중 오류가 발생했습니다.', false);
             }
         });
     });
