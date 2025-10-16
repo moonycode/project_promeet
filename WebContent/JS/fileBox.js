@@ -96,10 +96,10 @@ $(document).ready(function() {
                     for (var i = 0; i < taskFiles.length; i++) {
                         var item = taskFiles[i];
                         var card = '<a class="file-card">' +
-                            '<span class="file-client">코멘트번호:' + (item.commentNo || '') + '</span>' +
+                            '<span class="file-name">코멘트번호:' + (item.commentNo || '') + '</span>' +
                             '<span class="file-client">코멘트파일:' + (item.commentFile || '') + '</span>' +
                             '<span class="file-client">코멘트파일경로:' + (item.commentPath || '') + '</span>' +
-                            '<span class="file-client">답글번호:' + (item.replyNo || '') + '</span>' +
+                            '<span class="file-name">답글번호:' + (item.replyNo || '') + '</span>' +
                             '<span class="file-client">답글파일:' + (item.replyFile || '') + '</span>' +
                             '<span class="file-client">답글파일경로:' + (item.replyPath || '') + '</span>' +
                             '</a>';
