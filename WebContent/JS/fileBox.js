@@ -143,19 +143,24 @@ $(document).ready(function() {
                     var list = jsonResponse.data;
                     var $grid = $('#fileGrid');
                     $grid.empty();
-
+                    
                     var breadcrumbHtml = '';
-                    if (list.length > 0) {
-                        breadcrumbHtml =
-                            '<div class="breadcrumbs"><br>' +
-                                (list[0].projectName || '') +
-                                '<span class="sep"> / </span>' +
-                                (list[0].taskName || '') +
-                            '</div>';
+                    if(list.length > 0){
+                    	breadcrumbHtml =
+                    		'<div class="breadcrumbs">' +
+                    		(list[0].projectName || '') +
+                    		'<span class="sep"> / </span>' +
+                    		(list[0].taskName || '') +
+                    		'</div>';
                     }
+                    
+                    $grid.append(breadcrumbHtml);
+                    
+                    var $fileTableDiv = $('#fileTableDiv');
+                    $fileTableDiv.empty();
+                    
 
-                    var tableHtml =
-                        '<section class="panel" style="padding:0">' +
+                    var tableHead =
                             '<table class="file-table">' +
                                 '<thead>' +
                                     '<tr>' +
@@ -165,12 +170,12 @@ $(document).ready(function() {
                                     '</tr>' +
                                 '</thead>' +
                                 '<tbody></tbody>' +
-                            '</table>' +
-                        '</section>';
+                            '</table>';
 
-                    $grid.append(breadcrumbHtml + tableHtml);
+                 
+                    $fileTableDiv.append(tableHead);
 
-                    var $tbody = $grid.find('.file-table tbody');
+                    var $tbody = $fileTableDiv.find('.file-table tbody');
                     $tbody.empty();
 
                     for (var i = 0; i < list.length; i++) {
