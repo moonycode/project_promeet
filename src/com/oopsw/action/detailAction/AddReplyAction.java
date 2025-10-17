@@ -17,12 +17,14 @@ public class AddReplyAction implements Action {
 
 	@Override
 	public String execute(HttpServletRequest request) throws ServletException, IOException {
+		String taskNo = request.getParameter("taskNo");
 		String commentNo = request.getParameter("commentNo");
 		String contents = request.getParameter("contents");
-		String projectJoinNo = request.getParameter("projectJoinNo");
+		String employeeId = request.getParameter("employeeId");
+		int projectJoinNo = new CommentReplyDAO().findProjectJoinNo(Integer.valueOf(taskNo), employeeId);
 		try{
 			JsonResponse<Integer> response = 
-					new JsonResponse<>("success", "추가 완료",new CommentReplyDAO().addReply(new ReplyVO(Integer.valueOf(commentNo),Integer.valueOf(projectJoinNo),contents,null,null)));
+					new JsonResponse<>("success", "추가 완료",new CommentReplyDAO().addReply(new ReplyVO(Integer.valueOf(commentNo),projectJoinNo,contents,null,null)));
 			String jsonResponse = CreateJsonResponse.toJson(response);
 			request.setAttribute("jsonResponse", jsonResponse);
 		}catch(Exception e){

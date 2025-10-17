@@ -1,6 +1,9 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%request.setAttribute("projectActive", "active");%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%
+	request.setAttribute("projectActive", "active");
+%>
 
 <!DOCTYPE html>
 <html lang="ko">
@@ -8,14 +11,29 @@
 <meta charset="UTF-8" />
 <title>업무 상세 - 보기</title>
 <link rel="stylesheet" href="CSS/common.css" />
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 </head>
 
 <body>
 	<div class="container">
-	     <%@ include file="Jspf/sidebar.jspf" %>
 		<div class="main">
-			
+			<div class="detail-top">
+				<div class="detail-titlebar">
+					<div class="icon-back"  onclick="history.back()">←</div>
+					<div class="detail-title"></div>
+				</div>
+				<div class="detail-dates">  <span class="start">2025-09-15</span>
+  <span class="endline"><span class="til">~</span> <span class="end">2025-09-17</span></span></div>
+				<div class="member-pill">
+					<div class="avatar-s">
+						<img
+							src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='120' height='120'><defs><linearGradient id='g' x1='0' x2='1'><stop offset='0' stop-color='%23ffd1dc'/><stop offset='1' stop-color='%23c7b9ff'/></linearGradient></defs><rect width='100%' height='100%' fill='url(%23g)'/><circle cx='60' cy='50' r='22' fill='white'/><rect x='30' y='78' width='60' height='26' rx='13' fill='white'/></svg>"
+							alt="멤버" />
+					</div>
+					<div class="plus">+2</div>
+				</div>
+			</div>
 			<div class="detail-body">
 				<div class="todo-card view">
 					<div class="todo-list-wrap">
@@ -30,67 +48,6 @@
 
 				<section class="cmt-panel">
 					<div class="cmt-list" id="commentList">
-						<c:forEach var="comment" items="${commentList}">
-							<article class="cmt4">
-								<div class="line1">
-									<div class="name">${comment.commentWriter}</div>
-								</div>
-
-								<div class="line2">${comment.commentContents}</div>
-
-								<div class="line3">
-									<div class="meta-row">
-										<time>${comment.commentIndate}</time>
-
-										<c:if test="${!comment.commentDeldate}">
-											<div class="meta-actions">
-												<a href="#" class="btnEdit" data-id="${comment.commentNo}" data-type="comment">수정</a>
-												<a href="#" class="btnDel" data-id="${comment.commentNo}" data-type="comment">삭제</a>
-											</div>
-										</c:if>
-									</div>
-								</div>
-
-								<div class="line4">
-									<c:if test="${!comment.commentDeldate}">
-										<button class="btn-reply" data-id="${comment.commentNo}">답글</button>
-									</c:if>
-								</div>
-
-								<div class="reply-stack">
-									<c:forEach var="reply" items="${comment.replies}">
-										<div class="r3">
-											<div class="rline1">
-												<span class="arrow">ㄴ</span>
-												<span class="name">${reply.replyWriter}</span>
-											</div>
-											<div class="rline2">
-												<c:choose>
-													<c:when test="${reply.repliesDeldate}">
-														삭제된 답글입니다.
-													</c:when>
-													<c:otherwise>
-														${reply.repliesContents}
-													</c:otherwise>
-												</c:choose>
-											</div>
-											<div class="rline3">
-												<div class="meta-row">
-													<time>${reply.repliesIndate}</time>
-
-													<c:if test="${!reply.repliesDeldate}">
-														<div class="meta-actions">
-															<a href="#" class="btnEdit" data-id="${reply.replyNo}" data-type="reply">수정</a>
-															<a href="#" class="btnDel" data-id="${reply.replyNo}" data-type="reply">삭제</a>
-														</div>
-													</c:if>
-												</div>
-											</div>
-										</div>
-									</c:forEach>
-								</div>
-							</article>
-						</c:forEach>
 					</div>
 					<div class="comment-input">
 						<input id="newComment" type="text" placeholder="댓글 내용을 입력하세요" />
@@ -102,17 +59,20 @@
 			</div>
 		</div>
 	</div>
-		<dialog id="fileDialog">
-  <form method="dialog">
-    <h4>파일 이름을 입력하세요</h4>
-    <input type="text" id="fileNameInput" placeholder="">
-    <menu>
-      <button value="cancel">취소</button>
-      <button value="confirm">확인</button>
-    </menu>
-  </form>
-</dialog>
-
+	<dialog id="fileDialog">
+	<form method="dialog">
+		<h4>파일 이름을 입력하세요</h4>
+		<input type="text" id="fileNameInput" placeholder="">
+		<menu>
+			<button value="cancel">취소</button>
+			<button value="confirm">확인</button>
+		</menu>
+	</form>
+	</dialog>
+	<script>
+		window.employeeId = "${user.employeeId}";
+		window.taskNo = "${taskNo}";
+	</script>
 	<script src="JS/details.js"></script>
 </body>
 </html>

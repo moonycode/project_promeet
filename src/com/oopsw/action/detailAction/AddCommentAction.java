@@ -19,11 +19,14 @@ public class AddCommentAction implements Action {
 	public String execute(HttpServletRequest request) throws ServletException, IOException {
 		String taskNo = request.getParameter("taskNo");
 		String contents = request.getParameter("contents");
-		String projectJoinNo = request.getParameter("projectJoinNo");
+		String employeeId = request.getParameter("employeeId");
 		String fileName = request.getParameter("fileName");
+		int projectJoinNo = new CommentReplyDAO().findProjectJoinNo(Integer.valueOf(taskNo), employeeId);
+		
+		
 		try{
 			JsonResponse<Integer> response = 
-					new JsonResponse<>("success", "추가 완료",new CommentReplyDAO().addComment(new CommentVO(Integer.valueOf(taskNo),Integer.valueOf(projectJoinNo),contents,fileName,null)));
+					new JsonResponse<>("success", "추가 완료",new CommentReplyDAO().addComment(new CommentVO(Integer.valueOf(taskNo),projectJoinNo,contents,fileName,null)));
 			String jsonResponse = CreateJsonResponse.toJson(response);
 			request.setAttribute("jsonResponse", jsonResponse);
 		}catch(Exception e){

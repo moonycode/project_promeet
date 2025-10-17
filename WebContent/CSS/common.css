@@ -1098,3 +1098,100 @@ button,select,input{font:inherit}
 .attached-file .remove-file:hover {
   color: #333;
 }
+
+.comment-input {
+  display: grid;
+  grid-template-columns: 1fr auto auto;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.comment-input input[type="text"] {
+  border: 1.5px solid #222;
+  border-radius: 10px;
+  padding: 10px 12px;
+}
+
+/* 버튼 일관성 유지 */
+.comment-input .btn-small {
+  border: 1.5px solid #222;
+  border-radius: 12px;
+  padding: 8px 14px;
+  font-weight: 800;
+}
+
+.comment-input .btn-gray {
+  background: #fff;
+}
+
+.comment-input .btn-pink {
+  background: #f6d7ff;
+}
+.comment-input,
+.reply-editor {
+  display: grid;
+  grid-template-columns: 1fr auto auto;
+  gap: 8px;
+  margin-top: 12px;
+  background: #ffffff;
+  border: 2px solid #2b2b2b;
+  border-radius: 14px;
+  padding: 12px;
+  box-shadow: 2px 2px 0 #2b2b2b;
+}
+
+/* 인풋 통일 */
+.comment-input input[type="text"],
+.reply-editor input[type="text"] {
+  border: 1.5px solid #222;
+  border-radius: 10px;
+  padding: 10px 12px;
+  font-size: 15px;
+}
+
+/* 버튼 통일 */
+.comment-input .btn-small,
+.reply-editor .btn-small {
+  border: 1.5px solid #222;
+  border-radius: 12px;
+  padding: 8px 14px;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+/* 색상 통일 */
+.comment-input .btn-gray,
+.reply-editor .btn-gray {
+  background: #fff;
+}
+
+.comment-input .btn-pink,
+.reply-editor .btn-pink {
+  background: #f6d7ff;
+}
+.editArea {
+  width: 100%;
+  border: 1.5px solid #222;
+  border-radius: 10px;
+  padding: 10px 12px;
+  font-size: 15px;
+  resize: vertical;
+}
+
+.btnSaveEdit,
+.btnCancelEdit {
+  border: 1.5px solid #222;
+  border-radius: 12px;
+  padding: 8px 14px;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.btnSaveEdit {
+  background: #f6d7ff;
+}
+
+.btnCancelEdit {
+  background: #fff;
+  margin-left: 6px;
+}

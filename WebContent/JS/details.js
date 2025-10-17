@@ -1,14 +1,13 @@
 $(document).ready(function(){
-	const taskNo = 15;
-	const projectJoinNo = 1;
-	const employeeId = 1004014;
+	const taskNo = 3;
+	const employeeId = window.employeeId;
 	let isEditMode = false;
 
 
 	function getChecklist() {
 		$.ajax({
 			url: "controller",
-			data: { cmd: "checkList", taskNo },
+			data: { cmd: "checkList", taskNo  },
 			success: function(res) {
 				const list = JSON.parse(res);
 				loadChecklist(list.data);  
@@ -210,7 +209,7 @@ $(document).ready(function(){
 	function addComment(contents,fileName){
 		$.ajax({
 			url: "controller",
-			data: { cmd: "addComment", taskNo, projectJoinNo, contents, fileName  },
+			data: { cmd: "addComment", taskNo, employeeId, contents, fileName  },
 			success: function(){
 				$("#newComment").val("");
 				$("#attachedFileName").empty();
@@ -263,15 +262,17 @@ $(document).ready(function(){
 		const $article = $(this).closest(type === "reply" ? ".r3" : ".cmt4");
 		const $content = type === "reply" ? $article.find(".rline2") : $article.find(".line2");
 		const originalText = $content.text();
+		$(".meta-actions").hide();
 		if($article.find("textarea").length) return;
 		$content.html(`
 				<textarea class="editArea">${originalText}</textarea>
-				<button class="btnSaveEdit" data-id="${id}" data-type="${type}">수정 완료</button>
-				<button class="btnCancelEdit">취소</button>
+				<button class="btn-small btn-pink btnSaveEdit" data-id="${id}" data-type="${type}">등록</button>
+				<button class="btn-small btn-gray btnCancelEdit">취소</button>
 				`);
 	});
 
 	$(document).on("click", ".btnCancelEdit", function(){
+		$(".meta-actions").show();
 		const $area = $(this).closest(".cmt4, .r3");
 		const $textArea = $area.find("textarea");
 		const prevText = $textArea.val();
@@ -306,7 +307,7 @@ $(document).ready(function(){
 		const type = $(this).data("type");
 		if(type == "comment"){updateComment(id, contents);}
 		if(type == "reply"){updateReply(id, contents);}
-
+		$(".meta-actions").show();
 	});
 
 	$(document).on("click", ".btn-reply", function() {
@@ -327,7 +328,7 @@ $(document).ready(function(){
 	function addReply(commentNo,contents){
 		$.ajax({
 			url: "controller",
-			data: { cmd: "addReply", commentNo, projectJoinNo, contents },
+			data: { cmd: "addReply",taskNo, commentNo, employeeId, contents },
 
 			success: function() {
 				getComments(); 
@@ -353,12 +354,10 @@ $(document).ready(function(){
 
 	$(function(){
 		const dialog = document.getElementById("fileDialog");
-
 		$("#btnAddFile").on("click", function(){
 			$("#fileNameInput").val("");
-			dialog.showModal(); // 모달 표시
+			dialog.showModal();
 		});
-
 		dialog.addEventListener("close", function(){
 			if(dialog.returnValue === "confirm"){
 				const fileName = $("#fileNameInput").val().trim();

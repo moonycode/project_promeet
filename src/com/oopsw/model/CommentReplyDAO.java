@@ -1,6 +1,8 @@
 package com.oopsw.model;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
 
@@ -69,6 +71,15 @@ public class CommentReplyDAO {
 		return result;
 	}
 
-
+	public int findProjectJoinNo(int taskNo, String employeeId){
+		int projectJoinNo = 0 ;
+		SqlSession conn=DBCP.getSqlSessionFactory().openSession();
+        Map<String, Object> param = new HashMap<>();
+        param.put("taskNo", taskNo);
+        param.put("employeeId", employeeId);
+		projectJoinNo = conn.selectOne("detailMapper.findProjectJoinNo", param );
+		conn.close();
+		return projectJoinNo;
+	}
 
 }
