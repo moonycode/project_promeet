@@ -1,6 +1,6 @@
 $(document).ready(function(){
 	const taskNo = 3;
-	const employeeId = window.employeeId;
+	const employeeId = "1004005";
 	let isEditMode = false;
 
 

@@ -17,6 +17,7 @@
 
 <body>
 	<div class="container">
+	 <%@ include file="Jspf/sidebar.jspf" %>
 		<div class="main">
 			<div class="detail-top">
 				<div class="detail-titlebar">
