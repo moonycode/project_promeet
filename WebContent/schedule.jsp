@@ -7,6 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <!-- 공통 스타일 -->
 <link rel="stylesheet" href="CSS/common.css" />
+<link rel="stylesheet" href="CSS/modal.css" />
 <link rel="stylesheet"
 	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
 </head>
@@ -102,5 +103,6 @@
 			<button onclick="$('#customAlert').hide()">확인</button>
 		</div>		
 		</div>
+		<script src="JS/modal.js"></script>
 		<script src="JS/schedule.js"></script>
 </body>

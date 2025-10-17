@@ -17,7 +17,7 @@ $(document).ready(function() {
         $('.month').text(month + '월');
         
 
-        var firstDay = new Date(year, month - 1, 1).getDay();
+        var firstDay = new Date(year, month - 1, 0).getDay();
         var lastDate = new Date(year, month, 0).getDate();
         var tbody = $('.calendar tbody').empty();
 
@@ -239,34 +239,35 @@ $(document).ready(function() {
     });
 
     $('.sched-ul').on('click', '.sched-delete-btn', function() {
-        if (!confirm('정말로 삭제하시겠습니까?')) {
-            return;
-        }
-
+    	var $btn = $(this);
+    	var li = $btn.closest('li');
+    	var scheduleNo = li.data('schedule-no');
     	
     	
-        var li = $(this).closest('li');
-        var scheduleNo = li.data('schedule-no');
-
-        $.ajax({
-            url: 'controller',
-            type: 'POST',
-            data: { cmd: 'deleteSchedule', scheduleNo: scheduleNo },
-            success: function(response) {
-                if (response) {
-                    li.remove();
-                    fetchDotList(function() {
-                        updateCalendar();
-                        renderScheduleList(dotList, selectedDate);
-                    });
-                } else {
-                    showAlert('삭제 실패했습니다.');
-                }
-            },
-            error: function() {
-                showAlert('삭제 요청 서버 통신 오류');
-            }
-        });
+    	showConfirm('정말 삭제하시겠습니까?', function(result) {
+    		if (result) {
+    			$.ajax({
+    				url: 'controller',
+    				type: 'POST',
+    				data: { cmd: 'deleteSchedule', scheduleNo: scheduleNo },
+    				success: function(response) {
+    					if (response) {
+    						li.remove();
+    						fetchDotList(function() {
+    							updateCalendar();
+    							renderScheduleList(dotList, selectedDate);
+    						});
+    					} else {
+    						showAlert('삭제 실패했습니다.');
+    					}
+    				},
+    				error: function() {
+    					showAlert('삭제 요청 서버 통신 오류');
+    				}
+    			});
+    		}
+    	});
+    	
     });
     
     $('.sched-ul').on('click', 'li', function() {
