@@ -5,7 +5,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 <mapper namespace="fileBoxMapper">
 
-	<!-- 프로젝트 목록 조회 -->
 	<select id="getProjects" resultType="com.oopsw.model.ProjectVO">
 		SELECT
 		project_no AS
@@ -17,9 +16,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		WHERE del_date IS NULL
 	</select>
 
-	<!-- 파일검색 (부분검색 가능) -->
-	<select id="searchFiles" parameterType="String"
-		resultType="com.oopsw.model.SearchFileBoxVO">
+<select id="searchFilesOrTask" parameterType="map" resultType="com.oopsw.model.SearchFileBoxVO">
+<bind name="keyword" value="searchKeyword == null ? null : '%' + searchKeyword + '%'" />
+
 (
     SELECT
         c.file_name    AS fileName,
@@ -38,8 +37,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     WHERE c.del_date IS NULL
       AND t.del_date IS NULL
       AND p.del_date IS NULL
- AND c.file_name LIKE '%' || #{searchKeyword} || '%'
-
+      <if test="taskNo != null">
+        AND t.task_no = #{taskNo} AND c.file_name IS NOT NULL
+      </if>
+      <if test="searchKeyword != null and searchKeyword != ''">
+        AND c.file_name LIKE #{keyword}
+      </if>
 )
 UNION ALL
 (
@@ -62,13 +65,17 @@ UNION ALL
       AND c2.del_date IS NULL
       AND t.del_date IS NULL
       AND p.del_date IS NULL
-      AND r.file_name LIKE '%' || #{searchKeyword} || '%'
+      <if test="taskNo != null">
+        AND t.task_no = #{taskNo} AND r.file_name IS NOT NULL
+      </if>
+      <if test="searchKeyword != null and searchKeyword != ''">
+        AND r.file_name LIKE #{keyword}
+      </if>
 )
-	</select>
+</select>
 
 
 
-	<!--프로젝트 이름과 프로젝트 내 업무별 파일 갯수 조회 -->
 	<select id="getProjectNameTaskFileCount" parameterType="int"
 		resultType="com.oopsw.model.ProjectFileBoxVO">
 		SELECT
@@ -82,23 +89,5 @@ UNION ALL
 		WHERE t.project_no = #{projectNo}
 		GROUP BY t.task_no, t.task_name
 		ORDER BY t.task_no
-	</select>
-
-	<!-- 한 업무 내 파일 목록 조회 -->
-	<select id="getTaskFiles" parameterType="int"
-		resultType="com.oopsw.model.FilesTaskFileBoxVO">
-		SELECT
-		t.task_no AS taskNo,
-		c.comment_no AS commentNo,
-		c.file_name AS commentFile,
-		c.file_path AS commentPath,
-		r.reply_no AS replyNo,
-		r.file_name AS replyFile,
-		r.file_path AS replyPath
-		FROM tasks t
-		LEFT JOIN comments c ON t.task_no = c.task_no
-		LEFT JOIN replies r ON c.comment_no = r.comment_no
-		WHERE t.task_no = #{taskNo} AND (c.file_name IS NOT NULL OR r.file_name IS
-		NOT NULL)
 	</select>
 </mapper>

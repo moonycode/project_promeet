@@ -23,7 +23,7 @@ public class FileBoxAction implements Action {
 		List<ProjectVO> projectList = new FileBoxDAO().getProjects();
 	    
 	    JsonResponse<List<ProjectVO>> response = 
-	    	    new JsonResponse<>("success", "Á¶È¸ ¿Ï·á", projectList);
+	    	    new JsonResponse<>("success", "ì¡°íšŒ ì™„ë£Œ", projectList);
 	    	String jsonResponse = CreateJsonResponse.toJson(response);
 	    	request.setAttribute("jsonResponse", jsonResponse);
 	    	return "Json/jsonResult.jsp";

@@ -1,3 +1,5 @@
 eclipse.preferences.version=1
 encoding//WebContent/WEB-INF/jsp/inc/sidebar.jspf=UTF-8
 encoding//WebContent/WEB-INF/taskUpdate.jsp=UTF-8
+encoding//src/com/oopsw/action/fileBoxAction/FileBoxAction.java=UTF-8
+encoding//src/com/oopsw/action/fileBoxAction/FilesTaskFileBoxAction.java=UTF-8

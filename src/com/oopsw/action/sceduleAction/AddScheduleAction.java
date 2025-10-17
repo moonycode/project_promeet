@@ -6,8 +6,10 @@ import java.sql.Timestamp;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import com.oopsw.action.Action;
+import com.oopsw.model.EmployeeVO;
 import com.oopsw.model.ScheduleDAO;
 import com.oopsw.model.ScheduleVO;
 
@@ -15,9 +17,14 @@ public class AddScheduleAction implements Action {
 
 	@Override
 	public String execute(HttpServletRequest request) throws ServletException, IOException {
-		// HttpSession session = request.getSession();
-		// String employeeId = (String) session.getAttribute("employeeId");
-		String employeeId = "1004014";
+		String employeeId = null;
+		HttpSession session = request.getSession(false);
+		if (session != null) {
+		    EmployeeVO user = (EmployeeVO) session.getAttribute("user");
+		    if (user != null) {
+		        employeeId = (String)user.getEmployeeId();
+		    }
+		}
 		String date = request.getParameter("scheduleDate");
 		String scheduleType = request.getParameter("scheduleType");
 		String title = request.getParameter("title");

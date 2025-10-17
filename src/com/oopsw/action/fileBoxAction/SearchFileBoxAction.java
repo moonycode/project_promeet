@@ -19,9 +19,9 @@ public class SearchFileBoxAction implements Action {
 	public String execute(HttpServletRequest request) throws ServletException, IOException {
 		request.setCharacterEncoding("utf-8");
 		String keyword = request.getParameter("keyword");
-		List<SearchFileBoxVO> files = new FileBoxDAO().searchFiles(keyword);
+		List<SearchFileBoxVO> files = new FileBoxDAO().searchFilesOrTask(keyword,null);
 		
-		  JsonResponse<List<SearchFileBoxVO>> response = new JsonResponse<>("success", "ï¿½Ë»ï¿½ ï¿½Ï·ï¿½", files);
+		  JsonResponse<List<SearchFileBoxVO>> response = new JsonResponse<>("success", "ÆÄÀÏÀ» ¼º°øÀûÀ¸·Î ºÒ·¯¿Ô½À´Ï´Ù.", files);
 		  String jsonResponse = CreateJsonResponse.toJson(response);
 		request.setAttribute("jsonResponse", jsonResponse);
 		return "Json/jsonResult.jsp";

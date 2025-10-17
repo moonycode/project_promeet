@@ -25,14 +25,10 @@
 
 			<section class="section">
 				<h2 class="filebox-h2"></h2>
-
 				<div class="file-grid" id="fileGrid"></div>
 			</section>
 			<section class="panel" style="padding: 0">
-				<table class="file-table">
-					<tbody>
-					</tbody>
-				</table>
+				<div id="fileTableDiv"></div>
 			</section>
 
 

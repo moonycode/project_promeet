@@ -9,8 +9,10 @@ import java.util.Map;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import com.oopsw.action.Action;
+import com.oopsw.model.EmployeeVO;
 import com.oopsw.model.ScheduleDAO;
 import com.oopsw.model.ScheduleVO;
 
@@ -25,9 +27,14 @@ public class DotScheduleAction implements Action {
         SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
     
         
-//	    HttpSession session = request.getSession();
-//	    String employeeId = (String) session.getAttribute("employeeId");
-		String employeeId = "1004014";
+		String employeeId = null;
+		HttpSession session = request.getSession(false);
+		if (session != null) {
+		    EmployeeVO user = (EmployeeVO) session.getAttribute("user");
+		    if (user != null) {
+		        employeeId = (String)user.getEmployeeId();
+		    }
+		}
 		
 		
 		List<ScheduleVO> dotSchedulesList = new ScheduleDAO().getDotSchedule(employeeId);
@@ -45,7 +52,7 @@ public class DotScheduleAction implements Action {
 		    jsonList.add(map);
 		}
 		
-		JsonResponse<List<Map<String, Object>>> response = new JsonResponse<>("success", "dot�ҷ�����Ϸ�", jsonList);
+		JsonResponse<List<Map<String, Object>>> response = new JsonResponse<>("success", "dotSuccess", jsonList);
 		String jsonResponse = CreateJsonResponse.toJson(response);
 		request.setAttribute("jsonResponse", jsonResponse);
 		return "Json/jsonResult.jsp";

@@ -1,6 +1,8 @@
 package com.oopsw.model;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
 
@@ -12,9 +14,13 @@ public class FileBoxDAO {
         return list;
     }
     
-    public List<SearchFileBoxVO> searchFiles(String keyword) {
+    public List<SearchFileBoxVO> searchFilesOrTask(String keyword, Integer taskNo) {
         SqlSession conn = DBCP.getSqlSessionFactory().openSession();
-        List<SearchFileBoxVO> list = conn.selectList("fileBoxMapper.searchFiles", keyword);
+        Map<String, Object> param = new HashMap<>();
+        param.put("searchKeyword", keyword);
+        param.put("taskNo", taskNo);
+
+        List<SearchFileBoxVO> list = conn.selectList("fileBoxMapper.searchFilesOrTask", param);
         conn.close();
         return list;
     }
@@ -26,10 +32,4 @@ public class FileBoxDAO {
         return list;
     }
 
-      public List<FilesTaskFileBoxVO> getTaskFiles(int taskNo) {
-        SqlSession conn = DBCP.getSqlSessionFactory().openSession();
-        List<FilesTaskFileBoxVO> list = conn.selectList("fileBoxMapper.getTaskFiles", taskNo);
-        conn.close();
-        return list;
-    }
 }

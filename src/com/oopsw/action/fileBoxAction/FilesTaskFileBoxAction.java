@@ -8,22 +8,24 @@ import javax.servlet.http.HttpServletRequest;
 
 import com.oopsw.action.Action;
 import com.oopsw.model.FileBoxDAO;
-import com.oopsw.model.ProjectFileBoxVO;
+import com.oopsw.model.SearchFileBoxVO;
 
 import util.CreateJsonResponse;
 import util.JsonResponse;
 
-public class projectFileBoxAction implements Action {
+public class FilesTaskFileBoxAction implements Action {
 
 	@Override
 	public String execute(HttpServletRequest request) throws ServletException, IOException {
-		String projectNoStr = request.getParameter("projectNo");
-		int projectNo = Integer.parseInt(projectNoStr);
-		List<ProjectFileBoxVO> projectFiles = new FileBoxDAO().getProjectNameTaskFileCount(projectNo);
+		String taskNoStr = request.getParameter("taskNo");
+		System.out.println(taskNoStr);
+		int taskno = Integer.parseInt(taskNoStr);
+		List<SearchFileBoxVO> taskFiles = new FileBoxDAO().searchFilesOrTask(null,taskno);
 		
-		  JsonResponse<List<ProjectFileBoxVO>> response = new JsonResponse<>("success", "¾÷¹« Á¶È¸", projectFiles);
+		  JsonResponse<List<SearchFileBoxVO>> response = new JsonResponse<>("success", "ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½È¸", taskFiles);
 		  String jsonResponse = CreateJsonResponse.toJson(response);
 		request.setAttribute("jsonResponse", jsonResponse);
+		
 		return "Json/jsonResult.jsp";
 	}
 

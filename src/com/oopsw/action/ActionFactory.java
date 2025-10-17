@@ -20,8 +20,8 @@ import com.oopsw.action.employeeAction.MyPageUIAction;
 import com.oopsw.action.fileBoxAction.FileBoxAction;
 import com.oopsw.action.fileBoxAction.FileBoxUIAction;
 import com.oopsw.action.fileBoxAction.SearchFileBoxAction;
-import com.oopsw.action.fileBoxAction.filesTaskFileBoxAction;
-import com.oopsw.action.fileBoxAction.projectFileBoxAction;
+import com.oopsw.action.fileBoxAction.FilesTaskFileBoxAction;
+import com.oopsw.action.fileBoxAction.ProjectFileBoxAction;
 import com.oopsw.action.projectAction.AddProjectAction;
 import com.oopsw.action.projectAction.AddProjectUIAction;
 import com.oopsw.action.projectAction.BinProjectAction;
@@ -56,10 +56,10 @@ public class ActionFactory {
 			a = new MyPageUIAction();
 			break;
 		case "filesTaskFileBox":
-			a=new filesTaskFileBoxAction();
+			a=new FilesTaskFileBoxAction();
 			break;
 		case "projectFileBox":
-			a=new projectFileBoxAction();
+			a=new ProjectFileBoxAction();
 			break;
 		case "searchFileBox":
 			a=new SearchFileBoxAction();
