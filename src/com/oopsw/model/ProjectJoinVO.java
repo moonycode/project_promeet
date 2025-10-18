@@ -17,11 +17,10 @@ public class ProjectJoinVO {
     
     // 참여 정보(project_join)
 	private int projectJoinNo;
-	
-	
 	private Date inDate;
-	private Date upDate;
+	private Date dateUp;
 	private int joinFlag;
+	private int managerFlag;
 	
 	
 	public ProjectJoinVO(){}
@@ -36,8 +35,9 @@ public class ProjectJoinVO {
             int projectNo,
             String managerId,
             Date inDate,
-            Date upDate,
-            int joinFlag
+            Date dateUp,
+            int joinFlag, 
+            int managerFlag
     ){
         setProjectJoinNo(projectJoinNo);
         setEmployeeId(employeeId);
@@ -49,11 +49,13 @@ public class ProjectJoinVO {
         setProjectNo(projectNo);
         setManagerId(managerId);
         setInDate(inDate);
-        setUpDate(upDate);
+        setDateUp(dateUp);
         setJoinFlag(joinFlag);
+        setManagerFlag(managerFlag);
     }
 
-    // ===== getters / setters =====
+
+	// ===== getters / setters =====
     public int getProjectJoinNo() { return projectJoinNo; }
     public void setProjectJoinNo(int projectJoinNo) { this.projectJoinNo = projectJoinNo; }
 
@@ -66,8 +68,8 @@ public class ProjectJoinVO {
     public Date getInDate() { return inDate; }
     public void setInDate(Date inDate) { this.inDate = inDate; }
 
-    public Date getUpDate() { return upDate; }
-    public void setUpDate(Date upDate) { this.upDate = upDate; }
+    public Date getDateUp() { return dateUp; }
+    public void setDateUp(Date dateUp) { this.dateUp = dateUp; }
 
     public int getJoinFlag() { return joinFlag; }
     public void setJoinFlag(int joinFlag) { this.joinFlag = joinFlag; }
@@ -89,7 +91,12 @@ public class ProjectJoinVO {
 
     public String getManagerId() { return managerId; }
     public void setManagerId(String managerId) { this.managerId = managerId; }
-
+    public int getManagerFlag() {
+		return managerFlag;
+	}
+	public void setManagerFlag(int managerFlag) {
+		this.managerFlag = managerFlag;
+	}
     @Override
     public String toString() {
         return "ProjectJoinVO{" +
@@ -103,8 +110,9 @@ public class ProjectJoinVO {
                 ", projectNo=" + projectNo +
                 ", managerId='" + managerId + '\'' +
                 ", inDate=" + inDate +
-                ", upDate=" + upDate +
+                ", dateUp=" + dateUp +
                 ", joinFlag=" + joinFlag +
+                ", managerFlag=" + managerFlag +
                 '}';
     }
 }

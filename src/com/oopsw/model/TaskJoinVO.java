@@ -8,7 +8,7 @@ public class TaskJoinVO {
 	private int taskNo;
 	private int projectJoinNo;
 	private Date inDate;
-	private Date upDate;
+	private Date dateUp;
 	private int joinFlag;
 
 
@@ -18,7 +18,7 @@ public class TaskJoinVO {
 		setTaskNo(taskNo);
 		setProjectJoinNo(projectJoinNo);
 		setInDate(inDate);
-		setUpDate(upDate);
+		setDateUp(dateUp);
 		setJoinFlag(joinFlag);
 	}
 	public int getTaskJoinNo() {
@@ -45,11 +45,11 @@ public class TaskJoinVO {
 	public void setInDate(Date inDate) {
 		this.inDate = inDate;
 	}
-	public Date getUpDate() {
-		return upDate;
+	public Date getDateUp() {
+		return dateUp;
 	}
-	public void setUpDate(Date upDate) {
-		this.upDate = upDate;
+	public void setDateUp(Date dateUp) {
+		this.dateUp = dateUp;
 	}
 	public int getJoinFlag() {
 		return joinFlag;
@@ -60,7 +60,7 @@ public class TaskJoinVO {
 	@Override
 	public String toString() {
 		return "TaskJoinVO [taskJoinNo=" + taskJoinNo + ", taskNo=" + taskNo + ", projectJoinNo=" + projectJoinNo
-				+ ", inDate=" + inDate + ", upDate=" + upDate + ", joinFlag=" + joinFlag + "]";
+				+ ", inDate=" + inDate + ", dateUp=" + dateUp + ", joinFlag=" + joinFlag + "]";
 	}
 
 
