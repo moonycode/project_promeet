@@ -32,7 +32,7 @@ public class UpdateProjectAction implements Action {
         int result = dao.updateProject(project, startDate, endDate); 
 
         if (result > 0) {
-            return "controller?cmd=selectProject&projectNo=" + projectNo;
+            return "controller?cmd=tasksUI&projectNo=" + projectNo;
         } else {
             return "controller?cmd=updateProjectUI&projectNo=" + projectNo;
         }
