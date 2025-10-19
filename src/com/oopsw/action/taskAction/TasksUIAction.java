@@ -17,7 +17,7 @@ public class TasksUIAction implements Action {
 
     String projectNoStr = request.getParameter("projectNo");
     if (projectNoStr == null || projectNoStr.isEmpty()) return "controller?cmd=projectUI";
-    long projectNo = Long.parseLong(projectNoStr);
+    int projectNo = Integer.parseInt(projectNoStr);
 
     String taskStatus = request.getParameter("taskStatus");
     if (taskStatus == null || taskStatus.isEmpty()) taskStatus = "ALL";

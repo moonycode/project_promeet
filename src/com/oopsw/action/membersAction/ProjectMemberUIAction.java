@@ -15,7 +15,7 @@ public class ProjectMemberUIAction implements Action {
     EmployeeVO user = (s != null) ? (EmployeeVO) s.getAttribute("user") : null;
     if (user == null) return "controller?cmd=loginUI";
 
-    long projectNo = Long.parseLong(request.getParameter("projectNo"));
+    int projectNo = Integer.parseInt(request.getParameter("projectNo"));
     List<ProjectJoinVO> members = new MembersDAO().selectProjectMembers(projectNo);
     request.setAttribute("members", members);
     request.setAttribute("projectNo", projectNo);

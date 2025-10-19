@@ -5,7 +5,7 @@
 
 <mapper namespace="projectMapper">
 
-	 <select id="selectProjectHeader" parameterType="long" resultType="com.oopsw.model.ProjectVO">
+	 <select id="selectProjectHeader" parameterType="int" resultType="com.oopsw.model.ProjectVO">
 	    SELECT
 	      p.project_no     AS projectNo,
 	      p.creator_id     AS creatorId,

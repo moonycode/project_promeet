@@ -29,10 +29,11 @@ public class TaskDAO {
         } finally { s.close(); }
     }
 
-    public boolean softDeleteTask(long taskNo){
+   
+    public boolean deleteTask(int taskNo){
         SqlSession s = DBCP.getSqlSessionFactory().openSession(true);
         try{
-            int c = s.update("taskMapper.softDeleteTask", taskNo);
+            int c = s.update("taskMapper.deleteTask", taskNo);
             return c > 0;
         } finally { s.close(); }
     }

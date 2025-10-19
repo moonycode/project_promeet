@@ -14,10 +14,10 @@ public class DeleteTaskAction implements Action {
     EmployeeVO user = (s != null) ? (EmployeeVO) s.getAttribute("user") : null;
     if (user == null) return "controller?cmd=loginUI";
 
-    long taskNo    = Long.parseLong(request.getParameter("taskNo"));
-    long projectNo = Long.parseLong(request.getParameter("projectNo"));
+    int taskNo    = Integer.parseInt(request.getParameter("taskNo"));
+    int projectNo = Integer.parseInt(request.getParameter("projectNo"));
 
-    new TaskDAO().softDeleteTask(taskNo);
+    new TaskDAO().deleteTask(taskNo);
     return "controller?cmd=taskUI&projectNo=" + projectNo;
   }
 }

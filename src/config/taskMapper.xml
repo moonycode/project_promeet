@@ -112,10 +112,10 @@
 
 
   <!-- ===== 소프트 삭제 ===== -->
-  <update id="deleteTaskSoft" parameterType="int">
+  <update id="deleteTaskSoft" parameterType="map">
     UPDATE tasks
        SET del_date = SYSDATE
-     WHERE task_no  = #{value}
+     WHERE task_no  = #{taskNo}
   </update>
 
   <!-- ===== 업무 추가 (담당자 제외) ===== -->

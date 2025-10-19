@@ -14,14 +14,14 @@ public class UpdateProjectMemberAction implements Action {
     EmployeeVO user = (s != null) ? (EmployeeVO) s.getAttribute("user") : null;
     if (user == null) return "controller?cmd=loginUI";
 
-    long projectNo  = Long.parseLong(request.getParameter("projectNo"));
+    int projectNo  = Integer.parseInt(request.getParameter("projectNo"));
     String[] ids    = request.getParameterValues("employeeId");
     String[] flags  = request.getParameterValues("joinFlag");
 
     MembersDAO dao = new MembersDAO();
     if (ids != null && flags != null && ids.length == flags.length){
       for (int i=0; i<ids.length; i++){
-        long empId = Long.parseLong(ids[i]);
+        String empId = ids[i];
         int  flag  = Integer.parseInt(flags[i]);
         dao.upsertProjectJoin(projectNo, empId, flag);
       }

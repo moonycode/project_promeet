@@ -15,12 +15,12 @@ public class TaskMemberUIAction implements Action {
     EmployeeVO user = (s != null) ? (EmployeeVO) s.getAttribute("user") : null;
     if (user == null) return "controller?cmd=loginUI";
 
-    long projectNo = Long.parseLong(request.getParameter("projectNo"));
-    long taskNo    = Long.parseLong(request.getParameter("taskNo"));
+    int projectNo = Integer.parseInt(request.getParameter("projectNo"));
+    int taskNo    = Integer.parseInt(request.getParameter("taskNo"));
 
     MembersDAO dao = new MembersDAO();
     List<ProjectJoinVO> candidates = dao.selectActiveProjectMembers(projectNo);
-    List<Long> checkedPjoinNos = dao.selectTaskJoinedPjoinNos(taskNo);
+    List<Integer> checkedPjoinNos = dao.selectTaskJoinedPjoinNos(taskNo);
 
     request.setAttribute("projectNo", projectNo);
     request.setAttribute("taskNo", taskNo);

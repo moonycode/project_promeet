@@ -22,7 +22,7 @@ public class AddTaskAction implements Action {
     String startDate    = request.getParameter("startDate");
     String endDate      = request.getParameter("endDate");
 
-    long projectNo = Long.parseLong(projectNoStr);
+    int projectNo = Integer.parseInt(projectNoStr);
 
     Map<String,Object> p = new HashMap<>();
     p.put("projectNo", projectNo);

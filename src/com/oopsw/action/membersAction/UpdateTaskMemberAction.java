@@ -14,8 +14,8 @@ public class UpdateTaskMemberAction implements Action {
     EmployeeVO user = (s != null) ? (EmployeeVO) s.getAttribute("user") : null;
     if (user == null) return "controller?cmd=loginUI";
 
-    long projectNo = Long.parseLong(request.getParameter("projectNo"));
-    long taskNo    = Long.parseLong(request.getParameter("taskNo"));
+    int projectNo = Integer.parseInt(request.getParameter("projectNo"));
+    int taskNo    = Integer.parseInt(request.getParameter("taskNo"));
 
     String[] pjoinNos = request.getParameterValues("pjoinNo");
     new MembersDAO().updateTaskMembers(taskNo, pjoinNos);
