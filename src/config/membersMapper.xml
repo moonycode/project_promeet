@@ -17,7 +17,7 @@
     e.email                          AS email,
     NVL(pj.project_no, #{projectNo}) AS projectNo,
     pj.in_date                       AS inDate,
-    pj.date_up                       AS dateUp,
+    pj.up_date                       AS dateUp,
     NVL(pj.join_flag, 0)             AS joinFlag,
     NVL(pj.manager_flag, 0)          AS managerFlag
   FROM employees e
@@ -44,7 +44,7 @@
     e.email            AS email,
     pj.project_no      AS projectNo,
     pj.in_date         AS inDate,
-    pj.date_up         AS dateUp,
+    pj.up_date         AS dateUp,
     pj.join_flag       AS joinFlag,
     pj.manager_flag    AS managerFlag
   FROM project_join pj
@@ -81,7 +81,7 @@
     e.email            AS email,
     pj.project_no      AS projectNo,
     pj.in_date         AS inDate,
-    pj.date_up         AS dateUp,
+    pj.up_date         AS dateUp,
     pj.join_flag       AS joinFlag,
     pj.manager_flag    AS managerFlag
   FROM task_join tj
@@ -102,7 +102,7 @@
   <if test="empIds != null and empIds.size() > 0">
     UPDATE project_join
        SET join_flag = 1,
-           date_up   = SYSDATE
+           up_date   = SYSDATE
      WHERE project_no  = #{projectNo}
        AND employee_id IN
        <foreach collection="empIds" item="id" open="(" close=")" separator=",">
@@ -115,7 +115,7 @@
 <insert id="insertNewProjectMembers" parameterType="map">
   <if test="empIds != null and empIds.size() > 0">
     INSERT INTO project_join (project_join_no, project_no, employee_id, in_date, join_flag, manager_flag)
-    SELECT seq_project_join.NEXTVAL, #{projectNo}, e.employee_id, SYSDATE, 1, 0
+    SELECT project_join_seq.NEXTVAL, #{projectNo}, e.employee_id, SYSDATE, 1, 0
       FROM employees e
      WHERE e.employee_id IN
        <foreach collection="empIds" item="id" open="(" close=")" separator=",">
@@ -134,7 +134,7 @@
 <update id="deactivateRemovedProjectMembers" parameterType="map">
   UPDATE project_join
      SET join_flag = 0,
-         date_up   = SYSDATE
+         up_date   = SYSDATE
    WHERE project_no = #{projectNo}
      AND join_flag  = 1
      AND manager_flag = 0
@@ -156,7 +156,7 @@
   <if test="pjoinNos != null and pjoinNos.size() > 0">
     UPDATE task_join
        SET join_flag = 1,
-           date_up   = SYSDATE
+           up_date   = SYSDATE
      WHERE task_no IN (#{taskNo})
        AND project_join_no IN
        <foreach collection="pjoinNos" item="no" open="(" close=")" separator=",">
@@ -169,7 +169,7 @@
 <insert id="insertNewTaskMembers" parameterType="map">
   <if test="pjoinNos != null and pjoinNos.size() > 0">
     INSERT INTO task_join (task_join_no, task_no, project_join_no, in_date, join_flag)
-    SELECT seq_task_join.NEXTVAL, #{taskNo}, pj.project_join_no, SYSDATE, 1
+    SELECT task_join_seq.NEXTVAL, #{taskNo}, pj.project_join_no, SYSDATE, 1
       FROM project_join pj
      WHERE pj.project_join_no IN
        <foreach collection="pjoinNos" item="no" open="(" close=")" separator=",">
@@ -188,7 +188,7 @@
 <update id="deactivateRemovedTaskMembers" parameterType="map">
   UPDATE task_join
      SET join_flag = 0,
-         date_up   = SYSDATE
+         up_date   = SYSDATE
    WHERE task_no   = #{taskNo}
      AND join_flag = 1
      <choose>

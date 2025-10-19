@@ -135,7 +135,7 @@
 
 
 	<!-- ===== 소프트 삭제 ===== -->
-	<update id="deleteTaskSoft" parameterType="map">
+	<update id="deleteTask" parameterType="map">
 		UPDATE tasks
 		SET del_date = SYSDATE
 		WHERE task_no = #{taskNo}

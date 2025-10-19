@@ -62,8 +62,13 @@ public class TaskVO {
     public int getProgress(){ return progress; }
     public void setProgress(int progress){ this.progress = progress; }
 
-    @Override
-    public String toString(){
-        return "TaskVO{taskNo="+taskNo+", projectNo="+projectNo+", taskName='"+taskName+"', progress="+progress+"}";
+	@Override
+	public String toString() {
+		return "TaskVO [taskNo=" + taskNo + ", projectNo=" + projectNo + ", taskName=" + taskName + ", taskStatus="
+				+ taskStatus + ", startDate=" + startDate + ", endDate=" + endDate + ", inDate=" + inDate + ", dateUp="
+				+ dateUp + ", priority=" + priority + ", delDate=" + delDate + ", membersText=" + membersText
+				+ ", progress=" + progress + "]";
+	}
+
     }
-}
+

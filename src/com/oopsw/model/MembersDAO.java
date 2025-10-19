@@ -6,48 +6,62 @@ import org.apache.ibatis.session.SqlSession;
 public class MembersDAO {
 
     public List<ProjectJoinVO> selectProjectMembers(int projectNo){
+        Map<String,Object> p = new HashMap<>();
+        p.put("projectNo", projectNo);
         SqlSession s = DBCP.getSqlSessionFactory().openSession();
         try{
-            return s.selectList("membersMapper.selectProjectMembers", projectNo);
+            return s.selectList("membersMapper.selectAllEmployeesWithJoinForProject", p);
         } finally { s.close(); }
     }
 
-    /** employeeId는 샘플데이터가 문자열 사번이므로 String */
-    public boolean upsertProjectJoin(int projectNo, String employeeId, int joinFlag){
-        SqlSession s = DBCP.getSqlSessionFactory().openSession(true);
-        try{
-            Map<String,Object> p = new HashMap<>();
-            p.put("projectNo", projectNo);
-            p.put("employeeId", employeeId);
-            p.put("joinFlag", joinFlag);
-            int c = s.update("membersMapper.upsertProjectJoin", p);
-            return c > 0;
-        } finally { s.close(); }
+    public int syncProjectMembers(int projectNo, List<String> empIds){
+        Map<String,Object> p = new HashMap<>();
+        p.put("projectNo", projectNo);
+        List<String> safe = (empIds != null) ? empIds : Collections.emptyList();
+        p.put("empIds", safe);
+
+        try (SqlSession s = DBCP.getSqlSessionFactory().openSession(true)) {
+            int c1 = 0, c2 = 0, c3 = 0;
+            if (!safe.isEmpty()) {
+                c1 = s.update("membersMapper.rejoinExistingProjectMembers", p);
+                c2 = s.insert("membersMapper.insertNewProjectMembers", p);
+            }
+            c3 = s.update("membersMapper.deactivateRemovedProjectMembers", p);
+            return c1 + c2 + c3;
+        }
     }
 
     public List<ProjectJoinVO> selectActiveProjectMembers(int projectNo){
+        Map<String,Object> p = new HashMap<>();
+        p.put("projectNo", projectNo);
         SqlSession s = DBCP.getSqlSessionFactory().openSession();
         try{
-            return s.selectList("membersMapper.selectActiveProjectMembers", projectNo);
+            return s.selectList("membersMapper.selectActiveProjectMembers", p);
         } finally { s.close(); }
     }
 
-    /** pjoin_no 컬럼 int로 받을게요 */
     public List<Integer> selectTaskJoinedPjoinNos(int taskNo){
+        Map<String,Object> p = new HashMap<>();
+        p.put("taskNo", taskNo);
         SqlSession s = DBCP.getSqlSessionFactory().openSession();
         try{
-            return s.selectList("membersMapper.selectTaskJoinedPjoinNos", taskNo);
+            return s.selectList("membersMapper.selectTaskJoinedPjoinNos", p);
         } finally { s.close(); }
     }
 
     public boolean updateTaskMembers(int taskNo, String[] pjoinNos){
-        SqlSession s = DBCP.getSqlSessionFactory().openSession(true);
-        try{
-            Map<String,Object> p = new HashMap<>();
-            p.put("taskNo", taskNo);
-            p.put("pjoinNos", pjoinNos != null ? Arrays.asList(pjoinNos) : Collections.emptyList());
-            int c = s.update("membersMapper.updateTaskMembers", p);
-            return c >= 0; // 멱등 보장 형태 유지
-        } finally { s.close(); }
-    }
+        Map<String,Object> p = new HashMap<>();
+        p.put("taskNo", taskNo);
+        List<String> safe = (pjoinNos != null) ? Arrays.asList(pjoinNos) : Collections.emptyList();
+        p.put("pjoinNos", safe);
+
+        try (SqlSession s = DBCP.getSqlSessionFactory().openSession(true)) {
+            if (!safe.isEmpty()) {
+                s.update("membersMapper.rejoinExistingTaskMembers", p);
+                s.insert("membersMapper.insertNewTaskMembers", p);
+            }
+            s.update("membersMapper.deactivateRemovedTaskMembers", p);
+            return true;
+        }
+}
 }
