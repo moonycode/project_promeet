@@ -7,7 +7,15 @@ import java.util.Map;
 import org.apache.ibatis.session.SqlSession;
 
 public class ProjectDAO {
-
+	   public ProjectVO selectProjectHeader(int projectNo){
+	        SqlSession s = null;
+	        try{
+	            s = DBCP.getSqlSessionFactory().openSession();
+	            return s.selectOne("projectMapper.selectProjectHeader", projectNo);
+	        } finally {
+	            if (s != null) s.close();
+	        }
+	    }
     // 진행중 프로젝트 조회
     public List<ProjectVO> getOngoingProjects(String creatorId) {
         SqlSession session = null;
