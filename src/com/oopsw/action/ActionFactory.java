@@ -20,6 +20,7 @@ import com.oopsw.action.employeeAction.MyPageUIAction;
 import com.oopsw.action.fileBoxAction.FileBoxAction;
 import com.oopsw.action.fileBoxAction.FileBoxUIAction;
 import com.oopsw.action.fileBoxAction.SearchFileBoxAction;
+import com.oopsw.action.membersAction.*;
 import com.oopsw.action.fileBoxAction.FilesTaskFileBoxAction;
 import com.oopsw.action.fileBoxAction.ProjectFileBoxAction;
 import com.oopsw.action.projectAction.AddProjectAction;
@@ -38,6 +39,7 @@ import com.oopsw.action.sceduleAction.DeleteScheduleAction;
 import com.oopsw.action.sceduleAction.DotScheduleAction;
 import com.oopsw.action.sceduleAction.ScheduleUIAction;
 import com.oopsw.action.sceduleAction.UpdateScheduleAction;
+import com.oopsw.action.taskAction.*;
 
 public class ActionFactory {	
 	private ActionFactory(){}
@@ -46,6 +48,35 @@ public class ActionFactory {
 		Action a=null;
 		
 		switch(cmd){
+		
+	    case "taskUI":
+        case "tasksUI":
+            a = new TasksUIAction();
+            break;
+        case "addTaskAction":
+            a = new AddTaskAction();
+            break;
+        case "updateTaskAction":
+            a = new UpdateTaskAction();
+            break;
+        case "deleteTaskAction":
+            a = new DeleteTaskAction();
+            break;
+
+        case "projectMembersUI":
+            a = new ProjectMemberUIAction();
+            break;
+        case "updateProjectMembers":
+            a = new UpdateProjectMemberAction();
+            break;
+        case "taskMemberUI":
+            a = new TaskMemberUIAction();
+            break;
+        case "updateTaskMembers":
+            a = new UpdateTaskMemberAction();
+            break;
+		
+		
 		case "logout":
 			a = new LogoutAction();
 			break;

@@ -5,9 +5,33 @@
 
 <mapper namespace="projectMapper">
 
+	 <select id="selectProjectHeader" parameterType="long" resultType="com.oopsw.model.ProjectVO">
+	    SELECT
+	      p.project_no     AS projectNo,
+	      p.creator_id     AS creatorId,
+	      p.project_name   AS projectName,
+	      p.client         AS client,
+	      p.start_date     AS startDate,
+	      p.end_date       AS endDate,
+	      p.in_date        AS inDate,
+	      p.up_date        AS dateUp,         <!-- 팀 일부 VO는 dateUp 네이밍 -->
+	      p.description    AS description,
+	      p.complete_date  AS completeDate,
+	      p.del_date       AS delDate,
+	      p.creator_id     AS creatorId,
+	      /* 선택: 멤버/근무중 카운트 사용 시 */
+	      (SELECT COUNT(*) FROM project_join pj
+	        WHERE pj.project_no = p.project_no AND pj.join_flag = 1) AS membersCnt,
+	      (SELECT COUNT(*) FROM project_join pj
+	         JOIN employees e ON e.employee_id = pj.employee_id
+	        WHERE pj.project_no = p.project_no AND pj.join_flag = 1 AND e.work_status != '퇴근') AS workingCount
+	    FROM projects p
+	    WHERE p.project_no = #{projectNo}
+	  </select>
+
     <select id="getOngoingProjects" parameterType="String" resultType="com.oopsw.model.ProjectVO">
         SELECT
-		    p.project_no,
+		    p.project_no AS projectNo,
 		    p.project_name AS projectName,
 		    pmc.memberCount,
 		    p.client,

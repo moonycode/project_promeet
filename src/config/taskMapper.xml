@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="taskMapper">
+
+  <!-- ===== 업무 목록 (정렬/필터/담당자표시/진척도 계산 포함) ===== -->
+  <select id="selectTasksByProject"
+          parameterType="map"
+          resultType="com.oopsw.model.TaskVO">
+    SELECT
+        t.task_no     AS taskNo,
+        t.project_no  AS projectNo,
+        t.task_name   AS taskName,
+        t.task_status AS taskStatus,
+        t.start_date  AS startDate,
+        t.end_date    AS endDate,
+        t.in_date     AS inDate,
+        t.up_date     AS dateUp,
+        t.priority    AS priority,
+        t.del_date    AS delDate,
+
+        /* 담당자: 한 명 이름 + (+인원수-1) */
+        CASE
+          WHEN mt.member_cnt IS NULL OR mt.member_cnt = 0 THEN NULL
+          WHEN mt.member_cnt = 1 THEN mt.first_name
+          ELSE mt.first_name || '+' || (mt.member_cnt - 1)
+        END AS membersText,
+
+        /* 진척도: 완료/총 체크리스트 * 100 (%) */
+        CASE
+          WHEN cl.total_cnt IS NULL OR cl.total_cnt = 0 THEN 0
+          ELSE ROUND((cl.done_cnt / cl.total_cnt) * 100)
+        END AS progress
+    FROM tasks t
+    LEFT JOIN (
+      SELECT
+          tj.task_no,
+          MIN(e.name)                            AS first_name,
+          COUNT(DISTINCT pj.employee_id)         AS member_cnt
+      FROM task_join tj
+      JOIN project_join pj
+        ON tj.project_join_no = pj.project_join_no
+       AND tj.join_flag       = 1
+      JOIN employees e
+        ON pj.employee_id     = e.employee_id
+       AND e.resign_date IS NULL
+      GROUP BY tj.task_no
+    ) mt
+      ON mt.task_no = t.task_no
+    LEFT JOIN (
+      SELECT
+          c.task_no,
+          COUNT(*)                                               AS total_cnt,
+          SUM(CASE WHEN c.complete_flag = '1' THEN 1 ELSE 0 END) AS done_cnt
+      FROM checklist c
+      WHERE c.del_date IS NULL
+      GROUP BY c.task_no
+    ) cl
+      ON cl.task_no = t.task_no
+
+    <where>
+      t.del_date  IS NULL
+      AND t.project_no = #{projectNo}
+      <!-- 진행상태 필터 -->
+      <if test="taskStatus != null and taskStatus != '' and taskStatus != 'ALL'">
+        <choose>
+          <when test="taskStatus == 'DONE'">     AND t.task_status = '완료' </when>
+          <when test="taskStatus == 'PROGRESS'"> AND t.task_status = '진행' </when>
+          <when test="taskStatus == 'WAIT'">     AND t.task_status = '대기' </when>
+          <when test="taskStatus == 'HOLD'">     AND t.task_status = '보류' </when>
+          <when test="taskStatus == 'ETC'">      AND t.task_status = '기타' </when>
+        </choose>
+      </if>
+      <!-- 우선순위 필터 -->
+      <if test="priority != null and priority != '' and priority != 'ALL'">
+        <choose>
+          <when test="priority == 'EMERGENCY'"> AND t.priority = '긴급' </when>
+          <when test="priority == 'HIGH'">      AND t.priority = '높음' </when>
+          <when test="priority == 'NORMAL'">    AND t.priority = '보통' </when>
+          <when test="priority == 'LOW'">       AND t.priority = '낮음' </when>
+          <when test="priority == 'NONE'">      AND t.priority = '없음' </when>
+        </choose>
+      </if>
+    </where>
+
+    <choose>
+      <when test="orderBy == 'start_asc'"> ORDER BY t.start_date ASC NULLS LAST,  t.task_no ASC </when>
+      <when test="orderBy == 'start_desc'">ORDER BY t.start_date DESC NULLS LAST, t.task_no ASC </when>
+      <when test="orderBy == 'end_asc'">   ORDER BY t.end_date   ASC NULLS LAST,  t.task_no ASC </when>
+      <when test="orderBy == 'end_desc'">  ORDER BY t.end_date   DESC NULLS LAST, t.task_no ASC </when>
+      <otherwise>                          ORDER BY t.task_no    ASC               </otherwise>
+    </choose>
+  </select>
+
+  <!-- ===== 업무 기본정보 수정 (담당자 제외) ===== -->
+<update id="updateTaskBasic" parameterType="map">
+  UPDATE tasks
+     SET task_name   = NVL(#{taskName}, task_name),
+         task_status = NVL(#{taskStatus}, task_status),
+         start_date  = CASE
+                         WHEN #{startDate} IS NULL OR #{startDate} = '' THEN NULL
+                         ELSE TO_DATE(#{startDate}, 'YYYY-MM-DD')
+                       END,
+         end_date    = CASE
+                         WHEN #{endDate} IS NULL OR #{endDate} = '' THEN NULL
+                         ELSE TO_DATE(#{endDate}, 'YYYY-MM-DD')
+                       END,
+         priority    = NVL(#{priority}, priority),
+         up_date     = SYSDATE
+   WHERE task_no     = #{taskNo}
+</update>
+
+
+  <!-- ===== 소프트 삭제 ===== -->
+  <update id="deleteTaskSoft" parameterType="int">
+    UPDATE tasks
+       SET del_date = SYSDATE
+     WHERE task_no  = #{value}
+  </update>
+
+  <!-- ===== 업무 추가 (담당자 제외) ===== -->
+  <insert id="insertTask" parameterType="map">
+    INSERT INTO tasks (
+        task_no, project_no, task_name, task_status,
+        start_date, end_date, in_date, up_date, priority, del_date
+    )
+    VALUES (
+        tasks_seq.NEXTVAL,
+        #{projectNo},
+        #{taskName},
+        #{taskStatus},
+        TO_DATE(NULLIF(#{startDate}, ''), 'YYYY-MM-DD'),
+        TO_DATE(NULLIF(#{endDate},   ''), 'YYYY-MM-DD'),
+        SYSDATE,
+        NULL,
+        #{priority},
+        NULL
+    )
+  </insert>
+
+  <!-- ===== [모달] 특정 업무의 담당자 목록 (부서/이름 정렬) ===== -->
+
+<select id="selectTaskMembers"
+        parameterType="int"
+        resultType="com.oopsw.model.EmployeeVO">
+  SELECT
+      e.employee_id  AS employeeId,
+      e.name         AS name,
+      e.department   AS department,
+      e.position     AS position,
+      e.phone_number AS phoneNumber,
+      e.email        AS email,
+      e.work_status  AS workStatus
+     
+  FROM task_join tj
+  JOIN project_join pj
+    ON tj.project_join_no = pj.project_join_no
+   AND tj.join_flag       = 1
+  JOIN employees e
+    ON pj.employee_id     = e.employee_id
+   AND e.resign_date IS NULL
+  WHERE tj.task_no = #{value}
+  ORDER BY e.department ASC, e.name ASC
+</select>
+
+
+</mapper>
