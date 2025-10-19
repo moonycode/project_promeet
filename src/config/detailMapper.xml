@@ -4,6 +4,14 @@
     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="detailMapper">
+	<!-- 작성자 조회 -->
+	<select id="findProjectJoinNo" parameterType="map" resultType="int">
+    SELECT pj.project_join_no as projectJoinNo
+    FROM project_join pj
+    JOIN tasks t ON pj.project_no = t.project_no
+    WHERE t.task_no = #{taskNo}
+      AND pj.employee_id = #{employeeId}
+</select>	
 	<!-- 답글 삭제 -->
 	<update id="deleteReply" parameterType="int">
 		update replies
