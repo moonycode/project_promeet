@@ -16,15 +16,15 @@ import com.oopsw.model.ScheduleVO;
 
 public class ScheduleDAOTest {
 
-	//ÀÏÁ¤°ü¸® ÀüÃ¼ Á¶È¸
-	//ÀÏÁ¤°ü¸® Æ¯Á¤ ³¯Â¥ Á¶È¸
+	//ì¼ì •ê´€ë¦¬ ì „ì²´ ì¡°íšŒ
+	//ì¼ì •ê´€ë¦¬ íŠ¹ì • ë‚ ì§œ ì¡°íšŒ
     @Test
     public void getDotScheduleTest() {
         ScheduleDAO dao = new ScheduleDAO();
         String employeeId = "1004014";
         List<ScheduleVO> list = dao.getDotSchedule(employeeId);
-        assertNotNull("¸®½ºÆ®°¡ nullÀÌ¸é ¾ÈµÊ", list);
-        System.out.println("Á¶È¸µÈ ÀÏÁ¤ °³¼ö: " + list.size());
+        assertNotNull("ë¦¬ìŠ¤íŠ¸ê°€ nullì´ë©´ ì•ˆë¨", list);
+        System.out.println("ì¡°íšŒëœ ì¼ì • ê°œìˆ˜: " + list.size());
         
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");   
         SimpleDateFormat sdf2 = new SimpleDateFormat("HH:mm");
@@ -32,13 +32,13 @@ public class ScheduleDAOTest {
         if (!list.isEmpty()) {
             for (ScheduleVO vo : list) {
             	String dateStr = sdf.format(vo.getScheduleDate());
-                System.out.println("³¯Â¥: " + dateStr);
-                System.out.println("Å¸ÀÔ: " + vo.getScheduleType());
-                System.out.println("Á¦¸ñ: " + vo.getTitle());
+                System.out.println("ë‚ ì§œ: " + dateStr);
+                System.out.println("íƒ€ì…: " + vo.getScheduleType());
+                System.out.println("ì œëª©: " + vo.getTitle());
                 String startTimeStr = sdf2.format(vo.getStartTime());
-                System.out.println("½ÃÀÛ½Ã°£: " + startTimeStr);
+                System.out.println("ì‹œì‘ì‹œê°„: " + startTimeStr);
                 String endTimeStr = sdf2.format(vo.getEndTime());                
-                System.out.println("Á¾·á½Ã°£: " + endTimeStr);
+                System.out.println("ì¢…ë£Œì‹œê°„: " + endTimeStr);
             }
         }
     }
@@ -50,7 +50,7 @@ public class ScheduleDAOTest {
 		Timestamp endTime = Timestamp.valueOf("2025-10-11 18:00:00");
 		new ScheduleDAO().addSchedule(
 //String employeeId, Date scheduleDate, String scheduleType, String title, Date startTime, Date endTime
-				new ScheduleVO("1004014", scheduleDate, "green", "¿¬Â÷", startTime, endTime)
+				new ScheduleVO("1004014", scheduleDate, "green", "ì—°ì°¨", startTime, endTime)
 				);
 	}
 	
@@ -67,7 +67,7 @@ public class ScheduleDAOTest {
 	        "1004014",          // employeeId
 	        Date.valueOf("2025-10-12"), // scheduleDate
 	        "blue",                // scheduleType
-	        "Å×½ºÆ® ¼öÁ¤",           // title
+	        "í…ŒìŠ¤íŠ¸ ìˆ˜ì •",           // title
 	        Timestamp.valueOf("2025-10-12 09:00:00"), // startTime
 	        Timestamp.valueOf("2025-10-12 18:00:00")  // endTime
 	    );

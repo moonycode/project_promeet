@@ -43,9 +43,9 @@ public class ProjectDAOTest {
         newProject.setCreatorId("1004014");
         newProject.setProjectName("JUnit Simple Insert: " + System.currentTimeMillis());
         newProject.setClient("Simple Client");
-        newProject.setDescription("½ÉÇÃ ¹öÀü DAO Å×½ºÆ®¿ë ÇÁ·ÎÁ§Æ® µî·Ï.");
+        newProject.setDescription("ì‹¬í”Œ ë²„ì „ DAO í…ŒìŠ¤íŠ¸ìš© í”„ë¡œì íŠ¸ ë“±ë¡.");
         
-        // ÇÁ·ÎÁ§Æ®¿Í ¸Å´ÏÀú µî·ÏÀÌ ¸ğµÎ ¼º°øÇÏ¸é 1 
+        // í”„ë¡œì íŠ¸ì™€ ë§¤ë‹ˆì € ë“±ë¡ì´ ëª¨ë‘ ì„±ê³µí•˜ë©´ 1 
         assertEquals(1, dao.insertProject(newProject, "2026-01-01", "2026-12-31"));
     }
 
@@ -53,7 +53,7 @@ public class ProjectDAOTest {
     public void updateProjectTest() throws Exception {
         ProjectVO vo = dao.getProjectByNo(13);
         vo.setProjectNo(13);
-        vo.setProjectName("JUnit Simple Update: " + System.currentTimeMillis()); // ÀÌ¸§ º¯°æ
+        vo.setProjectName("JUnit Simple Update: " + System.currentTimeMillis()); // ì´ë¦„ ë³€ê²½
 
         assertEquals(1, dao.updateProject(vo, "2026-03-01", "2026-06-30"));
     }

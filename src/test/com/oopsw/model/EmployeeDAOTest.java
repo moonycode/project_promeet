@@ -19,7 +19,7 @@ public class EmployeeDAOTest {
     }
 
     @Test
-    public void loginCheck_SuccessTest() throws Exception {
+    public void loginCheckSuccessTest() throws Exception {
         EmployeeVO result = dao.loginCheck("1004014", "8fT2kP1q!");
         
         assertNotNull(result); 
@@ -31,13 +31,13 @@ public class EmployeeDAOTest {
 
 
     @Test
-    public void loginCheck_InvalidIdTest() throws Exception {
+    public void loginCheckInvalidIdTest() throws Exception {
         assertNull(dao.loginCheck("9999999", "1234"));
     }
 
 
     @Test
-    public void loginCheck_InvalidPasswordTest() throws Exception {
+    public void loginCheckInvalidPasswordTest() throws Exception {
         assertNull(dao.loginCheck("1004014", "wrongpassword"));
     }
 

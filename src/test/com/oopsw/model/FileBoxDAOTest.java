@@ -14,7 +14,7 @@ public class FileBoxDAOTest {
 
 
     @Test
-    public void testGetProjects() {
+    public void getProjectsTest() {
     	FileBoxDAO dao = new FileBoxDAO();
         List<ProjectVO> projects = dao.getProjects();
         for (ProjectVO projectVO : projects) {
@@ -23,7 +23,7 @@ public class FileBoxDAOTest {
     }
     
     @Test
-    public void testSearchFiles() {
+    public void searchFilesTest() {
         FileBoxDAO dao = new FileBoxDAO();
         String keyword = "JPA";
 
@@ -32,7 +32,7 @@ public class FileBoxDAOTest {
         }
     
     @Test
-    public void testSearchTask() {
+    public void searchTaskTest() {
         FileBoxDAO dao = new FileBoxDAO();
         Integer taskNo = 15;
 
@@ -41,7 +41,7 @@ public class FileBoxDAOTest {
         }
     
     @Test
-    public void testProjectFileBox() {
+    public void projectFileBoxTest() {
     	List<ProjectFileBoxVO> result = new FileBoxDAO().getProjectNameTaskFileCount(8);
     	System.out.println(result);
     }
