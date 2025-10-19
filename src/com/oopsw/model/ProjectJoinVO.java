@@ -3,7 +3,6 @@ package com.oopsw.model;
 import java.util.Date;
 
 public class ProjectJoinVO {
-	// 사원 정보(employees)
 	private String employeeId;
 	private String name;
 	private String position;
@@ -11,11 +10,8 @@ public class ProjectJoinVO {
     private String phoneNumber;
     private String email;
     
-    // 프로젝트 정보(projects)
-    private String managerId; 
     private int projectNo;
     
-    // 참여 정보(project_join)
 	private int projectJoinNo;
 	private Date inDate;
 	private Date dateUp;
@@ -33,7 +29,6 @@ public class ProjectJoinVO {
             String phoneNumber,
             String email,
             int projectNo,
-            String managerId,
             Date inDate,
             Date dateUp,
             int joinFlag, 
@@ -47,7 +42,6 @@ public class ProjectJoinVO {
         setPhoneNumber(phoneNumber);
         setEmail(email);
         setProjectNo(projectNo);
-        setManagerId(managerId);
         setInDate(inDate);
         setDateUp(dateUp);
         setJoinFlag(joinFlag);
@@ -89,8 +83,6 @@ public class ProjectJoinVO {
     public String getEmail() { return email; }
     public void setEmail(String email) { this.email = email; }
 
-    public String getManagerId() { return managerId; }
-    public void setManagerId(String managerId) { this.managerId = managerId; }
     public int getManagerFlag() {
 		return managerFlag;
 	}
@@ -108,7 +100,6 @@ public class ProjectJoinVO {
                 ", phoneNumber='" + phoneNumber + '\'' +
                 ", email='" + email + '\'' +
                 ", projectNo=" + projectNo +
-                ", managerId='" + managerId + '\'' +
                 ", inDate=" + inDate +
                 ", dateUp=" + dateUp +
                 ", joinFlag=" + joinFlag +
