@@ -1140,7 +1140,6 @@ button,select,input{font:inherit}
   box-shadow: 2px 2px 0 #2b2b2b;
 }
 
-/* 인풋 통일 */
 .comment-input input[type="text"],
 .reply-editor input[type="text"] {
   border: 1.5px solid #222;
@@ -1149,7 +1148,6 @@ button,select,input{font:inherit}
   font-size: 15px;
 }
 
-/* 버튼 통일 */
 .comment-input .btn-small,
 .reply-editor .btn-small {
   border: 1.5px solid #222;
@@ -1159,7 +1157,6 @@ button,select,input{font:inherit}
   cursor: pointer;
 }
 
-/* 색상 통일 */
 .comment-input .btn-gray,
 .reply-editor .btn-gray {
   background: #fff;
@@ -1195,3 +1192,59 @@ button,select,input{font:inherit}
   background: #fff;
   margin-left: 6px;
 }
+	.todo-card {
+	  display: flex;
+	  flex-direction: column;
+	  height: 950px; /* 전체 높이 조정 가능 */
+	  overflow: hidden;
+	}
+	
+	/* 실제 스크롤이 생길 영역 */
+	.todo-list-wrap {
+	  flex: 0 1 auto;
+	  overflow-y: auto;
+	  display: flex;
+	  flex-direction: column;
+	  gap: 10px;
+	  padding-right: 6px; /* 스크롤과 내용 간 여백 */
+	  border-top: 1px solid #ddd;
+	  margin-top: 8px;
+	  margin-bottom: 12px;
+	}
+	
+	/* 댓글 패널 */
+	.cmt-panel {
+	  display: flex;
+	  flex-direction: column;
+	  height: 950px; /* 댓글 전체 높이 */
+	  background: #fff;
+	  border: 1.5px solid #bfb9d1;
+	  border-radius: 10px;
+	  padding: 14px 16px 0;
+	}
+	
+	/* 댓글 목록만 스크롤 */
+	.cmt-list {
+	  flex: 1 1 auto;
+	  overflow-y: auto;
+	  display: flex;
+	  flex-direction: column;
+	  gap: 16px;
+	  padding-right: 6px;
+	  border-top: 1px solid #ddd;
+	  margin-top: 12px;
+	}
+	
+	/* 댓글 입력창 고정 */
+	.comment-editor {
+	  flex-shrink: 0;
+	  display: grid;
+	  grid-template-columns: 1fr auto auto;
+	  gap: 10px;
+	  padding: 10px 0 0;
+	  border-top: 1px solid #ddd;
+	  background: #fff;
+	  position: sticky;
+	  bottom: 0;
+	  box-shadow: 0 -2px 8px rgba(0,0,0,0.05);
+	}
