@@ -1,9 +1,30 @@
 $(document).ready(function(){
-	const taskNo = 3;
-	const employeeId = "1004005";
+	const taskNo = window.taskNo;
+	const employeeId = window.employeeId;
 	let isEditMode = false;
+	
+	console.log(window.taskName);
+	console.log(window.taskNo);
+	
+	function formatDateWithDay(dateStr) {
+	    const date = new Date(dateStr);
+	    const dayNames = ["일", "월", "화", "수", "목", "금", "토"];
+	    const day = dayNames[date.getDay()];
 
+	    const yyyy = date.getFullYear();
+	    const mm = String(date.getMonth() + 1).padStart(2, "0");
+	    const dd = String(date.getDate()).padStart(2, "0");
 
+	    return `${yyyy}-${mm}-${dd} (${day})`;
+	}
+
+	$(document).ready(function () {
+	    $(".detail-title").text(window.taskName);
+	    $(".start").text(formatDateWithDay(window.startDate));
+	    $(".end").text(formatDateWithDay(window.endDate));
+	    $(".members").text(window.membersText);
+	});
+	
 	function getChecklist() {
 		$.ajax({
 			url: "controller",
