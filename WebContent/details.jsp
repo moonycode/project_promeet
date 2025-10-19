@@ -3,6 +3,10 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%
+	if (session.getAttribute("user") == null) {
+		response.sendRedirect("login.jsp");
+		return;
+	}
 	request.setAttribute("projectActive", "active");
 %>
 

@@ -13,6 +13,7 @@ public class DetailTaskUIAction implements Action{
 	public String execute(HttpServletRequest request) throws ServletException, IOException {
 		int taskNo = Integer.parseInt(request.getParameter("taskNo"));
 
+			
         TaskVO task = new TaskDAO().selectTaskDetail(taskNo);
         request.setAttribute("task", task);
 		return "details.jsp";
