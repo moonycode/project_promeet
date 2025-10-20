@@ -9,7 +9,7 @@ public class ProjectJoinVO {
 	private String department;
     private String phoneNumber;
     private String email;
-    
+    private String workStatus;
     private int projectNo;
     
 	private int projectJoinNo;
@@ -28,6 +28,7 @@ public class ProjectJoinVO {
             String department,
             String phoneNumber,
             String email,
+            String workStatus,
             int projectNo,
             Date inDate,
             Date dateUp,
@@ -41,6 +42,7 @@ public class ProjectJoinVO {
         setDepartment(department);
         setPhoneNumber(phoneNumber);
         setEmail(email);
+        setWorkStatus(workStatus);
         setProjectNo(projectNo);
         setInDate(inDate);
         setDateUp(dateUp);
@@ -89,7 +91,13 @@ public class ProjectJoinVO {
 	public void setManagerFlag(int managerFlag) {
 		this.managerFlag = managerFlag;
 	}
-    @Override
+    public String getWorkStatus() {
+		return workStatus;
+	}
+	public void setWorkStatus(String workStatus) {
+		this.workStatus = workStatus;
+	}
+	@Override
     public String toString() {
         return "ProjectJoinVO{" +
                 "projectJoinNo=" + projectJoinNo +
@@ -99,6 +107,7 @@ public class ProjectJoinVO {
                 ", department='" + department + '\'' +
                 ", phoneNumber='" + phoneNumber + '\'' +
                 ", email='" + email + '\'' +
+                ", workStatus=" + workStatus +
                 ", projectNo=" + projectNo +
                 ", inDate=" + inDate +
                 ", dateUp=" + dateUp +

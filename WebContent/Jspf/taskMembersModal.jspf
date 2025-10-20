@@ -4,7 +4,7 @@
 
   <div class="pmodal-panel">
     <div class="pmodal-head">
-      <div id="task-members-title">담당자</div>
+      <div id="task-members-title">담당자<span id="tm-title-suffix"></span></div>
       <button type="button" class="pmodal-close" id="task-members-close" aria-label="닫기">×</button>
     </div>
 

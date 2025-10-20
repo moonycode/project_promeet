@@ -13,7 +13,9 @@
     <%@ include file="Jspf/sidebar.jspf" %>
 
     <div class="main">
-      <h1 class="page-title">프로젝트 참여 인원 조회 / 수정</h1>
+      <h1 class="page-title">
+        <span><c:out value="${project.projectName}"/></span>
+      </h1>
 
       <div class="manager-wrap">
         <!-- 좌측: 현재 참여 인원(미리보기) -->
@@ -55,7 +57,7 @@
                     <span class="name"><c:out value="${r.name}"/></span>
                     <c:choose>
                       <c:when test="${r.workStatus eq '출근'}"><span class="s-dot green"></span></c:when>
-                      <c:when test="${r.workStatus eq '자리비움'}"><span class="s-dot purple"></span></c:when>
+                      <c:when test="${r.workStatus eq '자리비움'}"><span class="s-dot yellow"></span></c:when>
                       <c:when test="${r.workStatus eq '외근'}"><span class="s-dot purple"></span></c:when>
                       <c:otherwise><span class="s-dot gray"></span></c:otherwise>
                     </c:choose>

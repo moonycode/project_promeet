@@ -4,6 +4,11 @@ import java.util.*;
 import org.apache.ibatis.session.SqlSession;
 
 public class TaskDAO {
+	public String selectTaskTitle(int taskNo){
+		  org.apache.ibatis.session.SqlSession s = DBCP.getSqlSessionFactory().openSession();
+		  try { return s.selectOne("taskMapper.selectTaskTitle", taskNo); }
+		  finally { s.close(); }
+		}
 
     public List<TaskVO> selectTasksByProject(Map<String,Object> params){
         SqlSession s = DBCP.getSqlSessionFactory().openSession();

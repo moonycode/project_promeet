@@ -1250,8 +1250,7 @@ button,select,input{font:inherit}
 	}
 	
 	
-	
-////JM tasks & Members
+
 
 .pm-tasks .task-wrap{ overflow-x:auto; overflow-y:visible; }
 .pm-tasks .th-wrap .dd-panel{ display:none; }
@@ -1367,4 +1366,209 @@ button,select,input{font:inherit}
   text-align:center; color:#777; padding:28px 12px; font-style:italic;
 }
 
-	
+
+/* ---- task members modal common ---- */
+.tm-subtitle {
+  display:flex; align-items:center; gap:6px;
+  font-size: 0.875rem;  /* small 과 동일 */
+  font-weight: 900;
+  margin: 0 0 8px 0;
+}
+.tm-subtitle-suffix { font-weight: 700; }
+
+/* 카드 공통 */
+.tm-card { display:flex; gap:12px; padding:12px; border:1px solid #e5e7eb; border-radius:12px; background:#fff; }
+.tm-card + .tm-card { margin-top:8px; }
+.tm-card-meta { display:flex; flex-direction:column; gap:2px; }
+.tm-muted { color:#6b7280; }
+
+/* 라인/점 */
+.tm-line1 { display:flex; align-items:center; gap:6px; }
+.tm-line2 { line-height:1.3; }
+.tm-dot { width:8px; height:8px; border-radius:50%; display:inline-block; }
+.tm-dot.green  { background:#16a34a; }
+.tm-dot.yellow { background:#f59e0b; }
+.tm-dot.purple { background:#8b5cf6; }
+.tm-dot.gray   { background:#9ca3af; }
+
+/* ---- task members modal (edit, 2-column) ---- */
+.tm-wrap { display:flex; gap:16px; }
+.tm-col { flex:1; min-width:280px; }
+.tm-col-head { display:flex; align-items:center; justify-content:space-between; margin:0 0 8px 0; }
+.tm-col-title { font-weight:700; }
+.tm-list { border:1px solid #e5e7eb; border-radius:12px; max-height:360px; overflow:auto; padding:8px; background:#fff; }
+.tm-item { display:flex; align-items:center; gap:10px; padding:8px 10px; border-radius:10px; cursor:pointer; }
+.tm-item:hover { background:#f9fafb; }
+.tm-item input.tm-check { margin-right:4px; }
+.tm-avatar { width:28px; height:28px; border-radius:50%; background:#eef2ff; display:flex; align-items:center; justify-content:center; font-weight:700; }
+.tm-item-meta { display:flex; flex-direction:column; gap:2px; }
+
+/* Modal */
+.pmodal.hidden { display:none; }
+.pmodal .pmodal-backdrop{
+  position:fixed; inset:0; background:rgba(0,0,0,0.4);
+}
+.pmodal .pmodal-panel{
+  position:fixed; top:50%; left:50%;
+  transform:translate(-50%,-50%);
+  width:min(920px, calc(100vw - 80px));
+  max-height: min(78vh, 860px);
+  background:#fff; border-radius:12px; box-shadow:0 10px 30px rgba(0,0,0,.2);
+  display:flex; flex-direction:column; overflow:hidden;
+}
+.pmodal .pmodal-head{
+  display:flex; align-items:center; justify-content:space-between;
+  padding:12px 16px; border-bottom:1px solid #e5e7eb; font-weight:700;
+}
+.pmodal .pmodal-body{
+  padding:12px 16px; overflow:auto;
+}
+.pmodal .pmodal-close{
+  border:none; background:transparent; font-size:22px; line-height:1; cursor:pointer;
+}
+
+/* ---- task members modal (edit) ---- */
+.tm-subtitle{ font-weight:700; margin:4px 0 10px; }
+.tm-subtitle .tm-subtitle-suffix{ color:#6b7280; margin-left:6px; }
+
+.tm-wrap { display:flex; gap:16px; }
+.tm-col { flex:1; min-width:280px; }
+.tm-col-head { display:flex; align-items:center; justify-content:space-between; margin:0 0 8px 0; }
+.tm-col-title { font-weight:700; }
+
+.tm-list { border:1px solid #e5e7eb; border-radius:12px; max-height:420px; overflow:auto; padding:8px; background:#fff; }
+
+.tm-item, .tm-card, .member-card { display:flex; align-items:center; gap:10px; padding:8px 10px; border-radius:10px; }
+.tm-item{ cursor:pointer; }
+.tm-item:hover { background:#f9fafb; }
+.tm-item input.tm-check { margin-right:4px; }
+
+.tm-avatar { width:28px; height:28px; border-radius:50%; background:#eef2ff; display:flex; align-items:center; justify-content:center; font-weight:700; }
+
+.tm-item-meta, .tm-card-meta, .member-card .card-body { display:flex; flex-direction:column; gap:2px; }
+
+.tm-line1 { display:flex; align-items:center; gap:6px; }
+.tm-dot { width:8px; height:8px; border-radius:50%; display:inline-block; }
+.tm-dot.green  { background:#16a34a; }
+.tm-dot.yellow { background:#f59e0b; }
+.tm-dot.purple { background:#8b5cf6; }
+.tm-dot.gray   { background:#9ca3af; }
+
+.small { font-size:12px; }
+.tm-muted{ color:#6b7280; }
+
+/* page header member chip etc. (minimal keep) */
+.member-chip .avatar-s img{ width:28px; height:28px; display:block; border-radius:50%; }
+.member-chip .member-ratio{ margin-left:6px; font-weight:600; color:#374151; text-decoration:none; }
+.member-chip .member-ratio:hover{ text-decoration:underline; }
+
+/* manager page panels */
+.pm-manager .manager-wrap{ display:flex; gap:20px; }
+.pm-manager .panel{ flex:1; min-width:320px; }
+.pm-manager .panel-title{ font-weight:700; margin:0 0 8px; }
+.pm-manager .listbox{ border:1px solid #e5e7eb; border-radius:12px; padding:8px; max-height:520px; overflow:auto; background:#fff; }
+.member-card.no-check{ cursor:default; }
+.s-dot{ width:8px; height:8px; border-radius:50%; display:inline-block; margin-left:6px; }
+.s-dot.green  { background:#16a34a; }
+.s-dot.yellow { background:#f59e0b; }
+.s-dot.purple { background:#8b5cf6; }
+.s-dot.gray   { background:#9ca3af; }
+
+/* --- additions/overrides --- */
+
+/* Larger modal for task members */
+.pmodal .pmodal-panel{
+  width: min(960px, calc(100vw - 80px));
+  max-height: 78vh;
+}
+.pmodal .pmodal-body{
+  max-height: calc(78vh - 64px);
+  overflow:auto;
+}
+
+/* dual list layout */
+.tm-wrap { display:flex; gap:16px; }
+.tm-col { flex:1; min-width:300px; display:flex; flex-direction:column; }
+.tm-col-head { display:flex; align-items:center; justify-content:space-between; margin:0 0 8px 0; }
+.tm-col-title { font-weight:700; }
+
+.tm-list { border:1px solid #e5e7eb; border-radius:12px; flex:1 1 auto; min-height:220px; max-height:520px; overflow:auto; padding:8px; background:#fff; }
+
+.tm-item, .tm-card, .member-card { display:flex; align-items:flex-start; gap:10px; padding:8px 10px; border-radius:10px; }
+.tm-item:hover, .tm-card:hover, .member-card:hover { background:#f9fafb; }
+.tm-item input.tm-check { margin-right:4px; }
+
+.tm-avatar { width:28px; height:28px; border-radius:50%; background:#eef2ff; display:flex; align-items:center; justify-content:center; font-weight:700; }
+.tm-item-meta, .tm-card-meta { display:flex; flex-direction:column; gap:2px; }
+
+.tm-line1 { display:flex; align-items:center; gap:6px; }
+.tm-dot { width:8px; height:8px; border-radius:50%; display:inline-block; }
+.tm-dot.green  { background:#16a34a; }
+.tm-dot.yellow { background:#f59e0b; }
+.tm-dot.purple { background:#8b5cf6; }
+.tm-dot.gray   { background:#9ca3af; }
+.tm-muted { color:#777; }
+
+/* Project members page height fill */
+.pm-manager .manager-wrap{
+  display:flex; gap:16px; align-items:stretch;
+  min-height: calc(100vh - 240px);
+}
+.pm-manager .panel{ flex:1; display:flex; flex-direction:column; }
+.pm-manager .panel .listbox{ flex:1 1 auto; overflow:auto; min-height:260px; max-height: calc(100vh - 260px);}
+
+/* chips and controls */
+.chip{ display:inline-flex; align-items:center; gap:6px; border:1px solid #e5e7eb; padding:2px 8px; border-radius:999px; }
+.btn-outline.s{ padding:2px 8px; font-size:12px; }
+
+.pm-manager .manager-wrap{
+  flex: 1 1 auto;
+  min-height: 0;                 /* 내부 스크롤 허용 핵심 */
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  overflow: hidden;              /* 리스트 박스 외부 넘침 금지 */
+}
+
+.pm-manager .main{
+  display: flex;
+  flex-direction: column;
+  min-height: 0;                 /* 내부 스크롤 허용 핵심 */
+}
+
+
+/* === tasks header actions === */
+.pm-tasks .header-actions{
+  display:flex;
+  justify-content:flex-end;
+  gap:8px;
+  margin:12px 0 16px;
+}
+
+.pm-tasks .header-actions .btn{
+  display:inline-block;
+  padding:8px 12px;
+  border:1px solid #ddd;
+  border-radius:10px;
+  text-decoration:none;
+  font-size:14px;
+  line-height:1;
+}
+
+/* 읽기전용 버튼 상태(ghost 등)가 이미 있다면 유지, 없으면 가벼운 톤만 */
+.pm-tasks .btn.ghost{
+  opacity:.45;
+  pointer-events:none;
+}
+
+/* page-header가 좌/우 요소를 품을 때 흔들리면 이걸 켜세요 */
+.pm-tasks .page-header{
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:12px;
+  flex-wrap:wrap; /* 좁을 때 줄바꿈 허용 */
+}
+.pm-tasks .page-title{ flex:1 1 auto; }
+.pm-tasks .member-chip{ flex:0 0 auto; }
+

@@ -2,40 +2,42 @@
 <%@ taglib prefix="c"  uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 
-<div class="small" style="font-weight:900;margin-bottom:8px">업무 담당자 선택</div>
+<div class="tm-subtitle">
+  <span class="tm-subtitle-label">담당자 선택</span>
+  <c:if test="${not empty taskName}">
+    <span class="tm-subtitle-suffix"> — <c:out value="${taskName}"/></span>
+  </c:if>
+</div>
 
-<c:if test="${empty projectMembers}">
-  <div class="small" style="color:#777">이 프로젝트에 참여 중인 직원이 없습니다.</div>
-</c:if>
+<div class="tm-wrap">
+  <div class="tm-col">
+    <div class="tm-col-head"><div class="tm-col-title">업무 참여 인원</div></div>
+    <div class="tm-list" id="tm-left"></div>
+  </div>
 
-<c:forEach var="m" items="${projectMembers}">
-  <label class="tm-card" data-empid="${m.employeeId}">
-    <input type="checkbox" class="tm-check" value="${m.employeeId}" data-name="${m.name}" style="margin-right:8px" />
-    <div class="tm-avatar"><c:out value="${fn:substring(m.name,0,1)}"/></div>
-    <div style="display:flex;flex-direction:column;gap:2px">
-      <div class="tm-line1">
-        <span class="name"><c:out value="${m.name}"/></span>
-        <c:set var="dotClass"
-               value="${m.workStatus eq '출근' ? 'green'
-                       : m.workStatus eq '자리비움' ? 'yellow'
-                       : m.workStatus eq '외근' ? 'purple'
-                       : 'gray'}"/>
-        <span class="tm-dot ${dotClass}" title="${m.workStatus}"></span>
-      </div>
-      <div class="tm-line2 small"><c:out value="${m.department}"/> / <c:out value="${m.position}"/></div>
-      <div class="tm-line2 small" style="color:#777"><c:out value="${m.email}"/></div>
+  <div class="tm-col">
+    <div class="tm-col-head"><div class="tm-col-title">프로젝트 참여 인원</div></div>
+    <div class="tm-list" id="tm-right">
+      <c:forEach var="m" items="${projectMembers}">
+        <label class="tm-item" data-pjoin="${m.projectJoinNo}">
+          <input type="checkbox" class="tm-check" value="${m.projectJoinNo}"/>
+          <div class="tm-avatar"><c:out value="${fn:substring(m.name,0,1)}"/></div>
+          <div class="tm-item-meta">
+            <div class="tm-line1">
+              <span class="name"><c:out value="${m.name}"/></span>
+              <c:set var="__ws" value="${m.workStatus}" />
+              <c:if test="${empty __ws}"><c:set var="__ws" value=""/></c:if>
+              <c:set var="dotClass" value="${__ws eq '출근' ? 'green' : __ws eq '자리비움' ? 'yellow' : __ws eq '외근' ? 'purple' : 'gray'}"/>
+              <span class="tm-dot ${dotClass}" title="${__ws}"></span>
+            </div>
+            <div class="tm-line2 small"><c:out value="${m.department}"/> / <c:out value="${m.position}"/></div>
+            <div class="tm-line2 small tm-muted"><c:out value="${m.email}"/></div>
+            <div class="tm-line2 small tm-muted"><c:out value="${m.phoneNumber}"/></div>
+          </div>
+        </label>
+      </c:forEach>
     </div>
-  </label>
-</c:forEach>
+  </div>
+</div>
 
-<c:if test="${not empty taskMemberIds}">
-  <script>
-    // 서버가 내려준 현재 업무 담당자 id들을 data-attr로 두고, 모달 JS가 없을 경우 대비
-    (function(){
-      var set = new Set(String('${taskMemberIds}').split(',').filter(Boolean));
-      document.querySelectorAll('#task-members-body .tm-check').forEach(function(cb){
-        if (set.has(String(cb.value))) cb.checked = true;
-      });
-    })();
-  </script>
-</c:if>
+<input type="hidden" id="tm-preset" value="<c:out value='${taskMemberIds}' default=''/>"/>

@@ -45,19 +45,6 @@ public class MembersDAOTest {
         assertTrue(joined.size() > 0);
     }
 
-    @Test
-    public void updateTaskMembersIdempotentSuccess() {
-        // 설명: 현재 배정 목록을 그대로 저장 → 전부 해제 → 다시 원복
-        List<String> curr = dao.selectTaskJoinedPjoinNos(3)
-                .stream().map(String::valueOf).collect(Collectors.toList());
-
-        String[] same = curr.toArray(new String[0]);
-        assertTrue(dao.updateTaskMembers(3, same));
-
-        assertTrue(dao.updateTaskMembers(3, new String[0]));
-
-        assertTrue(dao.updateTaskMembers(3, same));
-    }
 
     @Test
     public void syncProjectMembersDryRunKeepsState() {

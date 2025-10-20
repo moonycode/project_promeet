@@ -15,9 +15,15 @@ public class DeleteTaskAction implements Action {
     if (user == null) return "controller?cmd=loginUI";
 
     int taskNo    = Integer.parseInt(request.getParameter("taskNo"));
-    int projectNo = Integer.parseInt(request.getParameter("projectNo"));
+    String pnoStr = request.getParameter("projectNo");
 
     new TaskDAO().deleteTask(taskNo);
-    return "controller?cmd=taskUI&projectNo=" + projectNo;
+
+    // projectNo가 없으면 detail에서 복귀용으로 한 번 더 조회할 수도 있지만, 여기선 목록 라우트로
+    if (pnoStr == null || pnoStr.isEmpty()) {
+      return "controller?cmd=projectUI";
+    }
+    int projectNo = Integer.parseInt(pnoStr);
+    return "controller?cmd=tasksUI&projectNo=" + projectNo;
   }
 }

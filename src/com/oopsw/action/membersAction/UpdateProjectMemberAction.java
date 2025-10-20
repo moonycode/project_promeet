@@ -16,20 +16,19 @@ public class UpdateProjectMemberAction implements Action {
     if (user == null) return "controller?cmd=loginUI";
 
     int projectNo   = Integer.parseInt(request.getParameter("projectNo"));
-    String[] ids    = request.getParameterValues("employeeId"); // 사번 목록
-    String[] flags  = request.getParameterValues("joinFlag");   // "1"/"0"
 
-    // 설명: 체크된(또는 참여로 표시된) 사번만 수집 → 집합 동기화
+    String csv = request.getParameter("employeeIds");
     List<String> selected = new ArrayList<>();
-    if (ids != null && flags != null && ids.length == flags.length) {
-      for (int i = 0; i < ids.length; i++) {
-        if ("1".equals(flags[i])) selected.add(ids[i]);
+    if (csv != null && !csv.trim().isEmpty()) {
+      for (String id : csv.split(",")) {
+        String v = id.trim();
+        if (!v.isEmpty()) selected.add(v);
       }
     }
 
     MembersDAO dao = new MembersDAO();
-    dao.syncProjectMembers(projectNo, selected); // XML: rejoin → insert → deactivate
+    dao.syncProjectMembers(projectNo, selected);
 
-    return "controller?cmd=updateProjectUI&projectNo=" + projectNo;
+    return "controller?cmd=tasksUI&projectNo=" + projectNo;
   }
 }

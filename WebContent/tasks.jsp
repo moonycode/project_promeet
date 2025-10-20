@@ -7,7 +7,6 @@
 <head>
   <meta charset="UTF-8" />
   <title>업무 목록</title>
-  <!-- 공통 CSS -->
   <link rel="stylesheet" href="<c:url value='/CSS/common.css'/>" />
 </head>
 <body class="pm-tasks">
@@ -15,10 +14,8 @@
     <%@ include file="Jspf/sidebar.jspf" %>
 
     <div class="main">
-      <!-- 완료/삭제된 프로젝트면 읽기 전용 -->
       <c:set var="readonly" value="${not empty project.completeDate or not empty project.delDate}" />
 
-      <!-- 헤더 -->
       <div class="page-header">
         <div class="page-title">
           <span><c:out value="${project.projectName}" /></span>
@@ -28,7 +25,6 @@
           </span>
         </div>
 
-        <!-- 멤버 아이콘 / 비율 -->
         <div class="member-chip">
           <a href="<c:url value='/controller' />?cmd=projectMembersUI&amp;projectNo=${project.projectNo}"
              class="avatar-s" aria-label="프로젝트 멤버 보기">
@@ -42,23 +38,23 @@
         </div>
       </div>
 
-      <!-- 설명 + 액션 -->
       <div class="desc-wrap">
         <div class="desc-box">
           <c:out value="${project.description}" default="" />
         </div>
+</div>
+     <div class="header-actions">
+  <c:choose>
+    <c:when test="${isDeletedProject}">
+      <a class="btn" href="controller?cmd=restoreProject&projectNo=${project.projectNo}">프로젝트 복원</a>
+    </c:when>
+    <c:otherwise>
+      <a class="btn" href="controller?cmd=projectUpdateUI&projectNo=${project.projectNo}">프로젝트 수정</a>
+    </c:otherwise>
+  </c:choose>
+</div>
 
-        <c:choose>
-          <c:when test="${readonly}">
-            <span class="btn-outline" id="btn-restore" data-projectno="${project.projectNo}">프로젝트 복원</span>
-          </c:when>
-          <c:otherwise>
-            <a class="btn-outline" href="<c:url value='/controller'/>?cmd=updateProjectUI&amp;projectNo=${project.projectNo}">프로젝트 수정</a>
-          </c:otherwise>
-        </c:choose>
-      </div>
 
-      <!-- 업무 테이블 -->
       <div class="task-wrap">
         <table class="task-table">
           <colgroup>
@@ -77,7 +73,6 @@
               <th>업무명</th>
               <th>담당자</th>
 
-              <!-- 진행상태 필터 -->
               <th class="th-filter">
                 <div class="th-wrap">
                   <span class="th-label" tabindex="0" aria-expanded="false">진행상태 ▾</span>
@@ -97,7 +92,6 @@
                 </div>
               </th>
 
-              <!-- 시작일 정렬 -->
               <th class="th-sort">
                 <span class="th-text">시작일</span>
                 <span class="sort-inline">
@@ -106,7 +100,6 @@
                 </span>
               </th>
 
-              <!-- 마감일 정렬 -->
               <th class="th-sort">
                 <span class="th-text">마감일</span>
                 <span class="sort-inline">
@@ -115,7 +108,6 @@
                 </span>
               </th>
 
-              <!-- 우선순위 필터 -->
               <th class="th-filter">
                 <div class="th-wrap">
                   <span class="th-label" tabindex="0" aria-expanded="false">우선순위 ▾</span>
@@ -141,12 +133,10 @@
           </thead>
 
           <tbody id="taskBody">
-            <!-- 비어있을 때 -->
             <c:if test="${empty tasks}">
               <tr class="empty"><td colspan="8">등록된 업무가 없습니다.</td></tr>
             </c:if>
 
-            <!-- 리스트 -->
             <c:forEach var="t" items="${tasks}">
               <tr data-taskno="${t.taskNo}">
                 <td>
@@ -156,16 +146,13 @@
                   </a>
                 </td>
 
-                <td>
+                <td class="td-members">
                   <c:choose>
                     <c:when test="${empty t.membersText}">
                       <span>-</span>
                     </c:when>
                     <c:otherwise>
-                      <!-- 읽기 화면에서 클릭 → 보기 모달 -->
-                      <span class="chip member-chip-view" data-taskno="${t.taskNo}">
-                        <c:out value="${t.membersText}" />
-                      </span>
+                      <a href="#" class="chip member-chip-view"><c:out value="${t.membersText}"/></a>
                     </c:otherwise>
                   </c:choose>
                 </td>
@@ -195,7 +182,6 @@
         </table>
       </div>
 
-      <!-- 하단 ‘업무추가’ 버튼 -->
       <c:if test="${not readonly}">
         <div style="margin-top:10px;">
           <span class="btn-outline" id="btn-add">+ 업무추가</span>
@@ -204,19 +190,15 @@
     </div>
   </div>
 
-  <!-- 전역값 주입 -->
   <script>
     window.TaskPage = {
       contextPath: '<c:out value="${pageContext.request.contextPath}" default=""/>',
       projectNo:   <c:out value="${project.projectNo}" default="0" />,
-      readonly:    <c:out value="${readonly ? 'true' : 'false'}" default="false" />
+      readonly:    JSON.parse('<c:out value="${readonly}" default="false"/>')
     };
   </script>
 
-  <!-- 모달 마크업 -->
   <%@ include file="Jspf/taskMembersModal.jspf" %>
-
-  <!-- JS -->
   <script src="<c:url value='/JS/taskMembersModal.js'/>" type="text/javascript" defer></script>
   <script src="<c:url value='/JS/tasks.js'/>" type="text/javascript" defer></script>
 </body>

@@ -7,6 +7,14 @@ import java.util.Map;
 import org.apache.ibatis.session.SqlSession;
 
 public class ProjectDAO {
+	
+	public String selectProjectTitle(int projectNo){
+		  org.apache.ibatis.session.SqlSession s = DBCP.getSqlSessionFactory().openSession();
+		  try { return s.selectOne("projectMapper.selectProjectTitle", projectNo); }
+		  finally { s.close(); }
+		}
+
+	
 	   public ProjectVO selectProjectHeader(int projectNo){
 	        SqlSession s = null;
 	        try{
