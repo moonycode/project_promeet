@@ -28,7 +28,7 @@
         <h2>진행중</h2>
         <div class="projects project-list-container">
           <c:forEach var="project" items="${ongoingProjects}">
-            <a href="controller?cmd=taskUI&projectNo=${project.projectNo}" class="project-card-link">
+            <a href="controller?cmd=tasksUI&projectNo=${project.projectNo}" class="project-card-link">
               <article class="project-card">
                 <div class="project-header">
                     <div class="people"><span class="count">${project.memberCount}</span></div>
@@ -67,7 +67,7 @@
         <h2>완료</h2>
         <div class="projects project-list-container">
           <c:forEach var="project" items="${completedProjects}">
-            <a href="controller?cmd=taskUI&projectNo=${project.projectNo}" class="project-card-link">
+            <a href="controller?cmd=tasksUI&projectNo=${project.projectNo}" class="project-card-link">
               <article class="project-card completed-project-card">
                 <div class="project-header">
                     <div class="people"><span class="count">${project.memberCount}</span></div>

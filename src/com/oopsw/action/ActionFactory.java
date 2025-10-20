@@ -49,7 +49,6 @@ public class ActionFactory {
 		
 		switch(cmd){
 		
-	    case "taskUI":
         case "tasksUI":
             a = new TasksUIAction();
             break;

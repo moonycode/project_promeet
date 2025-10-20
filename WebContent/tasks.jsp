@@ -44,14 +44,20 @@
         </div>
 </div>
      <div class="header-actions">
-  <c:choose>
-    <c:when test="${isDeletedProject}">
-      <a class="btn" href="controller?cmd=restoreProject&projectNo=${project.projectNo}">프로젝트 복원</a>
-    </c:when>
-    <c:otherwise>
-      <a class="btn" href="controller?cmd=projectUpdateUI&projectNo=${project.projectNo}">프로젝트 수정</a>
-    </c:otherwise>
-  </c:choose>
+ <c:choose>
+  <c:when test="${isDeletedProject}">
+    <button type="button" id="btn-restore" data-projectno="${project.projectNo}" class="btn">프로젝트 복원</button>
+  </c:when>
+
+  <c:when test="${isCompletedProject}">
+    <button type="button" id="btn-reopen" data-projectno="${project.projectNo}" class="btn">프로젝트 재개</button>
+  </c:when>
+
+  <c:otherwise>
+    <button type="button" id="btn-edit-project" data-projectno="${project.projectNo}" class="btn">프로젝트 수정</button>
+    <!-- 그 외 완료/삭제 버튼 등 기존 버튼들 -->
+  </c:otherwise>
+</c:choose>
 </div>
 
 

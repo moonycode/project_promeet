@@ -24,7 +24,7 @@ public class DeleteProjectAction implements Action {
         int result = dao.deleteProject(projectNo); 
 
         if (result > 0) {
-            return "controller?cmd=projectUI";
+            return "controller?cmd=binProjectUI";
         } else {
             return "controller?cmd=projectUI";
         }
