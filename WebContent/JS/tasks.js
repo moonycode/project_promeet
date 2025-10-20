@@ -376,15 +376,7 @@
     editing.tr = null; editing.taskNo = null;
     fetchList();
   }
-  function restore(projectNo){
-	    return postForm('cmd=restoreProject&projectNo=' + encodeURIComponent(projectNo))
-	    .then(function(txt){
-	        // 성공 여부 체크 로직이 있다면 넣고…
-	        location.href = window.TaskPage.contextPath + '/controller?cmd=binProjectUI';
-	      })
-	      .catch(function(){ alert('삭제 실패'); });   
-	  }
-  
+
   function mountTbodyDelegates(){
     var tbody = qs('#taskBody');
     if(!tbody) return;
@@ -436,14 +428,7 @@
           priority:   prKr,
           pjoinNos:   (buf.pjoinNos || [])
         }, ['pjoinNos']);
-        
-        return fetch(contextPath + '/controller', {
-            method: 'POST',
-            headers: {'Content-Type':'application/x-www-form-urlencoded; charset=UTF-8', 'X-Requested-With':'XMLHttpRequest'},
-            credentials: 'same-origin',
-            body: form
-          });
-        
+
         postForm(form).then(function(){
           delete EDIT_BUFFER[taskNo];
           editing.tr = null; editing.taskNo = null;
@@ -528,56 +513,17 @@
         var pno = btnRestore.getAttribute('data-projectno');
         if(!pno) return;
         if(!confirm('프로젝트를 복원하시겠습니까?')) return;
-        
-        restore(pno).then(function(txt){
-            try {
-              var res = JSON.parse(txt);
-              if (res.status === 'ok'){
-                // A안) 전체 새로고침(가장 간단, 안전)
-                location.href = CP + '/controller?cmd=tasksUI&projectNo=' + pno;
-
-                // B안) 화면 유지 + 버튼만 즉시 활성화 (필요하면 A 대신 사용)
-                // activateButtonsInPlace();
-              } else {
-                alert(res.message || '복원 실패');
-              }
-            } catch(e){
-              alert('복원 처리 응답 파싱 실패');
-            }
-          }).catch(function(){
-            alert('서버 통신 실패');
+        // cmd 이름은 서버 매핑과 동일하게 유지(restoreProjectAction)
+        postForm('cmd=restoreProjectAction&projectNo='+encode(pno))
+          .then(function(){ location.reload(); })
+          .catch(function(err){
+            console.error(err);
+            alert('프로젝트 복원에 실패했습니다.\n\n' + err.message);
           });
-        });
-  }
-    // 2-2. 완료 프로젝트 재개(=완료 취소)
-    var btnReopen = document.getElementById('btn-reopen');
-    if (btnReopen && !btnReopen.dataset.bound){
-      btnReopen.dataset.bound = '1';
-      btnReopen.addEventListener('click', function(){
-        var pno = btnReopen.getAttribute('data-projectno');
-        if(!pno) return;
-        if(!confirm('프로젝트 완료 상태를 해제하시겠습니까?')) return;
-
-        restore(pno).then(function(txt){
-          try {
-            var res = JSON.parse(txt);
-            if (res.status === 'ok'){
-              // 완료 취소 후 정상 편집 모드 진입
-              location.href = CP + '/controller?cmd=tasksUI&projectNo=' + pno;
-            } else {
-              alert(res.message || '재개 실패');
-            }
-          } catch(e){
-            alert('재개 처리 응답 파싱 실패');
-          }
-        }).catch(function(){
-          alert('서버 통신 실패');
-        });
-      });
+      }, false);
     }
-    
-    
-    
+  }
+
   (function init(){
     mountTbodyDelegates();
     reflectUI();

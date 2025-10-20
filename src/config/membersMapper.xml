@@ -202,7 +202,7 @@
            </foreach>
          </when>
          <otherwise>
-           AND 1 = 1
+           <!-- pjoinNos 비었으면 전체 비활성 -->
          </otherwise>
        </choose>
   </update>

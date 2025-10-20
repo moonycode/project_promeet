@@ -16,7 +16,7 @@
         
         <div class="main">
             <div class="panel">
-                <a class="close-x" href="controller?cmd=tasksUI&projectNo=<c:out value="${project.projectNo}" />">X</a>
+                <a class="close-x" href="controller?cmd=taskUI&projectNo=<c:out value="${project.projectNo}" />">X</a>
                 
                 <h1 class="form-title">프로젝트 수정</h1>
                 
