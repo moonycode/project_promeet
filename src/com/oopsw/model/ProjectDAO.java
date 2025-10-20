@@ -189,17 +189,16 @@ public class ProjectDAO {
     // 삭제된 프로젝트(휴지통) 조회
     public List<ProjectVO> getBinProjects(String creatorId) {
         SqlSession session = null;
-        List<ProjectVO> list = null;
         try {
             session = DBCP.getSqlSessionFactory().openSession();
-            list = session.selectList("projectMapper.getBinProjects", creatorId); 
-        } catch (Exception e) {
-            e.printStackTrace();
+            Map<String,Object> p = new HashMap<>();
+            p.put("creatorId", creatorId);              
+            return session.selectList("projectMapper.getBinProjects", p);
         } finally {
             if (session != null) session.close();
         }
-        return list;
     }
+
     
     // 복원할 프로젝트 선택
     public ProjectVO selectBinProject(int projectNo) {
