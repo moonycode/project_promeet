@@ -377,14 +377,23 @@
     fetchList();
   }
   function restore(projectNo){
-	    return postForm('cmd=restoreProject&projectNo=' + encodeURIComponent(projectNo))
+	  return postForm('cmd=restoreProject&projectNo=' + encodeURIComponent(projectNo))
 	    .then(function(txt){
-	        // 성공 여부 체크 로직이 있다면 넣고…
-	        location.href = window.TaskPage.contextPath + '/controller?cmd=binProjectUI';
-	      })
-	      .catch(function(){ alert('삭제 실패'); });   
-	  }
-  
+	      try {
+	        var res = JSON.parse(txt);
+	        if (res.status !== 'ok') { alert(res.message || '복원 실패'); return; }
+	      } catch(e){ /* 무시 */ }
+
+	      // ★ 화면 유지하면서 편집 가능 상태로 전환
+	      activateButtonsInPlace();
+	      // 필요하면 목록만 새로고침
+	      fetchList();
+	    })
+	    .catch(function(){
+	      alert('복원 실패');
+	    });
+	}
+
   function mountTbodyDelegates(){
     var tbody = qs('#taskBody');
     if(!tbody) return;
@@ -452,8 +461,7 @@
           console.error(err);
           alert('업무 저장에 실패했습니다.\n\n' + err.message);
         });
-        e.preventDefault();
-        return;
+       
       }
 
       if (cls.indexOf('btn-cancel') > -1){
@@ -522,33 +530,32 @@
     }, false);
 
     var btnRestore = qs('#btn-restore');
-    if(btnRestore && !btnRestore.dataset.bound){
+    if (btnRestore && !btnRestore.dataset.bound) {
       btnRestore.dataset.bound = '1';
       btnRestore.addEventListener('click', function(){
         var pno = btnRestore.getAttribute('data-projectno');
         if(!pno) return;
         if(!confirm('프로젝트를 복원하시겠습니까?')) return;
-        
-        restore(pno).then(function(txt){
-            try {
-              var res = JSON.parse(txt);
-              if (res.status === 'ok'){
-                // A안) 전체 새로고침(가장 간단, 안전)
-                location.href = CP + '/controller?cmd=tasksUI&projectNo=' + pno;
 
-                // B안) 화면 유지 + 버튼만 즉시 활성화 (필요하면 A 대신 사용)
-                // activateButtonsInPlace();
-              } else {
-                alert(res.message || '복원 실패');
-              }
-            } catch(e){
-              alert('복원 처리 응답 파싱 실패');
+        restore(pno).then(function(txt){
+          try {
+            var res = JSON.parse(txt);
+            if (res.status === 'ok') {
+             
+              activateButtonsInPlace();
+              fetchList();
+            } else {
+              alert(res.message || '복원 실패');
             }
-          }).catch(function(){
-            alert('서버 통신 실패');
-          });
+          } catch(e){
+            alert('복원 처리 응답 파싱 실패');
+          }
+        }).catch(function(){
+          alert('서버 통신 실패');
         });
-  }
+      }, false);
+    }
+
     // 2-2. 완료 프로젝트 재개(=완료 취소)
     var btnReopen = document.getElementById('btn-reopen');
     if (btnReopen && !btnReopen.dataset.bound){
@@ -577,6 +584,51 @@
     }
     
     
+ // 복원/재개 직후, 페이지 리로드 없이 편집 가능 상태로 전환
+    function activateButtonsInPlace() {
+      // 1) 상단 버튼 토글
+      var r = document.getElementById('btn-restore'); if (r) r.style.display = 'none';
+      var o = document.getElementById('btn-reopen');  if (o) o.style.display = 'none';
+      var e = document.getElementById('btn-edit-project'); 
+      if (e) e.style.display = ''; // 보이도록
+
+      // 2) 전역 상태 해제
+      window.TaskPage.readonly = false;
+
+      // 3) 각 행의 "수정/삭제" 버튼을 실제 동작하는 버튼으로 교체
+      //    (readonly 렌더링 시 'ghost'만 있었기 때문에 활성 버튼으로 다시 그려줌)
+      var rows = document.querySelectorAll('#taskBody tr[data-taskno]');
+      rows.forEach(function(tr){
+        var taskNo = tr.getAttribute('data-taskno');
+        var act = tr.querySelector('.actions-cell');
+        if (!act) return;
+
+        // 현재가 readonly였다면 'ghost' 두 개가 있음 → 동작 버튼으로 갈아끼움
+        if (act.querySelector('.ghost')) {
+          act.innerHTML = ''
+            + '<span class="btn-xs btn-edit">수정</span> '
+            + '<span class="btn-xs btn-del" data-taskno="'+ (taskNo || '') +'">삭제</span>';
+          // 이벤트는 tbody 위임으로 이미 걸려 있으므로 재바인딩 불필요
+        }
+      });
+
+      // 4) "업무추가" 버튼 표시/활성화
+      var addBtn = document.getElementById('btn-add');
+      if (addBtn) {
+        addBtn.style.display = '';
+        addBtn.classList.remove('disabled');
+        addBtn.removeAttribute('aria-disabled');
+      }
+
+      // 5) (선택) 멤버칩도 열 수 있게 보장 — 행 편집에 들어가면 이미 가능하므로 생략해도 무방
+       document.querySelectorAll('.member-chip-view').forEach(function(a){ a.classList.remove('disabled'); });
+    }
+
+ 
+ activateButtonsInPlace();
+
+ fetchList();
+
     
   (function init(){
     mountTbodyDelegates();
