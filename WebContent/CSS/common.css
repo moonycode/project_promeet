@@ -1572,3 +1572,7 @@ button,select,input{font:inherit}
 .pm-tasks .page-title{ flex:1 1 auto; }
 .pm-tasks .member-chip{ flex:0 0 auto; }
 
+#btn-add.is-disabled {
+  opacity: .45;
+  pointer-events: none;
+}

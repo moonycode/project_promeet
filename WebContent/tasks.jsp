@@ -14,6 +14,7 @@
     <%@ include file="Jspf/sidebar.jspf" %>
 
     <div class="main">
+      <!-- readonly 계산은 서버에서도 세팅하지만 JSP에서도 보조 계산 -->
       <c:set var="readonly" value="${not empty project.completeDate or not empty project.delDate}" />
 
       <div class="page-header">
@@ -42,24 +43,21 @@
         <div class="desc-box">
           <c:out value="${project.description}" default="" />
         </div>
-</div>
-     <div class="header-actions">
- <c:choose>
-  <c:when test="${isDeletedProject}">
-    <button type="button" id="btn-restore" data-projectno="${project.projectNo}" class="btn">프로젝트 복원</button>
-  </c:when>
+      </div>
 
-  <c:when test="${isCompletedProject}">
-    <button type="button" id="btn-reopen" data-projectno="${project.projectNo}" class="btn">프로젝트 재개</button>
-  </c:when>
-
-  <c:otherwise>
-    <button type="button" id="btn-edit-project" data-projectno="${project.projectNo}" class="btn">프로젝트 수정</button>
-    <!-- 그 외 완료/삭제 버튼 등 기존 버튼들 -->
-  </c:otherwise>
-</c:choose>
-</div>
-
+      <div class="header-actions">
+        <c:choose>
+          <c:when test="${isDeletedProject}">
+            <button type="button" id="btn-restore" data-projectno="${project.projectNo}" class="btn">프로젝트 복원</button>
+          </c:when>
+          <c:when test="${isCompletedProject}">
+            <button type="button" id="btn-reopen" data-projectno="${project.projectNo}" class="btn">프로젝트 재개</button>
+          </c:when>
+          <c:otherwise>
+            <button type="button" id="btn-edit-project" data-projectno="${project.projectNo}" class="btn">프로젝트 수정</button>
+          </c:otherwise>
+        </c:choose>
+      </div>
 
       <div class="task-wrap">
         <table class="task-table">
@@ -188,14 +186,14 @@
         </table>
       </div>
 
-      <c:if test="${not readonly}">
-        <div style="margin-top:10px;">
-          <span class="btn-outline" id="btn-add">+ 업무추가</span>
-        </div>
-      </c:if>
+      <!-- 항상 렌더링하고 읽기전용이면 숨김 -->
+      <div id="add-btn-wrap" style="margin-top:10px; <c:if test='${readonly}'>display:none;</c:if>">
+        <span class="btn-outline" id="btn-add">+ 업무추가</span>
+      </div>
     </div>
   </div>
 
+  <!-- 전역 상태 주입 -->
   <script>
     window.TaskPage = {
       contextPath: '<c:out value="${pageContext.request.contextPath}" default=""/>',

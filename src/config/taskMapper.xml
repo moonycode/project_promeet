@@ -5,7 +5,7 @@
 
   <!-- ===== 단건 제목 ===== -->
   <select id="selectTaskTitle" parameterType="int" resultType="string">
-    SELECT task_name
+    SELECT task_name AS taskName
     FROM tasks
     WHERE task_no = #{taskNo}
   </select>
@@ -55,16 +55,16 @@
     FROM tasks t
     LEFT JOIN (
       SELECT
-        tj.task_no,
-        MAX(e.name) KEEP (DENSE_RANK FIRST ORDER BY pj.employee_id ASC) AS first_name,
-        COUNT(DISTINCT pj.employee_id) AS member_cnt
+        tj.task_no,COUNT(*) AS member_cnt,
+        MIN(e.name) KEEP (DENSE_RANK FIRST ORDER BY e.department, e.name) AS first_name
       FROM task_join tj
       JOIN project_join pj
-        ON tj.project_join_no = pj.project_join_no
-       AND tj.join_flag = 1
+        ON pj.project_join_no = tj.project_join_no
+       AND pj.join_flag = 1
       JOIN employees e
-        ON pj.employee_id = e.employee_id
+        ON e.employee_id = pj.employee_id
        AND e.resign_date IS NULL
+      WHERE tj.join_flag = 1
       GROUP BY tj.task_no
     ) mt ON mt.task_no = t.task_no
     LEFT JOIN (
@@ -78,8 +78,7 @@
     ) cl ON cl.task_no = t.task_no
     <where>
       t.project_no = #{projectNo}
-      <!-- 기본은 살아있는 업무만, 읽기전용(완료/삭제 프로젝트)엔 includeDeleted=1로 모두 표시 -->
-      <if test="includeDeleted != 1">
+      <if test="includeDeleted == null or includeDeleted != 1">
         AND t.del_date IS NULL
       </if>
 
@@ -136,24 +135,28 @@
   </update>
 
   <!-- ===== 업무 추가 (담당자 제외) ===== -->
-  <insert id="insertTask" parameterType="map">
+   <insert id="insertTask" parameterType="map">
+    <selectKey keyProperty="taskNo" resultType="int" order="BEFORE">
+      SELECT tasks_seq.NEXTVAL FROM dual
+    </selectKey>
     INSERT INTO tasks (
       task_no, project_no, task_name, task_status,
       start_date, end_date, in_date, up_date, priority, del_date
     ) VALUES (
-      tasks_seq.NEXTVAL,
+      #{taskNo},
       #{projectNo},
       #{taskName},
-      #{taskStatus},
+      NVL(#{taskStatus}, '대기'),
       TO_DATE(NULLIF(#{startDate}, ''), 'YYYY-MM-DD'),
       TO_DATE(NULLIF(#{endDate}, ''), 'YYYY-MM-DD'),
       SYSDATE,
       NULL,
-      #{priority},
+      NVL(#{priority}, '없음'),
       NULL
     )
   </insert>
-
+  
+ 
   <!-- ===== [모달] 특정 업무의 담당자 목록 ===== -->
   <select id="selectTaskMembers" parameterType="int"
           resultType="com.oopsw.model.EmployeeVO">
@@ -173,7 +176,7 @@
     JOIN employees e
       ON pj.employee_id = e.employee_id
      AND e.resign_date IS NULL
-    WHERE tj.task_no = #{value}
+    WHERE tj.task_no = #{taskNo}
     ORDER BY e.department ASC, e.name ASC
   </select>
 

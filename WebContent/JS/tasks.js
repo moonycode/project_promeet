@@ -1,4 +1,5 @@
 (function(){
+  // ===== 유틸 =====
   function qs(s, r){ return (r||document).querySelector(s); }
   function qsa(s, r){ return Array.prototype.slice.call((r||document).querySelectorAll(s)); }
   function getParam(name){
@@ -17,7 +18,7 @@
   var CP   = (window.TaskPage && window.TaskPage.contextPath) || '';
   var BASE = (CP ? CP : '') + '/controller';
 
-  // --- 공용 POST (응답검증 + 에러메시지) ---
+  // 공용 POST
   function postForm(bodyStr){
     return fetch(BASE, {
       method:'POST',
@@ -35,7 +36,7 @@
     });
   }
 
-  // --- x-www-form-urlencoded 본문 생성 (배열 필드는 같은 이름 반복) ---
+  // x-www-form-urlencoded 본문 생성 (배열 필드는 같은 이름 반복)
   function buildForm(paramsObj, listFields){
     var body = new URLSearchParams();
     var lists = Array.isArray(listFields) ? listFields : [];
@@ -66,20 +67,43 @@
     return true;
   }
 
-  // 신규행 감지/정리
   function hasNewRow(){
     var tb = document.getElementById('taskBody');
     return !!(tb && tb.querySelector('tr.is-new'));
   }
-  function ensureCloseNewIfExists(next){
-    if (!hasNewRow()){ next(); return; }
-    if (confirm('작성 중인 새 업무가 취소됩니다. 계속하시겠습니까?')) {
+
+  // 새/편집 상태 이탈 시 confirm 1회만 + 새행은 조용히 제거
+  function setAddButtonDisabled(disabled){
+    var addBtn = document.getElementById('btn-add');
+    if (!addBtn) return;
+    if (disabled) {
+      addBtn.classList.add('is-disabled');
+      addBtn.setAttribute('aria-disabled','true');
+    } else {
+      addBtn.classList.remove('is-disabled');
+      addBtn.removeAttribute('aria-disabled');
+    }
+  }
+
+  function confirmLoseEditingIfNeeded(opts) {
+    var opt = opts || {};
+    // 새행은 경고 없이 정리 (중복 confirm 방지)
+    if (hasNewRow()) {
       var tb = document.getElementById('taskBody');
       var nr = tb && tb.querySelector('tr.is-new');
       if (nr) nr.remove();
       delete EDIT_BUFFER[NEW_KEY];
-      next();
+      setAddButtonDisabled(false);
     }
+    // 편집행만 1회 확인
+    if (editing.tr) {
+      if (!opt.silentForEdit){
+        if (!confirm(CONFIRM_MSG)) return false;
+      }
+      editing.tr = null;
+      editing.taskNo = null;
+    }
+    return true;
   }
 
   window.addEventListener('pageshow', function (e) {
@@ -134,21 +158,16 @@
   function fetchList(){
     ensureEditingClean();
 
-    // 신규행 가드
+    // 혹시 남아 있던 새행 강제 제거
     if (hasNewRow()){
-      if(!confirm('작성 중인 새 업무가 취소됩니다. 계속하시겠습니까?')) {
-        return Promise.resolve();
-      }
       var tb = document.getElementById('taskBody');
       var nr = tb && tb.querySelector('tr.is-new');
       if (nr) nr.remove();
       delete EDIT_BUFFER[NEW_KEY];
+      setAddButtonDisabled(false);
     }
 
-    // 편집행 가드
-    if (editing.tr && !confirm(CONFIRM_MSG)) {
-      return Promise.resolve();
-    }
+    // 편집행 초기화
     editing.tr = null; editing.taskNo = null;
 
     var url = buildURL(state);
@@ -160,6 +179,7 @@
       .then(function(r){ return r.text(); })
       .then(function(html){
         replaceTbodyFromHTML(html);
+        reflectUI();
         syncURL();
       })
       .catch(function(err){
@@ -291,14 +311,12 @@
   (function mountFilters(){
     var fs=qs('#f-status'); var fp=qs('#f-priority');
     if(fs) fs.addEventListener('change', function(){
-      ensureEditingClean();
-      if (editing.tr && !confirm(CONFIRM_MSG)) return;
+      if (!confirmLoseEditingIfNeeded({ silentForEdit:false })) return;
       state.taskStatus = this.value || 'ALL';
       fetchList().then(reflectUI);
     });
     if(fp) fp.addEventListener('change', function(){
-      ensureEditingClean();
-      if (editing.tr && !confirm(CONFIRM_MSG)) return;
+      if (!confirmLoseEditingIfNeeded({ silentForEdit:false })) return;
       state.priority = this.value || 'ALL';
       fetchList().then(reflectUI);
     });
@@ -307,8 +325,7 @@
   // === 정렬 ===
   (function mountSorters(){
     function press(key){
-      ensureEditingClean();
-      if (editing.tr && !confirm(CONFIRM_MSG)) return;
+      if (!confirmLoseEditingIfNeeded({ silentForEdit:false })) return;
       state.orderBy = (state.orderBy === key) ? '' : key;
       fetchList().then(reflectUI);
     }
@@ -361,11 +378,13 @@
     );
 
     var taskNo = tr.getAttribute('data-taskno');
-    var buf = EDIT_BUFFER[taskNo] || { pjoinNos:[], membersText:(membersText||'-') };
-    var tempText = buf.membersText || (membersText || '-');
+    var buf = EDIT_BUFFER[taskNo] || { pjoinNos:[], membersText:(membersText||'') };
+    var tempText = (buf.membersText || membersText || '').trim();
+    if (!tempText) tempText = '담당자 추가'; // ✨ 의도적 변경: 빈 경우 기본 문구
+
     tds[COL.MEMBERS].innerHTML =
-      '<span class="chip" id="e-members">'+ tempText +'</span> '+
-      '<button type="button" class="btn-outline s member-chip-btn" id="e-members-pick">담당자 선택</button>';
+      '<button type="button" class="chip member-chip-btn" id="e-members-pick">'
+      + tempText + '</button>';
 
     tds[COL.ACT].innerHTML = '<span class="btn-xs btn-ok">확인</span> <span class="btn-xs btn-cancel">취소</span>';
 
@@ -376,24 +395,40 @@
     editing.tr = null; editing.taskNo = null;
     fetchList();
   }
-  function restore(projectNo){
-	  return postForm('cmd=restoreProject&projectNo=' + encodeURIComponent(projectNo))
-	    .then(function(txt){
-	      try {
-	        var res = JSON.parse(txt);
-	        if (res.status !== 'ok') { alert(res.message || '복원 실패'); return; }
-	      } catch(e){ /* 무시 */ }
 
-	      // ★ 화면 유지하면서 편집 가능 상태로 전환
-	      activateButtonsInPlace();
-	      // 필요하면 목록만 새로고침
-	      fetchList();
-	    })
-	    .catch(function(){
-	      alert('복원 실패');
-	    });
-	}
+  function activateButtonsInPlace() {
+    var r = document.getElementById('btn-restore'); if (r) r.style.display = 'none';
+    var o = document.getElementById('btn-reopen');  if (o) o.style.display = 'none';
+    var e = document.getElementById('btn-edit-project');
+    if (e) e.style.display = '';
 
+    window.TaskPage.readonly = false;
+
+    var rows = document.querySelectorAll('#taskBody tr[data-taskno]');
+    rows.forEach(function(tr){
+      var taskNo = tr.getAttribute('data-taskno');
+      var act = tr.querySelector('.actions-cell');
+      if (!act) return;
+      if (act.querySelector('.ghost')) {
+        act.innerHTML = ''
+          + '<span class="btn-xs btn-edit">수정</span> '
+          + '<span class="btn-xs btn-del" data-taskno="'+ (taskNo || '') +'">삭제</span>';
+      }
+    });
+
+    var addWrap = document.getElementById('add-btn-wrap');
+    if (addWrap) addWrap.style.display = '';
+    setAddButtonDisabled(false);
+  }
+
+  function formatMembersTextByIds(nextIds){
+    if (!nextIds || nextIds.length === 0) return '';
+    var first = String(nextIds[0]);
+    var rest  = nextIds.length - 1;
+    return rest > 0 ? (first + ' 외 ' + rest) : first;
+  }
+
+  // === tbody 델리게이트 ===
   function mountTbodyDelegates(){
     var tbody = qs('#taskBody');
     if(!tbody) return;
@@ -402,16 +437,9 @@
       var t = e.target;
       var cls = (t.className || '');
 
+      // 편집
       if (cls.indexOf('btn-edit') > -1){
-        ensureEditingClean();
-        if (editing.tr && editing.tr !== t.closest('tr')){
-          if(!confirm(CONFIRM_MSG)) return;
-          cancelEdit();
-        }
-        if (hasNewRow()){
-          ensureCloseNewIfExists(function(){});
-          if (hasNewRow()) return; // 사용자가 취소
-        }
+        if (!confirmLoseEditingIfNeeded({ silentForEdit:false })) { e.preventDefault(); return; }
         var tr = t.closest('tr'); if(!tr) return;
         editing.tr = tr; editing.taskNo = tr.getAttribute('data-taskno');
         toEditRow(tr);
@@ -419,6 +447,7 @@
         return;
       }
 
+      // 저장
       if (cls.indexOf('btn-ok') > -1){
         var tr = t.closest('tr'); if(!tr) return;
         var taskNo = tr.getAttribute('data-taskno');
@@ -445,14 +474,7 @@
           priority:   prKr,
           pjoinNos:   (buf.pjoinNos || [])
         }, ['pjoinNos']);
-        
-        return fetch(contextPath + '/controller', {
-            method: 'POST',
-            headers: {'Content-Type':'application/x-www-form-urlencoded; charset=UTF-8', 'X-Requested-With':'XMLHttpRequest'},
-            credentials: 'same-origin',
-            body: form
-          });
-        
+
         postForm(form).then(function(){
           delete EDIT_BUFFER[taskNo];
           editing.tr = null; editing.taskNo = null;
@@ -461,22 +483,20 @@
           console.error(err);
           alert('업무 저장에 실패했습니다.\n\n' + err.message);
         });
-       
+        e.preventDefault();
+        return;
       }
 
+      // 취소
       if (cls.indexOf('btn-cancel') > -1){
         cancelEdit();
         e.preventDefault();
         return;
       }
 
+      // 삭제
       if (cls.indexOf('btn-del') > -1){
-        ensureEditingClean();
-        if (editing.tr){ if(!confirm(CONFIRM_MSG)) return; }
-        if (hasNewRow()){
-          ensureCloseNewIfExists(function(){});
-          if (hasNewRow()) return;
-        }
+        if (!confirmLoseEditingIfNeeded({ silentForEdit:false })) return;
         var taskNo = t.getAttribute('data-taskno') || (t.closest('tr') && t.closest('tr').getAttribute('data-taskno'));
         if(!taskNo) return;
         if(!confirm('해당 업무를 삭제하시겠습니까?')) return;
@@ -491,6 +511,7 @@
         return;
       }
 
+      // 담당자 보기
       if (cls.indexOf('member-chip-view') > -1){
         var tr = t.closest('tr'); if(!tr) return;
         var taskNo = tr.getAttribute('data-taskno');
@@ -499,23 +520,27 @@
         return;
       }
 
+      // 담당자 선택(편집/신규 공용)
       if (cls.indexOf('member-chip-btn') > -1 || t.id === 'e-members-pick' || t.id === 'n-members-pick'){
         var tr = t.closest('tr'); if(!tr) return;
         var taskNo = tr.getAttribute('data-taskno');
 
         var bufKey = taskNo || NEW_KEY;
-        var chipId = taskNo ? 'e-members' : 'n-members';
+        var chipId = taskNo ? 'e-members-pick' : 'n-members-pick';
         var chipEl = qs('#'+chipId, tr);
-        var currentText = chipEl ? chipEl.textContent.trim() : '-';
 
+        var currentText = chipEl ? chipEl.textContent.trim() : '';
         var buf = EDIT_BUFFER[bufKey] || { pjoinNos:[], membersText: currentText };
 
         if (window.TaskMembersModal && typeof window.TaskMembersModal.open === 'function'){
           var preset = buf.pjoinNos || [];
           var apply  = function(nextIds, nextText){
-            EDIT_BUFFER[bufKey] = { pjoinNos: (nextIds||[]), membersText: (nextText||'-') };
+            var text = (nextText && nextText.trim().length>0) ? nextText : formatMembersTextByIds(nextIds);
+            // 빈 문자열이면 기본 문구
+            if (!text || !text.trim()) text = '담당자 추가';
+            EDIT_BUFFER[bufKey] = { pjoinNos: (nextIds||[]), membersText: text };
             var chip = qs('#'+chipId, tr);
-            if (chip) chip.textContent = (nextText || '-');
+            if (chip) chip.textContent = text;
           };
 
           if (taskNo) {
@@ -529,6 +554,7 @@
       }
     }, false);
 
+    // 복원 버튼
     var btnRestore = qs('#btn-restore');
     if (btnRestore && !btnRestore.dataset.bound) {
       btnRestore.dataset.bound = '1';
@@ -536,27 +562,11 @@
         var pno = btnRestore.getAttribute('data-projectno');
         if(!pno) return;
         if(!confirm('프로젝트를 복원하시겠습니까?')) return;
-
-        restore(pno).then(function(txt){
-          try {
-            var res = JSON.parse(txt);
-            if (res.status === 'ok') {
-             
-              activateButtonsInPlace();
-              fetchList();
-            } else {
-              alert(res.message || '복원 실패');
-            }
-          } catch(e){
-            alert('복원 처리 응답 파싱 실패');
-          }
-        }).catch(function(){
-          alert('서버 통신 실패');
-        });
+        restore(pno);
       }, false);
     }
 
-    // 2-2. 완료 프로젝트 재개(=완료 취소)
+    // 재개 버튼
     var btnReopen = document.getElementById('btn-reopen');
     if (btnReopen && !btnReopen.dataset.bound){
       btnReopen.dataset.bound = '1';
@@ -564,103 +574,65 @@
         var pno = btnReopen.getAttribute('data-projectno');
         if(!pno) return;
         if(!confirm('프로젝트 완료 상태를 해제하시겠습니까?')) return;
-
-        restore(pno).then(function(txt){
-          try {
-            var res = JSON.parse(txt);
-            if (res.status === 'ok'){
-              // 완료 취소 후 정상 편집 모드 진입
-              location.href = CP + '/controller?cmd=tasksUI&projectNo=' + pno;
-            } else {
-              alert(res.message || '재개 실패');
-            }
-          } catch(e){
-            alert('재개 처리 응답 파싱 실패');
-          }
-        }).catch(function(){
-          alert('서버 통신 실패');
-        });
+        restore(pno);
       });
     }
-    
-    
- // 복원/재개 직후, 페이지 리로드 없이 편집 가능 상태로 전환
-    function activateButtonsInPlace() {
-      // 1) 상단 버튼 토글
-      var r = document.getElementById('btn-restore'); if (r) r.style.display = 'none';
-      var o = document.getElementById('btn-reopen');  if (o) o.style.display = 'none';
-      var e = document.getElementById('btn-edit-project'); 
-      if (e) e.style.display = ''; // 보이도록
+  }
 
-      // 2) 전역 상태 해제
-      window.TaskPage.readonly = false;
+  // 복원 호출 (화면 유지 모드)
+  function restore(projectNo){
+    return postForm('cmd=restoreProject&projectNo=' + encodeURIComponent(projectNo))
+      .then(function(txt){
+        try {
+          var res = JSON.parse(txt);
+          if (res.status !== 'ok') { alert(res.message || '복원 실패'); return; }
+        } catch(e){ /* JSON 아니면 무시 */ }
 
-      // 3) 각 행의 "수정/삭제" 버튼을 실제 동작하는 버튼으로 교체
-      //    (readonly 렌더링 시 'ghost'만 있었기 때문에 활성 버튼으로 다시 그려줌)
-      var rows = document.querySelectorAll('#taskBody tr[data-taskno]');
-      rows.forEach(function(tr){
-        var taskNo = tr.getAttribute('data-taskno');
-        var act = tr.querySelector('.actions-cell');
-        if (!act) return;
-
-        // 현재가 readonly였다면 'ghost' 두 개가 있음 → 동작 버튼으로 갈아끼움
-        if (act.querySelector('.ghost')) {
-          act.innerHTML = ''
-            + '<span class="btn-xs btn-edit">수정</span> '
-            + '<span class="btn-xs btn-del" data-taskno="'+ (taskNo || '') +'">삭제</span>';
-          // 이벤트는 tbody 위임으로 이미 걸려 있으므로 재바인딩 불필요
-        }
+        activateButtonsInPlace();
+        fetchList();
+      })
+      .catch(function(){
+        alert('복원 실패');
       });
+  }
 
-      // 4) "업무추가" 버튼 표시/활성화
-      var addBtn = document.getElementById('btn-add');
-      if (addBtn) {
-        addBtn.style.display = '';
-        addBtn.classList.remove('disabled');
-        addBtn.removeAttribute('aria-disabled');
-      }
-
-      // 5) (선택) 멤버칩도 열 수 있게 보장 — 행 편집에 들어가면 이미 가능하므로 생략해도 무방
-       document.querySelectorAll('.member-chip-view').forEach(function(a){ a.classList.remove('disabled'); });
-    }
-
- 
- activateButtonsInPlace();
-
- fetchList();
-
-    
+  // === 초기화 ===
   (function init(){
     mountTbodyDelegates();
     reflectUI();
     syncURL();
 
+    // '프로젝트 수정' 버튼
+    var btnEditProject = document.getElementById('btn-edit-project');
+    if (btnEditProject && !btnEditProject.dataset.bound) {
+      btnEditProject.dataset.bound = '1';
+      btnEditProject.addEventListener('click', function(){
+        var pno = this.getAttribute('data-projectno');
+        if (!pno) return;
+        if (window.TaskPage && window.TaskPage.readonly) return;
+        location.href = CP + '/controller?cmd=updateProjectUI&projectNo=' + encodeURIComponent(pno);
+      }, false);
+    }
+
+    // '업무 추가' 버튼
     var btnAdd = document.getElementById('btn-add');
     if (btnAdd && !window.TaskPage.readonly && !btnAdd.dataset.bound) {
       btnAdd.dataset.bound = '1';
       btnAdd.addEventListener('click', function () {
-        ensureEditingClean();
-        if (editing.tr){
-          if(!confirm(CONFIRM_MSG)) return;
-          cancelEdit();
-        }
-        if (hasNewRow()){
-          ensureCloseNewIfExists(function(){});
-          if (hasNewRow()) return;
-        }
+        if (hasNewRow()) return; // 이미 새 행 있으면 무시
+
+        setAddButtonDisabled(true);
 
         var tbody = document.getElementById('taskBody');
         if (!tbody) return;
-
-        if (tbody.querySelector('tr.is-new')) return;
 
         var tr = document.createElement('tr');
         tr.className = 'row-edit is-new';
         tr.innerHTML =
           '<td><input class="input-s" id="n-name" type="text" placeholder="업무명(필수)"></td>' +
           '<td>' +
-          '  <span class="chip" id="n-members">-</span> ' +
-          '  <button type="button" class="btn-outline s member-chip-btn" id="n-members-pick">담당자 선택</button>' +
+          // ✨ 의도적 변경: 기본 텍스트 표시
+          '  <button type="button" class="chip member-chip-btn" id="n-members-pick">담당자 추가</button>' +
           '</td>' +
           '<td>' +
           '  <select class="select-s" id="n-status">' +
@@ -682,6 +654,27 @@
         tbody.appendChild(tr);
         (tr.querySelector('#n-name') || tr).focus();
 
+        var newBuf = EDIT_BUFFER[NEW_KEY] || { pjoinNos: [], membersText:'' };
+        EDIT_BUFFER[NEW_KEY] = newBuf;
+
+        var pickBtn = tr.querySelector('#n-members-pick');
+        if (pickBtn) {
+          pickBtn.addEventListener('click', function(){
+            if (window.TaskMembersModal && typeof window.TaskMembersModal.open === 'function'){
+              var preset = newBuf.pjoinNos || [];
+              var apply  = function(nextIds, nextText){
+                var text = (nextText && nextText.trim().length>0) ? nextText : formatMembersTextByIds(nextIds);
+                if (!text || !text.trim()) text = '담당자 추가'; // ✨
+                EDIT_BUFFER[NEW_KEY] = { pjoinNos: (nextIds||[]), membersText: text };
+                var chip = tr.querySelector('#n-members-pick');
+                if (chip) chip.textContent = text;
+              };
+              window.TaskMembersModal.open('editTask', window.TaskPage.projectNo, null, preset, apply);
+            }
+          }, false);
+        }
+
+        // 신규 저장
         tr.querySelector('.btn-ok-new').addEventListener('click', function () {
           var name = (tr.querySelector('#n-name')||{}).value.trim();
           if (!name) { alert('업무명은 필수입니다.'); return; }
@@ -692,7 +685,6 @@
           var stKr = (tr.querySelector('#n-status')||{}).value || '대기';
           var prKr = (tr.querySelector('#n-prio')||{}).value   || '없음';
 
-          var newBuf = EDIT_BUFFER[NEW_KEY] || { pjoinNos: [] };
           var form = buildForm({
             cmd:        'addTaskAction',
             projectNo:  (window.TaskPage.projectNo || 0),
@@ -705,7 +697,11 @@
           }, ['pjoinNos']);
 
           postForm(form).then(function () {
+            var tb = document.getElementById('taskBody');
+            var nr = tb && tb.querySelector('tr.is-new');
+            if (nr) nr.remove();
             delete EDIT_BUFFER[NEW_KEY];
+            setAddButtonDisabled(false);
             return fetchList();
           }).catch(function(err){
             console.error(err);
@@ -713,9 +709,11 @@
           });
         });
 
+        // 신규 취소
         tr.querySelector('.btn-cancel-new').addEventListener('click', function () {
           delete EDIT_BUFFER[NEW_KEY];
           tr.remove();
+          setAddButtonDisabled(false);
         });
       }, false);
     }

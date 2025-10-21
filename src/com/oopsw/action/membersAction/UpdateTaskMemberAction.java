@@ -1,4 +1,3 @@
-// src/com/oopsw/action/membersAction/UpdateTaskMemberAction.java
 package com.oopsw.action.membersAction;
 
 import java.io.IOException;
@@ -20,27 +19,16 @@ public class UpdateTaskMemberAction implements Action {
     int projectNo = Integer.parseInt(request.getParameter("projectNo"));
     int taskNo    = Integer.parseInt(request.getParameter("taskNo"));
 
-    // 1) 반복 파라미터 우선: pjoinNos=1&pjoinNos=2...
     String[] pjoinNos = request.getParameterValues("pjoinNos");
-
-    // 2) 과거 호환: pjoinNo=1&pjoinNo=2...
+    if (pjoinNos == null || pjoinNos.length == 0) pjoinNos = request.getParameterValues("pjoinNo");
     if (pjoinNos == null || pjoinNos.length == 0) {
-      pjoinNos = request.getParameterValues("pjoinNo");
-    }
-
-    // 3) 콤마 문자열 호환: pjoinNos="1,2,3"
-    if ((pjoinNos == null || pjoinNos.length == 0)) {
       String csv = request.getParameter("pjoinNos");
       if (csv != null && !csv.trim().isEmpty()) {
-        pjoinNos = Arrays.stream(csv.split(","))
-                .map(String::trim).filter(sv -> !sv.isEmpty())
-                .toArray(String[]::new);
+        pjoinNos = Arrays.stream(csv.split(",")).map(String::trim).filter(x->!x.isEmpty()).toArray(String[]::new);
       }
     }
 
     new MembersDAO().updateTaskMembers(taskNo, pjoinNos);
-
-    // ★ 라우팅은 항상 tasksUI(복수)
     return "controller?cmd=tasksUI&projectNo=" + projectNo;
   }
 }

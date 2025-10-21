@@ -34,9 +34,9 @@
 
                 <div class="kv" style="margin-top:12px">
                     <label for="employeeId">사번</label>
-                    <input type="text" id="employeeId" name="employeeId" placeholder="12345" required />
+                    <input type="text" id="employeeId" name="employeeId" placeholder="" required />
                     <label for="password">비밀번호</label>
-                    <input type="password" id="password" name="password" placeholder="••••••••" required />
+                    <input type="password" id="password" name="password" placeholder="" required />
                     
                     <button type="submit" class="btn" style="margin-top:12px">로그인</button>
                 </div>
