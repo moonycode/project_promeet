@@ -35,6 +35,17 @@ public class EmployeeDAO {
         }
     }
     
+    public int updateWorkStatus(String employeeId, String workStatus){
+        try (SqlSession s = DBCP.getSqlSessionFactory().openSession()) {
+            Map<String,Object> p = new HashMap<>();
+            p.put("employeeId", employeeId);
+            p.put("workStatus", workStatus);
+            int c = s.update("employeeMapper.updateWorkStatus", p);
+            s.commit();
+            return c;
+        }
+    }
+
     
     public EmployeeVO getEmployeeInfo(String employeeId) {
         SqlSession session = DBCP.getSqlSessionFactory().openSession();

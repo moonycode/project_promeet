@@ -1,40 +1,133 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<div class="sidebar">
-    <div class="logo-wrap">
-	    <img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='240' height='60'><rect width='100%' height='100%' rx='12' ry='12' fill='%23b14dd6'/><text x='50%' y='55%' dominant-baseline='middle' text-anchor='middle' font-family='Arial' font-size='28' fill='white'>ProMeet</text></svg>" alt="ProMeet 로고" />
-	</div>
-	<div class="avatar">
-	    <img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='120' height='120'><defs><linearGradient id='g' x1='0' x2='1'><stop offset='0' stop-color='%23ffd1dc'/><stop offset='1' stop-color='%23c7b9ff'/></linearGradient></defs><rect width='100%' height='100%' fill='url(%23g)'/><circle cx='60' cy='50' r='22' fill='white'/><rect x='30' y='78' width='60' height='26' rx='13' fill='white'/></svg>" alt="프로필 이미지(가상)" />
-	</div>
-    <div class="user-name-position">
-        <c:if test="${not empty sessionScope.user}">
-        <c:out value="${sessionScope.user.name}" /> 
-        <c:out value="${sessionScope.user.position}" />
-	    </c:if>
-	    <c:if test="${empty sessionScope.user}">
-	        로그인 필요
-	    </c:if>
-    </div>
 
-    <div class="status-board">
-        <div class="row">
-            <label for="status">상태</label>
-            <select id="status" name="status">
-                <option>출근</option>
-                <option>자리비움</option>
-                <option>외근</option>
-                <option>퇴근</option>
-            </select>
-        </div>
+<div class="sidebar">
+  <div class="logo-wrap">
+    <a id="logo-link" href="controller?cmd=projectUI">
+      <img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='240' height='60'><rect width='100%' height='100%' rx='12' ry='12' fill='%23b14dd6'/><text x='50%' y='55%' dominant-baseline='middle' text-anchor='middle' font-family='Arial' font-size='28' fill='white'>ProMeet</text></svg>" alt="ProMeet 로고" />
+    </a>
+  </div>
+
+  <div class="avatar">
+    <img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='120' height='120'><defs><linearGradient id='g' x1='0' x2='1'><stop offset='0' stop-color='%23ffd1dc'/><stop offset='1' stop-color='%23c7b9ff'/></linearGradient></defs><rect width='100%' height='100%' fill='url(%23g)'/><circle cx='60' cy='50' r='22' fill='white'/><rect x='30' y='78' width='60' height='26' rx='13' fill='white'/></svg>" alt="프로필 이미지(가상)" />
+  </div>
+
+  <div class="user-name-position">
+    <c:if test="${not empty sessionScope.user}">
+      <c:out value="${sessionScope.user.name}" />
+      <c:out value="${sessionScope.user.position}" />
+    </c:if>
+    <c:if test="${empty sessionScope.user}">
+      로그인 필요
+    </c:if>
+  </div>
+
+  <div class="status-board">
+  <c:if test="${not empty sessionScope.user}">
+    <c:set var="__ws" value="${sessionScope.user.workStatus}" />
+    <c:if test="${empty __ws}"><c:set var="__ws" value="퇴근" /></c:if>
+    <c:set var="dotClass"
+           value="${__ws eq '출근' ? 'green' :
+                   __ws eq '자리비움' ? 'yellow' :
+                   __ws eq '외근' ? 'purple' : 'gray'}" />
+
+    <div class="ws-row">
+      <span class="ws-label">상태</span>
+
+      <!-- 버튼형 드롭다운 -->
+      <button type="button" id="ws-select"
+              class="ws-select"
+              aria-haspopup="listbox" aria-expanded="false">
+        <span class="tm-dot ${dotClass}" aria-hidden="true"></span>
+        <span id="ws-select-text"><c:out value="${__ws}" /></span>
+        <svg class="ws-caret" width="14" height="14" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M7 10l5 5 5-5" fill="none" stroke="currentColor" stroke-width="2" />
+        </svg>
+      </button>
+
+      <!-- 옵션 목록 -->
+      <ul id="ws-list" class="ws-list" role="listbox" hidden>
+        <li role="option" data-ws="출근"><span class="tm-dot green"></span>출근</li>
+        <li role="option" data-ws="자리비움"><span class="tm-dot yellow"></span>자리비움</li>
+        <li role="option" data-ws="외근"><span class="tm-dot purple"></span>외근</li>
+        <li role="option" data-ws="퇴근"><span class="tm-dot gray"></span>퇴근</li>
+      </ul>
     </div>
-        
-    <nav class="nav">
-	    <a class="${projectActive}" href="controller?cmd=projectUI">프로젝트</a> 
-	    <a class="${fileBoxActive}" href="controller?cmd=fileBoxUI">파일함</a>
-	    <a class="${scheduleActive}" href="controller?cmd=scheduleUI">일정관리</a>
-	    <a class="${myPageActive}" href="controller?cmd=myPageUI">마이페이지</a>
-	</nav>
-        
-    <a class="logout" href="controller?cmd=logout" >로그아웃</a>
+  </c:if>
 </div>
+
+  <nav class="nav">
+    <a class="${projectActive}" href="controller?cmd=projectUI">프로젝트</a>
+    <a class="${fileBoxActive}" href="controller?cmd=fileBoxUI">파일함</a>
+    <a class="${scheduleActive}" href="controller?cmd=scheduleUI">일정관리</a>
+    <a class="${myPageActive}" href="controller?cmd=myPageUI">마이페이지</a>
+  </nav>
+
+  <a class="logout" href="controller?cmd=logout">로그아웃</a>
+</div>
+
+<script>
+(function(){
+
+  var logo = document.getElementById('logo-link');
+  if (logo) {
+    try {
+        logo.href = 'controller?cmd=projectUI';
+    } catch(e) {}
+  }
+
+  var selectBtn = document.getElementById('ws-select');
+  var listEl    = document.getElementById('ws-list');
+
+  function closeList(){
+    if(!listEl) return;
+    listEl.hidden = true;
+    if (selectBtn) selectBtn.setAttribute('aria-expanded','false');
+  }
+
+  if (selectBtn && listEl){
+    // 열기/닫기
+    selectBtn.addEventListener('click', function(e){
+      e.preventDefault();
+      var open = !listEl.hidden;
+      if(open) closeList();
+      else { listEl.hidden = false; selectBtn.setAttribute('aria-expanded','true'); }
+    }, false);
+
+    // 항목 선택 → 서버 반영 → UI 동기화
+    listEl.addEventListener('click', function(e){
+      var li = e.target.closest('li[data-ws]');
+      if(!li) return;
+      var next = li.getAttribute('data-ws');
+
+      fetch('controller', {
+        method:'POST',
+        headers:{'Content-Type':'application/x-www-form-urlencoded; charset=UTF-8','X-Requested-With':'XMLHttpRequest'},
+        credentials:'same-origin',
+        body:'cmd=updateWorkStatus&status=' + encodeURIComponent(next)
+      }).then(function(){
+        // 텍스트/점 즉시 갱신
+        var txt = document.getElementById('ws-select-text');
+        if (txt) txt.textContent = next;
+
+        var dot = selectBtn.querySelector('.tm-dot');
+        if (dot){
+          dot.classList.remove('green','yellow','purple','gray');
+          dot.classList.add(
+            next === '출근' ? 'green' :
+            next === '자리비움' ? 'yellow' :
+            next === '외근' ? 'purple' : 'gray'
+          );
+          dot.title = next;
+        }
+        closeList();
+      }).catch(function(){ closeList(); });
+    }, false);
+
+    // 바깥 클릭 닫기
+    document.addEventListener('mousedown', function(e){
+      if (!listEl.hidden && !listEl.contains(e.target) && !selectBtn.contains(e.target)) closeList();
+    }, false);
+  }
+})();
+</script>

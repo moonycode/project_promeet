@@ -45,5 +45,15 @@
 			up_date  = SYSDATE 
 		WHERE employee_id = #{employeeId} and password=#{currentPassword}
     </update>
+    
+    <!-- 통합 근무상태 업데이트 -->
+<update id="updateWorkStatus" parameterType="map">
+  UPDATE employees
+     SET work_status = #{workStatus},
+         up_date     = SYSDATE
+   WHERE employee_id = #{employeeId}
+     AND resign_date IS NULL
+</update>
+    
 
 </mapper>

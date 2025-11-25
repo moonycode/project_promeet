@@ -1,47 +1,50 @@
 package com.oopsw.action.employeeAction;
 
-import java.io.IOException;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-
 import com.oopsw.action.Action;
 import com.oopsw.model.EmployeeDAO;
 import com.oopsw.model.EmployeeVO;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+import java.io.IOException;
 
 public class LoginAction implements Action {
 
     @Override
     public String execute(HttpServletRequest request) throws ServletException, IOException {
-        // ·Î±×ÀÎ ¼º°ø ½Ã ÇÁ·ÎÁ§Æ® ¸ŞÀÎ È­¸éÀ¸·Î ÀÌµ¿
-        String successUrl = "controller?cmd=projectUI";
-        // ·Î±×ÀÎ ½ÇÆĞ ½Ã ·Î±×ÀÎ È­¸éÀ¸·Î Æ÷¿öµù
-        String failUrl = "login.jsp";
+        final String successUrl = "controller?cmd=projectUI";
+        final String failUrl    = "login.jsp";
 
         try {
-            // 1. ¿äÃ» ÆÄ¶ó¹ÌÅÍ ¹Ş±â
-            String employeeId = request.getParameter("employeeId");
-            String password = request.getParameter("password");
-            
-            // 2. DB¿¡¼­ »ç¹ø°ú ºñ¹Ğ¹øÈ£ ÀÏÄ¡ ¿©ºÎ È®ÀÎ ¹× Á¤º¸ Á¶È¸
-            EmployeeDAO employeeDAO = new EmployeeDAO();
-            EmployeeVO employeeVO = employeeDAO.loginCheck(employeeId, password);          
-            
-            if (employeeVO != null) {
-                // 3. ÀÎÁõ ¼º°ø: ¼¼¼Ç¿¡ »ç¿ëÀÚ Á¤º¸ ÀúÀå
-                HttpSession session = request.getSession();
-                session.setAttribute("user", employeeVO); 
-                
-                return successUrl; // ¼º°ø½Ã cmd=projectUI·Î ÀÌµ¿
-            } else {
-                // 4. ÀÎÁõ ½ÇÆĞ
-                request.setAttribute("msg", "»ç¹ø ¶Ç´Â ºñ¹Ğ¹øÈ£°¡ ÀÏÄ¡ÇÏÁö ¾Ê°Å³ª Åğ»çÇÑ Á÷¿øÀÔ´Ï´Ù.");
-                return failUrl; // login.jsp·Î Æ÷¿öµù (msg¿Í ÇÔ²²)
-            }
+            // (POSTì¼ ë•Œ) í•œê¸€ íŒŒë¼ë¯¸í„° ë°©ì§€ìš©
+            try { request.setCharacterEncoding("UTF-8"); } catch (Exception ignore) {}
 
+            String employeeId = request.getParameter("employeeId");
+            String password   = request.getParameter("password");
+
+            EmployeeDAO employeeDAO = new EmployeeDAO();
+            EmployeeVO  user        = employeeDAO.loginCheck(employeeId, password);
+
+            if (user != null) {
+                // ë¡œê·¸ì¸ ì„±ê³µ â†’ ìë™ ì¶œê·¼ ì²˜ë¦¬
+                try {
+                    employeeDAO.updateWorkStatus(user.getEmployeeId(), "ì¶œê·¼");
+                    // í™”ë©´ì—ì„œ ë°”ë¡œ ë³´ì´ë„ë¡ ì„¸ì…˜ì— ë„£ëŠ” ê°ì²´ì—ë„ ìƒíƒœ ë°˜ì˜
+                    user.setWorkStatus("ì¶œê·¼");
+                } catch (Exception ignore) {}
+
+                HttpSession session = request.getSession(true);
+                session.setAttribute("user", user);
+
+                return successUrl;
+            } else {
+                request.setAttribute("msg", "ì•„ì´ë”” ë˜ëŠ” ë¹„ë°€ë²ˆí˜¸ê°€ ì¼ì¹˜í•˜ì§€ ì•Šê±°ë‚˜, í‡´ì‚¬ ì²˜ë¦¬ëœ ê³„ì •ì…ë‹ˆë‹¤.");
+                return failUrl;
+            }
         } catch (Exception e) {
             e.printStackTrace();
-            request.setAttribute("msg", "·Î±×ÀÎ Ã³¸® Áß ½Ã½ºÅÛ ¿À·ù°¡ ¹ß»ıÇß½À´Ï´Ù.");
+            request.setAttribute("msg", "ë¡œê·¸ì¸ ì²˜ë¦¬ ì¤‘ ì‹œìŠ¤í…œ ì˜¤ë¥˜ê°€ ë°œìƒí–ˆìŠµë‹ˆë‹¤.");
             return failUrl;
         }
     }

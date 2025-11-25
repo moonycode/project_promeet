@@ -17,6 +17,7 @@ import com.oopsw.action.employeeAction.LoginAction;
 import com.oopsw.action.employeeAction.LoginUIAction;
 import com.oopsw.action.employeeAction.LogoutAction;
 import com.oopsw.action.employeeAction.MyPageUIAction;
+import com.oopsw.action.employeeAction.UpdateWorkStatusAction;
 import com.oopsw.action.fileBoxAction.FileBoxAction;
 import com.oopsw.action.fileBoxAction.FileBoxUIAction;
 import com.oopsw.action.fileBoxAction.SearchFileBoxAction;
@@ -184,6 +185,11 @@ public class ActionFactory {
 		case "projectUI":
 			a = new ProjectUIAction();
 			break;
+			
+		case "updateWorkStatus":
+		    a = new UpdateWorkStatusAction();
+		    break;
+	
 		case "login":
 			a = new LoginAction();
 			break;
