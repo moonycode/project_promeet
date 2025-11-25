@@ -395,31 +395,172 @@
     editing.tr = null; editing.taskNo = null;
     fetchList();
   }
+  function ensureEditProjectButton() {
+	  var pno = String(window.TaskPage && window.TaskPage.projectNo || '');
+	  var btn = document.getElementById('btn-edit-project');
+	  if (btn) {
+	    // 보이기 + 잠재적 숨김 속성 해제
+	    btn.style.display = '';
+	    btn.removeAttribute('hidden');
+	    btn.classList.remove('ghost');
+	  } else {
+	    // 꽂을 자리 찾기(복원/재개 버튼 근처 → 헤더 액션 영역 → 헤더)
+	    var container =
+	      (document.getElementById('btn-restore') && document.getElementById('btn-restore').parentNode) ||
+	      (document.getElementById('btn-reopen')  && document.getElementById('btn-reopen').parentNode)  ||
+	      document.querySelector('.header .actions-right') ||
+	      document.querySelector('.header') || document.body;
+
+	    btn = document.createElement('a');
+	    btn.id = 'btn-edit-project';
+	    btn.className = 'btn';
+	    btn.setAttribute('data-projectno', pno);
+	    btn.href = (CP || '') + '/controller?cmd=updateProjectUI&projectNo=' + encodeURIComponent(pno);
+	    btn.textContent = '프로젝트 수정';
+	    container.insertBefore(btn, container.firstChild);
+	  }
+
+	  // 클릭 바인딩 보장
+	  if (!btn.dataset.bound) {
+	    btn.dataset.bound = '1';
+	    btn.addEventListener('click', function(e){
+	      // a 링크면 기본 이동도 OK, 하지만 readonly 방지 체크 유지
+	      var pno = this.getAttribute('data-projectno');
+	      if (!pno) { e.preventDefault(); return; }
+	      if (window.TaskPage && window.TaskPage.readonly) { e.preventDefault(); return; }
+	      // a의 href가 있으므로 추가 작업 불필요
+	    }, false);
+	  }
+	  return btn;
+	}
 
   function activateButtonsInPlace() {
+    // 복원/재개 버튼 숨김, 프로젝트 수정 보이기
     var r = document.getElementById('btn-restore'); if (r) r.style.display = 'none';
     var o = document.getElementById('btn-reopen');  if (o) o.style.display = 'none';
-    var e = document.getElementById('btn-edit-project');
-    if (e) e.style.display = '';
+    ensureEditProjectButton();
 
+
+    // 읽기 전용 해제
     window.TaskPage.readonly = false;
 
+    // 목록행의 액션 버튼들 교체(이미 있음)
     var rows = document.querySelectorAll('#taskBody tr[data-taskno]');
     rows.forEach(function(tr){
       var taskNo = tr.getAttribute('data-taskno');
       var act = tr.querySelector('.actions-cell');
       if (!act) return;
       if (act.querySelector('.ghost')) {
-        act.innerHTML = ''
-          + '<span class="btn-xs btn-edit">수정</span> '
-          + '<span class="btn-xs btn-del" data-taskno="'+ (taskNo || '') +'">삭제</span>';
+        act.innerHTML =
+          '<span class="btn-xs btn-edit">수정</span> ' +
+          '<span class="btn-xs btn-del" data-taskno="'+ (taskNo || '') +'">삭제</span>';
       }
     });
 
+    // 업무추가 영역 보이기 + 바인딩 보장
     var addWrap = document.getElementById('add-btn-wrap');
     if (addWrap) addWrap.style.display = '';
-    setAddButtonDisabled(false);
+
+    var addBtn = document.getElementById('btn-add');
+    if (addBtn) {
+      addBtn.classList.remove('is-disabled');
+      addBtn.removeAttribute('aria-disabled');
+      if (!addBtn.dataset.bound) {
+        addBtn.dataset.bound = '1';
+        // init에서 쓰던 동일 로직을 그대로 호출
+        addBtn.addEventListener('click', function () {
+          if (hasNewRow()) return;
+          setAddButtonDisabled(true);
+          var tbody = document.getElementById('taskBody');
+          if (!tbody) return;
+
+          var tr = document.createElement('tr');
+          tr.className = 'row-edit is-new';
+          tr.innerHTML =
+            '<td><input class="input-s" id="n-name" type="text" placeholder="업무명(필수)"></td>' +
+            '<td><button type="button" class="chip member-chip-btn" id="n-members-pick">담당자 추가</button></td>' +
+            '<td><select class="select-s" id="n-status"><option selected>대기</option><option>진행</option><option>완료</option><option>보류</option><option>기타</option></select></td>' +
+            '<td><input class="input-s w-120" id="n-sd" type="date"></td>' +
+            '<td><input class="input-s w-120" id="n-ed" type="date"></td>' +
+            '<td><select class="select-s" id="n-prio"><option selected>없음</option><option>낮음</option><option>보통</option><option>높음</option><option>긴급</option></select></td>' +
+            '<td class="progress-cell">0%</td>' +
+            '<td class="actions-cell"><span class="btn-xs btn-ok-new">확인</span> <span class="btn-xs btn-cancel-new">취소</span></td>';
+
+          tbody.appendChild(tr);
+          (tr.querySelector('#n-name') || tr).focus();
+
+          var newBuf = EDIT_BUFFER[NEW_KEY] || { pjoinNos: [], membersText:'' };
+          EDIT_BUFFER[NEW_KEY] = newBuf;
+
+          var pickBtn = tr.querySelector('#n-members-pick');
+          if (pickBtn) {
+            pickBtn.addEventListener('click', function(e){
+              e.preventDefault(); e.stopPropagation();
+              if (window.TaskMembersModal && typeof window.TaskMembersModal.open === 'function'){
+                var preset = newBuf.pjoinNos || [];
+                var apply  = function(nextIds, nextText){
+                  var text = (nextText && nextText.trim().length>0) ? nextText : formatMembersTextByIds(nextIds);
+                  if (!text || !text.trim()) text = '담당자 추가';
+                  newBuf.pjoinNos   = (nextIds || []);
+                  newBuf.membersText = text;
+                  EDIT_BUFFER[NEW_KEY] = newBuf;
+                  var chip = tr.querySelector('#n-members-pick');
+                  if (chip) chip.textContent = text;
+                };
+                window.TaskMembersModal.open('editTask', window.TaskPage.projectNo, null, preset, apply);
+              }
+            }, false);
+          }
+
+          // 신규 저장/취소 바인딩 (기존 init과 동일)
+          tr.querySelector('.btn-ok-new').addEventListener('click', function () {
+            var name = (tr.querySelector('#n-name')||{}).value.trim();
+            if (!name) { alert('업무명은 필수입니다.'); return; }
+            var sd = (tr.querySelector('#n-sd')||{}).value || '';
+            var ed = (tr.querySelector('#n-ed')||{}).value || '';
+            if (sd && ed && sd > ed) { alert('마감일이 시작일보다 빠릅니다.'); return; }
+            var stKr = (tr.querySelector('#n-status')||{}).value || '대기';
+            var prKr = (tr.querySelector('#n-prio')||{}).value   || '없음';
+            var bufNow = EDIT_BUFFER[NEW_KEY] || newBuf;
+
+            var form = buildForm({
+              cmd:        'addTaskAction',
+              projectNo:  (window.TaskPage.projectNo || 0),
+              taskName:   name,
+              taskStatus: stKr,
+              startDate:  sd,
+              endDate:    ed,
+              priority:   prKr,
+              pjoinNos:   (bufNow.pjoinNos || [])
+            }, ['pjoinNos']);
+
+            if (Array.isArray(bufNow.pjoinNos) && bufNow.pjoinNos.length > 0) {
+              form += '&pjoinNos=' + encodeURIComponent(bufNow.pjoinNos.join(','));
+            }
+
+            postForm(form).then(function () {
+              var tb = document.getElementById('taskBody');
+              var nr = tb && tb.querySelector('tr.is-new');
+              if (nr) nr.remove();
+              delete EDIT_BUFFER[NEW_KEY];
+              setAddButtonDisabled(false);
+              return fetchList();
+            }).catch(function(err){
+              console.error(err);
+              alert('업무 추가에 실패했습니다.\n\n' + err.message);
+            });
+          });
+
+          tr.querySelector('.btn-cancel-new').addEventListener('click', function () {
+            delete EDIT_BUFFER[NEW_KEY];
+            tr.remove();
+            setAddButtonDisabled(false);
+          });
+        }, false);
+      }
+    }
   }
+
 
   function formatMembersTextByIds(nextIds){
     if (!nextIds || nextIds.length === 0) return '';
@@ -463,17 +604,17 @@
 
         var buf = EDIT_BUFFER[taskNo] || { pjoinNos:[], membersText:'' };
 
-        var form = buildForm({
-          cmd:        'updateTaskAction',
-          taskNo:     taskNo,
-          projectNo:  (window.TaskPage.projectNo || 0),
-          taskName:   name,
-          taskStatus: stKr,
-          startDate:  sd,
-          endDate:    ed,
-          priority:   prKr,
-          pjoinNos:   (buf.pjoinNos || [])
-        }, ['pjoinNos']);
+        var form = 'cmd=updateTaskAction'
+            + '&taskNo='    + encode(taskNo)
+            + '&projectNo=' + encode(window.TaskPage.projectNo || 0)
+            + '&taskName='  + encode(name)
+            + '&taskStatus='+ encode(stKr)
+            + '&startDate=' + encode(sd)
+            + '&endDate='   + encode(ed)
+            + '&priority='  + encode(prKr);
+   (buf.pjoinNos || []).forEach(function(no){
+     form += '&pjoinNos=' + encode(no);
+   });
 
         postForm(form).then(function(){
           delete EDIT_BUFFER[taskNo];
@@ -659,13 +800,17 @@
 
         var pickBtn = tr.querySelector('#n-members-pick');
         if (pickBtn) {
-          pickBtn.addEventListener('click', function(){
+          pickBtn.addEventListener('click', function(e){
+        	  e.preventDefault();
+        	  e.stopPropagation();
             if (window.TaskMembersModal && typeof window.TaskMembersModal.open === 'function'){
               var preset = newBuf.pjoinNos || [];
               var apply  = function(nextIds, nextText){
                 var text = (nextText && nextText.trim().length>0) ? nextText : formatMembersTextByIds(nextIds);
                 if (!text || !text.trim()) text = '담당자 추가'; // ✨
-                EDIT_BUFFER[NEW_KEY] = { pjoinNos: (nextIds||[]), membersText: text };
+                newBuf.pjoinNos   = (nextIds || []);
+                newBuf.membersText = text;
+                EDIT_BUFFER[NEW_KEY] = newBuf;
                 var chip = tr.querySelector('#n-members-pick');
                 if (chip) chip.textContent = text;
               };
@@ -684,18 +829,18 @@
 
           var stKr = (tr.querySelector('#n-status')||{}).value || '대기';
           var prKr = (tr.querySelector('#n-prio')||{}).value   || '없음';
-
-          var form = buildForm({
-            cmd:        'addTaskAction',
-            projectNo:  (window.TaskPage.projectNo || 0),
-            taskName:   name,
-            taskStatus: stKr,
-            startDate:  sd,
-            endDate:    ed,
-            priority:   prKr,
-            pjoinNos:   (newBuf.pjoinNos || [])
-          }, ['pjoinNos']);
-
+          var bufNow = EDIT_BUFFER[NEW_KEY] || newBuf;
+          var form = 'cmd=addTaskAction'
+        	       + '&projectNo=' + encode(window.TaskPage.projectNo || 0)
+        	       + '&taskName='  + encode(name)
+        	       + '&taskStatus='+ encode(stKr)
+        	       + '&startDate=' + encode(sd)
+        	       + '&endDate='   + encode(ed)
+        	       + '&priority='  + encode(prKr);
+        	    (bufNow.pjoinNos || []).forEach(function(no){
+        	      form += '&pjoinNos=' + encode(no);
+        	    });
+          
           postForm(form).then(function () {
             var tb = document.getElementById('taskBody');
             var nr = tb && tb.querySelector('tr.is-new');

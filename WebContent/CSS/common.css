@@ -1576,3 +1576,58 @@ button,select,input{font:inherit}
   opacity: .45;
   pointer-events: none;
 }
+/* 1열 고정 */
+.sidebar .ws-group{
+  display:grid;
+  grid-template-columns: 1fr;
+  gap:8px;
+  width:100%;
+}
+
+/* 상태 버튼 */
+.sidebar .ws-btn{
+  display:inline-flex; align-items:center; gap:6px;
+  width:100%;
+  padding:6px 10px;
+  background:#fff; border:1px solid #d9d9e3; border-radius:10px;
+  font-size:13px; line-height:1; white-space:nowrap; cursor:pointer;
+}
+
+/* 상태 점 */
+.tm-dot{display:inline-block;width:8px;height:8px;border-radius:50%}
+.tm-dot.green{background:#22c55e}
+.tm-dot.yellow{background:#f59e0b}
+.tm-dot.purple{background:#8b5cf6}
+.tm-dot.gray{background:#9ca3af}
+
+.ws-pill{display:inline-flex;align-items:center;gap:6px;padding:4px 10px;border:1px solid #e2e2e2;border-radius:14px;background:#fff;cursor:pointer}
+.ws-menu[hidden]{display:none}
+.ws-menu{position:absolute;margin-top:6px;background:#fff;border:1px solid #e2e2e2;border-radius:10px;box-shadow:0 6px 18px rgba(0,0,0,.08);padding:6px;z-index:1000}
+.ws-menu button{display:flex;align-items:center;gap:8px;width:140px;padding:8px 10px;background:none;border:0;cursor:pointer}
+.ws-menu button:hover{background:#f7f7f7}
+.tm-dot{display:inline-block;width:8px;height:8px;border-radius:50%}
+.tm-dot.green{background:#22c55e}.tm-dot.yellow{background:#f59e0b}.tm-dot.purple{background:#8b5cf6}.tm-dot.gray{background:#9ca3af}
+/* ===== Sidebar Work-Status (compact dropdown) =================== */
+.ws-row{display:flex; align-items:center; gap:10px;}
+.ws-label{font-size:14px; font-weight:600; color:#2b2b2b; min-width:36px;}
+.ws-select{
+  display:inline-flex; align-items:center; gap:8px; justify-content:space-between;
+  width:100%; height:36px; padding:0 12px;
+  background:#fff; border:1px solid #dcdde3; border-radius:10px;
+  font-size:14px; color:#222; cursor:pointer;
+}
+.ws-select:focus{outline:2px solid #cdb7ff; outline-offset:2px;}
+.ws-select .ws-caret{margin-left:auto; opacity:.6}
+.ws-list[hidden]{display:none}
+.ws-row{position:relative}
+.ws-list{
+  position:absolute; right:0; left:70px; top:40px;
+  background:#fff; border:1px solid #dcdde3; border-radius:10px;
+  box-shadow:0 8px 24px rgba(0,0,0,.08);
+  padding:6px; margin:0; list-style:none; z-index:1000;
+}
+.ws-list li{
+  display:flex; align-items:center; gap:8px;
+  padding:8px 10px; border-radius:8px; font-size:14px; cursor:pointer;
+}
+.ws-list li:hover{background:#f6f6fb}

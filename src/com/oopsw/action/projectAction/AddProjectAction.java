@@ -13,37 +13,42 @@ public class AddProjectAction implements Action {
 
 	@Override
 	public String execute(HttpServletRequest request) throws ServletException, IOException {
-		String url = "controller?cmd=projectUI";
-		
-		try {
-			ProjectVO projectVO = new ProjectVO();
-			String creatorId = request.getParameter("creatorId");
-			String projectName = request.getParameter("projectName");
-			String client = request.getParameter("client");
-			String description = request.getParameter("description");
-			String startDateStr = request.getParameter("startDate");
-			String endDateStr = request.getParameter("endDate");
-			
-			projectVO.setCreatorId(creatorId);
-			projectVO.setProjectName(projectName);
-			projectVO.setClient(client);
-			projectVO.setDescription(description);
+	
 
-			ProjectDAO projectDAO = new ProjectDAO();
-			int result = projectDAO.insertProject(projectVO, startDateStr, endDateStr);
-			
-			if (result > 0) {
-			} else {
-				request.setAttribute("msg", "ÇÁ·ÎÁ§Æ® µî·Ï¿¡ ½ÇÆĞÇß½À´Ï´Ù.");
-				url = "addProject.jsp";
-			}
+	    String url = "controller?cmd=projectUI";
+	    try {
+	        ProjectVO projectVO = new ProjectVO();
 
-		} catch (Exception e) {
-			e.printStackTrace();
-			request.setAttribute("msg", "µî·Ï Áß ½Ã½ºÅÛ ¿À·ù°¡ ¹ß»ıÇß½À´Ï´Ù.");
-			url = "addProject.jsp";
-		}
+	        String creatorId   = request.getParameter("creatorId");
+	        String projectName = request.getParameter("projectName");
+	        String client      = request.getParameter("client");
+	        String description = request.getParameter("description");
+	        String startDateStr= request.getParameter("startDate");
+	        String endDateStr  = request.getParameter("endDate");
 
-		return url;
+	
+	        if (startDateStr != null && startDateStr.trim().isEmpty()) startDateStr = null;
+	        if (endDateStr   != null && endDateStr.trim().isEmpty())   endDateStr   = null;
+
+	        projectVO.setCreatorId(creatorId);
+	        projectVO.setProjectName(projectName);
+	        projectVO.setClient(client);
+	        projectVO.setDescription(description);
+
+	        ProjectDAO projectDAO = new ProjectDAO();
+	        int result = projectDAO.insertProject(projectVO, startDateStr, endDateStr);
+	        if (result > 0) {
+	            url = "controller?cmd=projectUI";
+	        } else {
+	            request.setAttribute("msg", "í”„ë¡œì íŠ¸ ë“±ë¡ì— ì‹¤íŒ¨í–ˆìŠµë‹ˆë‹¤.");
+	            url = "controller?cmd=addProjectUI";
+	        }
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        request.setAttribute("msg", "ì²˜ë¦¬ ì¤‘ ì‹œìŠ¤í…œ ì˜¤ë¥˜ê°€ ë°œìƒí–ˆìŠµë‹ˆë‹¤.");
+	
+	        url = "controller?cmd=addProjectUI";
+	    }
+	    return url;
 	}
 }

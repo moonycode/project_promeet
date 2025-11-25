@@ -34,14 +34,20 @@ public class UpdateTaskAction implements Action {
 
     new TaskDAO().updateTaskBasicMap(p);
 
-    String[] pjoinNos = request.getParameterValues("pjoinNos");
-    if (pjoinNos == null || pjoinNos.length == 0) {
-      String csv = request.getParameter("pjoinNos");
-      if (csv != null && !csv.trim().isEmpty()) {
-        pjoinNos = Arrays.stream(csv.split(",")).map(String::trim).filter(x->!x.isEmpty()).toArray(String[]::new);
-      }
+    // 담당자 파라미터가 '요청에 포함'된 경우에만 동기화 (안 건드렸으면 그대로 유지)
+    boolean hasPjoinParam = request.getParameterMap().containsKey("pjoinNos");
+    if (hasPjoinParam) {
+        String[] pjoinNos = request.getParameterValues("pjoinNos");
+        if (pjoinNos == null || pjoinNos.length == 0) {
+            String csv = request.getParameter("pjoinNos");
+            if (csv != null && !csv.trim().isEmpty()) {
+                pjoinNos = Arrays.stream(csv.split(","))
+                        .map(String::trim).filter(x -> !x.isEmpty())
+                        .toArray(String[]::new);
+            }
+        }
+        new MembersDAO().updateTaskMembers(taskNo, pjoinNos); // 존재할 때만 갱신
     }
-    new MembersDAO().updateTaskMembers(taskNo, pjoinNos);
 
     return "controller?cmd=tasksUI&projectNo=" + projectNo;
   }

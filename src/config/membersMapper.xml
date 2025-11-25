@@ -25,8 +25,8 @@
     LEFT JOIN project_join pj
            ON pj.employee_id = e.employee_id
           AND pj.project_no  = #{projectNo}
-    WHERE e.resign_date IS NULL
-    ORDER BY
+   WHERE e.resign_date IS NULL
+   ORDER BY
       CASE WHEN NVL(pj.manager_flag,0)=1 THEN 0 ELSE 1 END,
       e.department ASC, e.name ASC
   </select>
@@ -51,12 +51,10 @@
       pj.manager_flag    AS managerFlag
     FROM project_join pj
     JOIN employees e ON e.employee_id = pj.employee_id
-    WHERE pj.project_no = #{projectNo}
-      AND pj.join_flag  = 1
-      AND e.resign_date IS NULL
-    ORDER BY
-      CASE WHEN pj.manager_flag=1 THEN 0 ELSE 1 END,
-      e.department ASC, e.name ASC
+   WHERE pj.project_no = #{projectNo}
+     AND pj.join_flag  = 1
+     AND e.resign_date IS NULL
+   ORDER BY e.department ASC, e.name ASC
   </select>
 
   <!-- 프로젝트: 신규 참여 insert -->
@@ -78,7 +76,7 @@
          )
     </if>
   </insert>
-    
+
   <!-- 프로젝트: 재참여(기존 rows up) -->
   <update id="rejoinExistingProjectMembers" parameterType="map">
     <if test="employeeIds != null and employeeIds.size() > 0">
@@ -94,21 +92,20 @@
   </update>
 
   <!-- 프로젝트: 체크 해제자 비활성(팀장 제외). 빈 리스트면 전체(팀장 제외) 비활성 -->
-<update id="deactivateRemovedProjectMembers" parameterType="map">
-  UPDATE project_join
-     SET join_flag = 0,
-         up_date   = SYSDATE
-   WHERE project_no   = #{projectNo}
-     AND join_flag    = 1
-     AND manager_flag = 0
-  <if test="employeeIds != null and employeeIds.size() > 0">
-     AND employee_id NOT IN
-     <foreach collection="employeeIds" item="id" open="(" close=")" separator=",">
-       #{id}
-     </foreach>
-  </if>
-</update>
-
+  <update id="deactivateRemovedProjectMembers" parameterType="map">
+    UPDATE project_join
+       SET join_flag = 0,
+           up_date   = SYSDATE
+     WHERE project_no   = #{projectNo}
+       AND join_flag    = 1
+       AND manager_flag = 0
+    <if test="employeeIds != null and employeeIds.size() > 0">
+       AND employee_id NOT IN
+       <foreach collection="employeeIds" item="id" open="(" close=")" separator=",">
+         #{id}
+       </foreach>
+    </if>
+  </update>
 
   <!-- ====== 업무 모달/목록용 ====== -->
 
@@ -118,16 +115,15 @@
           resultType="int">
     SELECT DISTINCT tj.project_join_no AS projectJoinNo
       FROM task_join tj
-  	JOIN project_join pj ON pj.project_join_no = tj.project_join_no
-    JOIN employees e     ON e.employee_id      = pj.employee_id
-    WHERE tj.task_no   = #{taskNo}
-      AND tj.join_flag = 1
-      AND pj.join_flag = 1
-      AND e.resign_date IS NULL
+      JOIN project_join pj ON pj.project_join_no = tj.project_join_no
+      JOIN employees e     ON e.employee_id      = pj.employee_id
+     WHERE tj.task_no   = #{taskNo}
+       AND tj.join_flag = 1
+       AND pj.join_flag = 1
+       AND e.resign_date IS NULL
   </select>
-  
-  
-  <!-- 업무: 현재 활성 담당자 목록 -->
+
+  <!-- 업무: 현재 활성 담당자 목록(보기/모달 좌측 미러링) -->
   <select id="selectTaskActiveMembers"
           parameterType="map"
           resultType="com.oopsw.model.ProjectJoinVO">
@@ -139,8 +135,8 @@
       e.department       AS department,
       e.phone_number     AS phoneNumber,
       e.email            AS email,
-      e.work_status	   AS WorkStatus,
-      pj.project_no      AS ProjectNo,
+      e.work_status      AS workStatus,
+      pj.project_no      AS projectNo,
       pj.in_date         AS inDate,
       pj.up_date         AS dateUp,
       pj.join_flag       AS joinFlag,
@@ -148,34 +144,36 @@
     FROM task_join tj
     JOIN project_join pj ON pj.project_join_no = tj.project_join_no
     JOIN employees e     ON e.employee_id      = pj.employee_id
-    WHERE tj.task_no   = #{taskNo}
-      AND tj.join_flag = 1
-      AND pj.join_flag = 1
-      AND e.resign_date IS NULL
-    ORDER BY
-      e.department ASC, e.name ASC
-  </select>
-
-  <!-- 업무: 단순 조회(필요 시 칩 문자열 생성 등에 사용) -->
-  <select id="selectTaskMembersByTask" parameterType="int" resultType="com.oopsw.model.EmployeeVO">
-    SELECT e.employee_id    AS employeeId,
-           e.name           AS name,
-           e.position       AS position,
-           e.department     AS department,
-           e.phone_number   AS phoneNumber,
-           e.email          AS email
-      FROM task_join tj
-      JOIN project_join pj ON pj.project_join_no = tj.project_join_no
-      JOIN employees e     ON e.employee_id      = pj.employee_id
-     WHERE tj.task_no = #{taskNo}
+   WHERE tj.task_no   = #{taskNo}
      AND tj.join_flag = 1
-     ORDER BY e.department ASC, e.name ASC
-     
+     AND pj.join_flag = 1
+     AND e.resign_date IS NULL
+   ORDER BY e.department ASC, e.name ASC
   </select>
 
+  <!-- 업무: 단순 조회(다른 화면에서 사용될 수 있으니 동일 기준으로 정합성 유지) -->
+  <select id="selectTaskMembersByTask" parameterType="int"
+          resultType="com.oopsw.model.EmployeeVO">
+    SELECT
+      e.employee_id  AS employeeId,
+      e.name         AS name,
+      e.position     AS position,
+      e.department   AS department,
+      e.phone_number AS phoneNumber,
+      e.email        AS email
+    FROM task_join tj
+    JOIN project_join pj ON pj.project_join_no = tj.project_join_no
+    JOIN employees e     ON e.employee_id      = pj.employee_id
+   WHERE tj.task_no   = #{taskNo}
+     AND tj.join_flag = 1
+     AND pj.join_flag = 1
+     AND e.resign_date IS NULL
+   ORDER BY e.department ASC, e.name ASC
+  </select>
 
-  <!-- ====== 업무 담당자 diff 갱신(핵심) ====== -->
-  <!--  기존 레코드 → 재참여(ON, 변동자만 up_date 갱신) -->
+  <!-- ====== 업무 담당자 diff 갱신 ====== -->
+
+  <!-- 기존 레코드 → 재참여(ON, 변동자만 up_date 갱신) -->
   <update id="rejoinExistingTaskMembers" parameterType="map">
     <if test="pjoinNos != null and pjoinNos.size() > 0">
       UPDATE task_join
@@ -208,20 +206,38 @@
     </if>
   </insert>
 
-  <!-- 체크 해제자 비활성(OFF, 변동자만 up_date 갱신). 비어있으면 전체 OFF -->
-<update id="deactivateRemovedTaskMembers" parameterType="map">
+  <!-- 체크 해제자 비활성(OFF). 비어있으면 전체 OFF -->
+  <update id="deactivateRemovedTaskMembers" parameterType="map">
+    UPDATE task_join
+       SET join_flag = 0,
+           up_date   = SYSDATE
+     WHERE task_no   = #{taskNo}
+       AND join_flag = 1
+    <if test="pjoinNos != null and pjoinNos.size() > 0">
+       AND project_join_no NOT IN
+       <foreach collection="pjoinNos" item="no" open="(" close=")" separator=",">
+         #{no}
+       </foreach>
+    </if>
+  </update>
+  
+<!-- 제외된 프로젝트 인원의 모든 업무 담당을 OFF -->
+<update id="deactivateTaskMembersByRemovedEmployees" parameterType="map">
   UPDATE task_join
      SET join_flag = 0,
          up_date   = SYSDATE
-   WHERE task_no   = #{taskNo}
-     AND join_flag = 1
-  <if test="pjoinNos != null and pjoinNos.size() > 0">
-     AND project_join_no NOT IN
-     <foreach collection="pjoinNos" item="no" open="(" close=")" separator=",">
-       #{no}
-     </foreach>
-  </if>
+   WHERE project_join_no IN (
+     SELECT pj.project_join_no
+       FROM project_join pj
+      WHERE pj.project_no   = #{projectNo}
+        AND pj.manager_flag = 0
+      <if test="employeeIds != null and employeeIds.size() > 0">
+        AND pj.employee_id NOT IN
+        <foreach collection="employeeIds" item="id" open="(" close=")" separator=",">
+          #{id}
+        </foreach>
+      </if>
+   )
 </update>
-
 
 </mapper>

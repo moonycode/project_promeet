@@ -35,18 +35,29 @@ public class AddTaskAction implements Action {
     TaskDAO tdao = new TaskDAO();
     Integer newTaskNo = tdao.insertTaskAndReturnId(p);
 
-    // pjoinNos 처리 (배열 또는 csv)
-    String[] pjoinNos = request.getParameterValues("pjoinNos");
-    if (pjoinNos == null || pjoinNos.length == 0) {
-      String csv = request.getParameter("pjoinNos");
-      if (csv != null && !csv.trim().isEmpty()) {
-        pjoinNos = Arrays.stream(csv.split(",")).map(String::trim).filter(x->!x.isEmpty()).toArray(String[]::new);
+   
+    boolean hasPjoinParam = request.getParameterMap().containsKey("pjoinNos");
+
+    String[] pjoinNos = null;
+    if (hasPjoinParam) {
+
+      pjoinNos = request.getParameterValues("pjoinNos");
+
+      if (pjoinNos == null || pjoinNos.length == 0) {
+        String csv = request.getParameter("pjoinNos");
+        if (csv != null && !csv.trim().isEmpty()) {
+          pjoinNos = Arrays.stream(csv.split(","))
+                           .map(String::trim)
+                           .filter(x -> !x.isEmpty())
+                           .toArray(String[]::new);
+        }
       }
     }
-    if (newTaskNo != null && newTaskNo > 0) {
+
+    if (newTaskNo != null && newTaskNo > 0 && hasPjoinParam) {
       new MembersDAO().updateTaskMembers(newTaskNo, pjoinNos);
     }
-
+  
     return "controller?cmd=tasksUI&projectNo=" + projectNo;
   }
 }

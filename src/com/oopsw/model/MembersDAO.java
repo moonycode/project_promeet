@@ -14,37 +14,42 @@ public class MembersDAO {
             s.close();
         }
     }
-	
     public int syncProjectMembers(int projectNo, List<String> employeeIds) {
         Map<String, Object> p = new HashMap<>();
         p.put("projectNo", projectNo);
-        // 빈 목록은 deactivate 전체(팀장 제외) 시나리오를 위해 그대로 emptyList로 넘깁니다.
-        List<String> safeList = (employeeIds != null) ? employeeIds : Collections.emptyList();
-        p.put("employeeIds", safeList);
 
-        int c1 = 0, c2 = 0, c3 = 0;
+        List<String> keepList = (employeeIds != null) ? employeeIds : Collections.emptyList();
+        p.put("employeeIds", keepList);
 
-        // try-with-resources + 수동 커밋(원자성 보장).
-        try (SqlSession s = DBCP.getSqlSessionFactory().openSession(false)) {
-            if (!safeList.isEmpty()) {
-                // 1) 기존 멤버 재활성화.
+        int c1 = 0, c2 = 0, c3 = 0, c4 = 0;
+
+        // 수동 커밋 + 동일 세션에서 롤백 처리
+        SqlSession s = DBCP.getSqlSessionFactory().openSession(false);
+        try {
+            if (!keepList.isEmpty()) {
+                // 1) 기존 멤버 재활성화
                 c1 = s.update("membersMapper.rejoinExistingProjectMembers", p);
-                // 2) 완전 신규만 INSERT.
+                // 2) 완전 신규만 INSERT
                 c2 = s.insert("membersMapper.insertNewProjectMembers", p);
             }
-            // 3) 목록에 없는 멤버 비활성화(팀장 제외는 매퍼에서 필터).
-            c3 = s.update("membersMapper.deactivateRemovedProjectMembers", p);
+
+            // 3) (NEW) 이번에 제외되는 사람들의 '모든 업무 담당' OFF
+            //    keepList에 없는 인원 대상. keepList가 비어있으면 비관리자 전원 OFF.
+            c3 = s.update("membersMapper.deactivateTaskMembersByRemovedEmployees", p);
+
+            // 4) 프로젝트 참여 자체 OFF (비관리자)
+            c4 = s.update("membersMapper.deactivateRemovedProjectMembers", p);
 
             s.commit();
+            return c1 + c2 + c3 + c4;
         } catch (RuntimeException e) {
-            // try-with-resources에서는 close 전에 rollback 할 수 있도록 별도 블록 필요.
-            try (SqlSession s2 = DBCP.getSqlSessionFactory().openSession()) {
-                s2.rollback(); // 이미 닫힌 세션에선 불가하므로, 필요시 위 try를 전통적 try/finally로 바꿔도 됩니다.
-            } catch (Exception ignore) {}
+            s.rollback();
             throw e;
+        } finally {
+            s.close();
         }
-        return c1 + c2 + c3;
     }
+
 
     
     public int updateTaskMembers(int taskNo, String[] pjoinNos){
